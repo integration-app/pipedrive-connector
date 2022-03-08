@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  endpoint:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: test
+    env_file: .env
+  test:
+    depends_on:
+      - endpoint
+    links:
+      - endpoint
+    build:
+      context: .
+      dockerfile: ./tests/Dockerfile
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: sh -c "dockerize -wait http://endpoint:3000 npm i && npm run test"
+    env_file: .env

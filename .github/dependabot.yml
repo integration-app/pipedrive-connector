@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # Update Endpoint SDK whenever a new version is released
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "@integration-app/endpoint-sdk"
