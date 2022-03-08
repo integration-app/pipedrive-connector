@@ -8,9 +8,9 @@ const TEST_ACCESS_TOKEN_JSON = env
 
 import { server } from '../src/server/app'
 
-export function makeRequest(key: string, payload?: any) {
+export function makeRequest(uri: string, payload?: any) {
   return supertest('http://endpoint:3000')
-    .post(`/${key}`)
+    .post(uri)
     .set(
       'Authorization',
       `Bearer ${server.makeAccessToken(JSON.parse(TEST_ACCESS_TOKEN_JSON))}`,

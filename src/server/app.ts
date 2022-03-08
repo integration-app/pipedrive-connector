@@ -2,8 +2,6 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { ConnectorServer } from '@integration-app/connector-sdk'
-import { DataResponse } from '@integration-app/sdk/endpoint-data-response'
-import { getItems, getLegacyRootResponse } from './legacy-pipedrive'
 import {
   ConnectionMode,
   DataLocationType,
@@ -124,96 +122,19 @@ collections.forEach((collection) => {
       querySchema: collection.querySchema,
       execute: (request) => queryCollection(collection, request),
     },
-    insert: collection.recordSchema
-      ? {
-          execute: async (request) =>
-            insertCollectionRecord(collection, request),
-          recordSchema: collection.recordSchema,
-        }
-      : undefined,
-    update: collection.recordSchema
-      ? {
-          execute: async (request) =>
-            updateCollectionRecord(collection, request),
-          recordSchema: collection.recordSchema,
-          querySchema: collection.querySchema,
-        }
-      : undefined,
-    upsert: collection.recordSchema
-      ? {
-          querySchema: collection.querySchema,
-          recordSchema: collection.recordSchema,
-          execute: async (request) =>
-            upsertCollectionRecord(collection, request),
-        }
-      : undefined,
+    insert: {
+      execute: async (request) => insertCollectionRecord(collection, request),
+      recordSchema: collection.recordSchema,
+    },
+    update: {
+      execute: async (request) => updateCollectionRecord(collection, request),
+      recordSchema: collection.recordSchema,
+      querySchema: collection.querySchema,
+    },
+    upsert: {
+      querySchema: collection.querySchema,
+      recordSchema: collection.recordSchema,
+      execute: async (request) => upsertCollectionRecord(collection, request),
+    },
   })
 })
-
-/***** OLD CONNECTOR ******/
-server.dataRequest('data', async (): Promise<DataResponse> => {
-  return getLegacyRootResponse()
-})
-
-server.dataRequest(
-  'data/activities',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('activities', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/goals',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('goals', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/users',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('users', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/deals',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('deals', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/leads',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('leads', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/organizations',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('organizations', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/persons',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('persons', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/pipelines',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('pipelines', credentials, payload)
-  },
-)
-
-server.dataRequest(
-  'data/products',
-  async ({ credentials: credentials, payload: payload }): Promise<any> => {
-    return await getItems('products', credentials, payload)
-  },
-)
