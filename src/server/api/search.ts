@@ -1,4 +1,4 @@
-import { DataCollectionQueryResponse } from '@integration-app/sdk/connector-api'
+import { DataRecord } from '@integration-app/sdk/connector-api'
 import { Type } from '@sinclair/typebox'
 import { get, MAX_LIMIT } from '../api'
 
@@ -39,7 +39,7 @@ export async function search(
   credentials,
   itemType,
   query,
-): Promise<DataCollectionQueryResponse> {
+): Promise<DataRecord[]> {
   const parameters = {
     term: query.search.term,
     item_types: itemType,
@@ -54,9 +54,10 @@ export async function search(
   const response = await get(credentials, 'itemSearch', parameters)
 
   const records =
-    response.data?.items?.map((responseRecord) => responseRecord.item) ?? []
+    response.data?.items?.map((responseRecord) => ({
+      record: responseRecord.item,
+      id: responseRecord.item.id,
+    })) ?? []
 
-  return {
-    records,
-  }
+  return records
 }

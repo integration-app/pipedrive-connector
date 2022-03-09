@@ -4,14 +4,18 @@ import { makeSearchQuerySchema } from '../api/search'
 import { makeOwnerSchema } from '../api/users'
 import { makeVisibleToSchema } from '../api/visibility'
 
-export async function getOrganizationsQuerySchema({ credentials }) {
-  const SEARCH_FIELDS = ['address', 'custom_fields', 'name', 'notes']
+const SEARCH_FIELDS = ['address', 'custom_fields', 'name', 'notes']
 
+export async function getFindOrganizationsQuerySchema({ credentials }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
     await makeSavedFilterQuerySchema(credentials, 'org'),
     await makeOwnerSchema(credentials),
   ])
+}
+
+export async function getFindOneOrganizationQuerySchema({}) {
+  return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
 export async function getOrganizationsRecordSchema({ credentials }) {

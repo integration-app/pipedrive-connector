@@ -3,11 +3,15 @@ import { makeActivityTypeSchema } from '../api/activity-types'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeOwnerSchema } from '../api/users'
 
-export async function getActivitiesQuerySchema({ credentials }) {
+export async function getFindActivitiesQuerySchema({ credentials }) {
   return Type.Union([
     await makeSavedFilterQuerySchema(credentials, 'activity'),
     Type.Object(await makeOwnerSchema(credentials)),
   ])
+}
+
+export async function getFindOneActivityQuerySchema({ credentials }) {
+  return makeSavedFilterQuerySchema(credentials, 'activity')
 }
 
 export async function getActivitiesRecordSchema({ credentials }) {

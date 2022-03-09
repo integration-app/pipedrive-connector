@@ -4,17 +4,17 @@ import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeSearchQuerySchema } from '../api/search'
 import { makeOwnerSchema } from '../api/users'
 
-export async function getLeadsQuerySchema({ credentials }) {
-  const SEARCH_FIELDS = [
-    'custom_fields',
-    'notes',
-    'email',
-    'organization_name',
-    'person_name',
-    'phone',
-    'title',
-  ]
+const SEARCH_FIELDS = [
+  'custom_fields',
+  'notes',
+  'email',
+  'organization_name',
+  'person_name',
+  'phone',
+  'title',
+]
 
+export async function getFindLeadsQuerySchema({ credentials }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
     await makeSavedFilterQuerySchema(credentials, 'leads'),
@@ -27,6 +27,10 @@ export async function getLeadsQuerySchema({ credentials }) {
       },
     ),
   ])
+}
+
+export async function getFindOneLeadQuerySchema({}) {
+  return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
 export async function getInsertLeadRecordSchema({ credentials }) {

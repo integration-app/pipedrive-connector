@@ -1,24 +1,30 @@
 import {
-  ConnectorDataCollectionQueryRequest,
+  ConnectorDataCollectionFindOneRequest,
+  ConnectorDataCollectionFindRequest,
   ConnectorDataCollectionUpdateRequest,
-  ConnectorDataCollectionUpsertRequest,
 } from '@integration-app/connector-sdk'
 import {
-  DataCollectionInsertResponse,
-  DataCollectionQueryResponse,
+  DataCollectionCreateResponse,
+  DataCollectionFindOneResponse,
+  DataCollectionFindResponse,
   DataCollectionUpdateResponse,
-  DataCollectionUpsertResponse,
 } from '@integration-app/sdk/connector-api'
-import { BadRequestError } from '@integration-app/sdk/errors'
 import { insertRecord, queryRecords, updateRecord } from '../api/records'
 import { isSearchQuery, search } from '../api/search'
 
-export async function queryCollection(
+export async function findInCollection(
   collection,
-  request: ConnectorDataCollectionQueryRequest,
-): Promise<DataCollectionQueryResponse> {
+  request: ConnectorDataCollectionFindRequest,
+): Promise<DataCollectionFindResponse> {
   if (collection.searchItemType && isSearchQuery(request.query)) {
-    return search(request.credentials, collection.searchItemType, request.query)
+    const records = await search(
+      request.credentials,
+      collection.searchItemType,
+      request.query,
+    )
+    return {
+      records,
+    }
   } else {
     return queryRecords(
       request.credentials,
@@ -29,95 +35,43 @@ export async function queryCollection(
   }
 }
 
+export async function findOneInCollection(
+  collection,
+  request: ConnectorDataCollectionFindOneRequest,
+): Promise<DataCollectionFindOneResponse> {
+  if (collection.searchItemType && isSearchQuery(request.query)) {
+    const records = await search(
+      request.credentials,
+      collection.searchItemType,
+      request.query,
+    )
+    return {
+      record: records[0],
+      multipleResults: records.length > 1,
+    }
+  } else {
+    return {
+      record: null,
+      multipleResults: false,
+    }
+  }
+}
+
 export async function insertCollectionRecord(
   collection,
   { credentials, record },
-): Promise<DataCollectionInsertResponse> {
+): Promise<DataCollectionCreateResponse> {
   return insertRecord(credentials, collection.key, record)
 }
 
 export async function updateCollectionRecord(
   collection,
   request: ConnectorDataCollectionUpdateRequest,
-) {
-  if (request.id) {
-    return updateCollectionRecordById(collection, {
-      ...request,
-      id: request.id,
-    })
-  } else if (request.query) {
-    return updateCollectionRecordByQuery(collection, {
-      ...request,
-      query: request.query,
-    })
-  } else {
-    throw new BadRequestError(
-      'Either `id` or `query` must be provided to update a record',
-    )
-  }
-}
-
-export async function upsertCollectionRecord(
-  collection,
-  request: ConnectorDataCollectionUpsertRequest,
-) {
-  if (request.id) {
-    return updateCollectionRecordById(collection, {
-      ...request,
-      id: request.id,
-    })
-  } else {
-    return upsertCollectionRecordByQuery(collection, request)
-  }
-}
-
-async function updateCollectionRecordById(
-  collection,
-  { credentials, id, record },
 ): Promise<DataCollectionUpdateResponse> {
-  return updateRecord(credentials, collection.key, id, record)
-}
-
-async function updateCollectionRecordByQuery(
-  collection,
-  { credentials, query, record }: ConnectorDataCollectionUpdateRequest,
-): Promise<DataCollectionUpdateResponse> {
-  const queryResponse = await queryCollection(collection, {
-    credentials,
-    query,
-  })
-  if (queryResponse.records.length > 0) {
-    return updateRecord(
-      credentials,
-      collection.key,
-      queryResponse.records[0].id,
-      record,
-    )
-  } else {
-    return null
-  }
-}
-
-async function upsertCollectionRecordByQuery(
-  collection,
-  { credentials, query, record }: ConnectorDataCollectionUpsertRequest,
-): Promise<DataCollectionUpsertResponse> {
-  const queryResponse = await queryCollection(collection, {
-    credentials,
-    query,
-  })
-  if (queryResponse.records.length === 1) {
-    return updateRecord(
-      credentials,
-      collection.key,
-      queryResponse.records[0].id,
-      record,
-    )
-  } else if (queryResponse.records.length > 1) {
-    throw new BadRequestError(
-      'Found more than one record matching the query. Can not choose whicn one to update',
-    )
-  } else {
-    return insertRecord(credentials, collection.key, record)
-  }
+  return updateRecord(
+    request.credentials,
+    collection.key,
+    request.id,
+    request.record,
+  )
 }

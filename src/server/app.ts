@@ -7,26 +7,33 @@ import {
   DataLocationType,
 } from '@integration-app/sdk/connector-api'
 import {
+  getFindOnePersonQuerySchema,
+  getFindPersonsQuerySchema,
   getInsertPersonRecordSchema,
-  getPersonsQuerySchema,
 } from './collections/persons'
 import {
+  findInCollection,
+  findOneInCollection,
   insertCollectionRecord,
-  queryCollection,
   updateCollectionRecord,
-  upsertCollectionRecord,
 } from './collections/common'
-import { getDealsQuerySchema, getDealsRecordSchema } from './collections/deals'
 import {
-  getActivitiesQuerySchema,
+  getDealsRecordSchema,
+  getFindDealsQuerySchema,
+  getFindOneDealQuerySchema,
+} from './collections/deals'
+import {
   getActivitiesRecordSchema,
+  getFindActivitiesQuerySchema,
 } from './collections/activities'
 import {
+  getFindLeadsQuerySchema,
+  getFindOneLeadQuerySchema,
   getInsertLeadRecordSchema,
-  getLeadsQuerySchema,
 } from './collections/leads'
 import {
-  getOrganizationsQuerySchema,
+  getFindOneOrganizationQuerySchema,
+  getFindOrganizationsQuerySchema,
   getOrganizationsRecordSchema,
 } from './collections/organizations'
 
@@ -69,34 +76,38 @@ const collections = [
   {
     name: 'Leads',
     key: 'leads',
-    querySchema: getLeadsQuerySchema,
+    findQuerySchema: getFindLeadsQuerySchema,
+    findOneQuerySchema: getFindOneLeadQuerySchema,
     recordSchema: getInsertLeadRecordSchema,
   },
   {
     name: 'Persons',
     key: 'persons',
     searchItemType: 'person',
-    querySchema: getPersonsQuerySchema,
+    findQuerySchema: getFindPersonsQuerySchema,
+    findOneQuerySchema: getFindOnePersonQuerySchema,
     recordSchema: getInsertPersonRecordSchema,
   },
   {
     name: 'Organizations',
     key: 'organizations',
     searchItemType: 'organization',
-    querySchema: getOrganizationsQuerySchema,
+    findQuerySchema: getFindOrganizationsQuerySchema,
+    findOneQuerySchema: getFindOneOrganizationQuerySchema,
     recordSchema: getOrganizationsRecordSchema,
   },
   {
     name: 'Deals',
     key: 'deals',
     searchItemType: 'deal',
-    querySchema: getDealsQuerySchema,
+    findQuerySchema: getFindDealsQuerySchema,
+    findOneQuerySchema: getFindOneDealQuerySchema,
     recordSchema: getDealsRecordSchema,
   },
   {
     name: 'Activities',
     key: 'activities',
-    querySchema: getActivitiesQuerySchema,
+    findQuerySchema: getFindActivitiesQuerySchema,
     recordSchema: getActivitiesRecordSchema,
   },
 ]
@@ -118,23 +129,23 @@ server.dataDirectory('data/root', {
 collections.forEach((collection) => {
   server.dataCollection(`data/collections/${collection.key}`, {
     name: collection.name,
-    query: {
-      querySchema: collection.querySchema,
-      execute: (request) => queryCollection(collection, request),
+    find: {
+      querySchema: collection.findQuerySchema,
+      execute: (request) => findInCollection(collection, request),
     },
-    insert: {
+    findOne: collection.findOneQuerySchema
+      ? {
+          querySchema: collection.findOneQuerySchema,
+          execute: (request) => findOneInCollection(collection, request),
+        }
+      : undefined,
+    create: {
       execute: async (request) => insertCollectionRecord(collection, request),
       recordSchema: collection.recordSchema,
     },
     update: {
       execute: async (request) => updateCollectionRecord(collection, request),
       recordSchema: collection.recordSchema,
-      querySchema: collection.querySchema,
-    },
-    upsert: {
-      querySchema: collection.querySchema,
-      recordSchema: collection.recordSchema,
-      execute: async (request) => upsertCollectionRecord(collection, request),
     },
   })
 })

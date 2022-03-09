@@ -6,9 +6,9 @@ import { makeStageSchema } from '../api/stages'
 import { makeOwnerSchema } from '../api/users'
 import { makeVisibleToSchema } from '../api/visibility'
 
-export async function getDealsQuerySchema({ credentials }) {
-  const SEARCH_FIELDS = ['custom_fields', 'notes', 'title']
+const SEARCH_FIELDS = ['custom_fields', 'notes', 'title']
 
+export async function getFindDealsQuerySchema({ credentials }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
     await makeSavedFilterQuerySchema(credentials, 'deals'),
@@ -26,6 +26,10 @@ export async function getDealsQuerySchema({ credentials }) {
       },
     ),
   ])
+}
+
+export async function getFindOneDealQuerySchema({}) {
+  return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
 export async function getDealsRecordSchema({ credentials }) {
