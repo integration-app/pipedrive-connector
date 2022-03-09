@@ -1,8 +1,6 @@
 name: Docker
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
 
@@ -52,4 +50,4 @@ jobs:
           format: 'table'
           exit-code: '0'
           severity: 'CRITICAL'
-      
+
