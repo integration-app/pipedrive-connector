@@ -1,16 +1,16 @@
 import {
-  DataCollectionInsertResponse,
-  DataCollectionQueryResponse,
+  DataCollectionCreateResponse,
+  DataCollectionFindResponse,
   DataCollectionUpdateResponse,
 } from '@integration-app/sdk/connector-api'
 import { get, MAX_LIMIT, post, put } from '../api'
 
-export async function queryRecords(
+export async function getRecords(
   credentials,
   recordKey,
   query,
   cursor = null,
-): Promise<DataCollectionQueryResponse> {
+): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const parameters = {
     ...(query ?? {}),
@@ -30,11 +30,11 @@ export async function queryRecords(
   }
 }
 
-export async function insertRecord(
+export async function createRecord(
   credentials,
   recordKey,
   record,
-): Promise<DataCollectionInsertResponse> {
+): Promise<DataCollectionCreateResponse> {
   const response = await post(credentials, recordKey, record)
   return {
     id: response.data.id,
