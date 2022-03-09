@@ -10,10 +10,6 @@ export async function getFindActivitiesQuerySchema({ credentials }) {
   ])
 }
 
-export async function getFindOneActivityQuerySchema({ credentials }) {
-  return makeSavedFilterQuerySchema(credentials, 'activity')
-}
-
 export async function getActivitiesRecordSchema({ credentials }) {
   return Type.Partial(
     Type.Object({
