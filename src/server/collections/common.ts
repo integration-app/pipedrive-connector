@@ -9,7 +9,7 @@ import {
   DataCollectionFindResponse,
   DataCollectionUpdateResponse,
 } from '@integration-app/sdk/connector-api'
-import { insertRecord, queryRecords, updateRecord } from '../api/records'
+import { createRecord, getRecords, updateRecord } from '../api/records'
 import { isSearchQuery, search } from '../api/search'
 
 export async function findInCollection(
@@ -26,7 +26,7 @@ export async function findInCollection(
       records,
     }
   } else {
-    return queryRecords(
+    return getRecords(
       request.credentials,
       collection.key,
       request.query,
@@ -61,7 +61,7 @@ export async function insertCollectionRecord(
   collection,
   { credentials, record },
 ): Promise<DataCollectionCreateResponse> {
-  return insertRecord(credentials, collection.key, record)
+  return createRecord(credentials, collection.key, record)
 }
 
 export async function updateCollectionRecord(
