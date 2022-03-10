@@ -24,11 +24,7 @@ export async function getInsertPersonRecordSchema({ credentials }) {
       name: Type.String(),
       owner_id: await makeOwnerSchema(credentials),
       org_id: Type.Integer({
-        title: 'Organization',
-        enum: [
-          // ToDo: fetch orgs
-          100,
-        ],
+        lookupCollectionUri: 'data/collections/organizations',
       }),
       email: Type.Array(Type.String(), { title: 'Email(s)' }),
       phone: Type.Array(Type.String(), { title: 'Phone(s)' }),

@@ -2,10 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { ConnectorServer } from '@integration-app/connector-sdk'
-import {
-  ConnectionMode,
-  DataLocationType,
-} from '@integration-app/sdk/connector-api'
+import { DataLocationType } from '@integration-app/sdk/connector-api'
 import {
   getFindOnePersonQuerySchema,
   getFindPersonsQuerySchema,
@@ -36,6 +33,7 @@ import {
   getFindOrganizationsQuerySchema,
   getOrganizationsRecordSchema,
 } from './collections/organizations'
+import { ConnectionMode } from '@integration-app/sdk/connectors'
 
 export const server = new ConnectorServer({
   baseUri: process.env.BASE_URI,

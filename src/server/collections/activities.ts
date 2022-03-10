@@ -14,6 +14,9 @@ export async function getActivitiesRecordSchema({ credentials }) {
   return Type.Partial(
     Type.Object({
       type: await makeActivityTypeSchema(credentials),
+      subject: Type.String(),
+      note: Type.String(),
+      public_description: Type.String(),
       done: Type.Boolean(),
       due_date: Type.String({
         format: 'date',
@@ -24,15 +27,20 @@ export async function getActivitiesRecordSchema({ credentials }) {
       duration: Type.String({
         format: 'time',
       }),
-      deal_id: Type.Integer(),
-      lead_id: Type.Integer(),
-      person_id: Type.Integer(),
-      org_id: Type.Integer(),
-      note: Type.String(),
       location: Type.String(),
-      public_description: Type.String(),
-      subject: Type.String(),
       user_id: await makeOwnerSchema(credentials),
+      person_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/persons',
+      }),
+      org_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/organizations',
+      }),
+      deal_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/deals',
+      }),
+      lead_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/leads',
+      }),
     }),
   )
 }
