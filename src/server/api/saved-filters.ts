@@ -3,12 +3,14 @@ import { get } from '../api'
 
 export async function makeSavedFilterQuerySchema(credentials, itemType) {
   const filters = await getFilters(credentials, itemType)
+  console.log(itemType, filters)
   return Type.Object(
     {
       filter_id: Type.String({
-        enum: filters.map((filter: any) => {
-          return { value: filter.id, label: filter.name }
-        }),
+        enum:
+          filters?.map((filter: any) => {
+            return { value: filter.id, label: filter.name }
+          }) ?? [],
         title: 'Filter',
       }),
     },

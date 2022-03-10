@@ -41,8 +41,12 @@ export async function getInsertLeadRecordSchema({ credentials }) {
       label_ids: Type.Array(await makeLeadLabelSchema({ credentials }), {
         title: 'Labels',
       }),
-      person_id: Type.Integer(),
-      organization_id: Type.Integer(),
+      person_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/persons',
+      }),
+      organization_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/organizations',
+      }),
       expected_close_date: Type.String({
         format: 'date',
         title: 'Expected Close Date',

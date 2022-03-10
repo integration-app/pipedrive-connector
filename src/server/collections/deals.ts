@@ -39,8 +39,12 @@ export async function getDealsRecordSchema({ credentials }) {
       value: Type.String(),
       currency: Type.String(),
       user_id: await makeOwnerSchema(credentials),
-      person_id: Type.Integer(),
-      org_id: Type.Integer(),
+      person_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/persons',
+      }),
+      org_id: Type.Integer({
+        lookupCollectionUri: 'data/collections/organizations',
+      }),
       pipeline_id: await makePipelineSchema(credentials),
       stage_id: await makeStageSchema(credentials),
       status: Type.String({ enum: ['open', 'won', 'lost'] }),
