@@ -48,22 +48,20 @@ export const server = new ConnectorServer({
     root: {
       uri: 'data/root',
     },
-    crm: {
-      leads: {
-        uri: 'data/collections/leads',
-      },
-      contacts: {
-        uri: 'data/collections/persons',
-      },
-      companies: {
-        uri: 'data/collections/organizations',
-      },
-      deals: {
-        uri: 'data/collections/deals',
-      },
-      activities: {
-        uri: 'data/collections/activities',
-      },
+    'crm-leads': {
+      uri: 'data/collections/leads',
+    },
+    'crm-contacts': {
+      uri: 'data/collections/persons',
+    },
+    'crm-companies': {
+      uri: 'data/collections/organizations',
+    },
+    'crm-deals': {
+      uri: 'data/collections/deals',
+    },
+    'crm-activities': {
+      uri: 'data/collections/activities',
     },
   } as any,
 })
