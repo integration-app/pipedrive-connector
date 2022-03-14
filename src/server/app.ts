@@ -34,6 +34,7 @@ import {
   getOrganizationsRecordSchema,
 } from './collections/organizations'
 import { ConnectionMode } from '@integration-app/sdk/connectors'
+import { UnifiedContactRecord } from '@integration-app/sdk/udm/crm-contacts'
 
 export const server = new ConnectorServer({
   baseUri: process.env.BASE_URI,
@@ -83,6 +84,31 @@ const collections = [
     findQuerySchema: getFindPersonsQuerySchema,
     findOneQuerySchema: getFindOnePersonQuerySchema,
     recordSchema: getInsertPersonRecordSchema,
+    parseUnifiedQuery: (unifiedQuery: any) => {
+      if (unifiedQuery?.['crm-contacts']) {
+        if (unifiedQuery['crm-contacts'].email) {
+          return {
+            search: {
+              fields: ['email'],
+              term: unifiedQuery['crm-contacts'].email,
+            },
+          }
+        }
+      }
+      return null
+    },
+    parseUnifiedRecord: (unifiedRecord: any) => {
+      if (unifiedRecord?.['crm-contacts']) {
+        const unifiedContact: UnifiedContactRecord =
+          unifiedRecord['crm-contacts']
+        return {
+          name: `${unifiedContact.firstName} ${unifiedContact.lastName}`,
+          email: unifiedRecord.email,
+        }
+      } else {
+        return null
+      }
+    },
   },
   {
     name: 'Organizations',
@@ -127,20 +153,46 @@ collections.forEach((collection) => {
     name: collection.name,
     find: {
       querySchema: collection.findQuerySchema,
-      execute: (request) => findInCollection(collection, request),
+      execute: (request) =>
+        findInCollection(
+          collection,
+          request.credentials,
+          request.query ??
+            collection?.parseUnifiedQuery?.(request.unifiedQuery),
+          request.cursor,
+        ),
     },
     findOne: collection.findOneQuerySchema
       ? {
           querySchema: collection.findOneQuerySchema,
-          execute: (request) => findOneInCollection(collection, request),
+          execute: (request) =>
+            findOneInCollection(
+              collection,
+              request.credentials,
+              request.query ??
+                collection.parseUnifiedQuery?.(request.unifiedQuery),
+            ),
         }
       : undefined,
     create: {
-      execute: async (request) => insertCollectionRecord(collection, request),
+      execute: async (request) =>
+        insertCollectionRecord(
+          collection,
+          request.credentials,
+          request.record ??
+            collection.parseUnifiedRecord?.(request.unifiedRecord),
+        ),
       recordSchema: collection.recordSchema,
     },
     update: {
-      execute: async (request) => updateCollectionRecord(collection, request),
+      execute: async (request) =>
+        updateCollectionRecord(
+          collection,
+          request.credentials,
+          request.id,
+          request.record ??
+            collection.parseUnifiedRecord?.(request.unifiedRecord),
+        ),
       recordSchema: collection.recordSchema,
     },
   })

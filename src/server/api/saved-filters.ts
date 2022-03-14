@@ -3,7 +3,6 @@ import { get } from '../api'
 
 export async function makeSavedFilterQuerySchema(credentials, itemType) {
   const filters = await getFilters(credentials, itemType)
-  console.log(itemType, filters)
   return Type.Object(
     {
       filter_id: Type.String({
