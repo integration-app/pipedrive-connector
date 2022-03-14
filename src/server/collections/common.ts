@@ -1,9 +1,4 @@
 import {
-  ConnectorDataCollectionFindOneRequest,
-  ConnectorDataCollectionFindRequest,
-  ConnectorDataCollectionUpdateRequest,
-} from '@integration-app/connector-sdk'
-import {
   DataCollectionCreateResponse,
   DataCollectionFindOneResponse,
   DataCollectionFindResponse,
@@ -14,37 +9,27 @@ import { isSearchQuery, search } from '../api/search'
 
 export async function findInCollection(
   collection,
-  request: ConnectorDataCollectionFindRequest,
+  credentials,
+  query: any,
+  cursor?: string,
 ): Promise<DataCollectionFindResponse> {
-  if (collection.searchItemType && isSearchQuery(request.query)) {
-    const records = await search(
-      request.credentials,
-      collection.searchItemType,
-      request.query,
-    )
+  if (collection.searchItemType && isSearchQuery(query)) {
+    const records = await search(credentials, collection.searchItemType, query)
     return {
       records,
     }
   } else {
-    return getRecords(
-      request.credentials,
-      collection.key,
-      request.query,
-      request.cursor,
-    )
+    return getRecords(credentials, collection.key, query, cursor)
   }
 }
 
 export async function findOneInCollection(
   collection,
-  request: ConnectorDataCollectionFindOneRequest,
+  credentials,
+  query,
 ): Promise<DataCollectionFindOneResponse> {
-  if (collection.searchItemType && isSearchQuery(request.query)) {
-    const records = await search(
-      request.credentials,
-      collection.searchItemType,
-      request.query,
-    )
+  if (collection.searchItemType && isSearchQuery(query)) {
+    const records = await search(credentials, collection.searchItemType, query)
     return {
       record: records[0],
       multipleResults: records.length > 1,
@@ -59,19 +44,17 @@ export async function findOneInCollection(
 
 export async function insertCollectionRecord(
   collection,
-  { credentials, record },
+  credentials,
+  record,
 ): Promise<DataCollectionCreateResponse> {
   return createRecord(credentials, collection.key, record)
 }
 
 export async function updateCollectionRecord(
   collection,
-  request: ConnectorDataCollectionUpdateRequest,
+  credentials,
+  id,
+  record,
 ): Promise<DataCollectionUpdateResponse> {
-  return updateRecord(
-    request.credentials,
-    collection.key,
-    request.id,
-    request.record,
-  )
+  return updateRecord(credentials, collection.key, id, record)
 }

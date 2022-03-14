@@ -56,7 +56,7 @@ export async function search(
   const records =
     response.data?.items?.map((responseRecord) => ({
       record: responseRecord.item,
-      id: responseRecord.item.id,
+      id: responseRecord.item.id.toString(),
     })) ?? []
 
   return records
