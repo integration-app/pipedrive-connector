@@ -96,7 +96,7 @@ const collections = [
             query: {
               search: {
                 fields: ['email'],
-                term: unifiedQuery['crm-contacts'].email,
+                term: contactsQuery.email,
               },
             },
           }
