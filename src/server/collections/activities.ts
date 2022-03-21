@@ -2,15 +2,53 @@ import { Type } from '@sinclair/typebox'
 import { makeActivityTypeSchema } from '../api/activity-types'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeOwnerSchema } from '../api/users'
+import { UnifiedActivityFields } from '@integration-app/sdk/udm/crm-activities'
+import { DataCollectionHandler } from '@integration-app/connector-sdk'
+import {
+  findInCollection,
+  createCollectionRecord,
+  updateCollectionRecord,
+} from './common'
 
-export async function getFindActivitiesQuerySchema({ credentials }) {
+const RECORD_KEY = 'activities'
+
+const handler: DataCollectionHandler = {
+  name: 'persons',
+  find: {
+    querySchema: getFindQuerySchema,
+    execute: (request) =>
+      findInCollection({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
+  create: {
+    execute: async (request) =>
+      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+    fieldsSchema: getFieldsSchema,
+    parseUnifiedFields,
+  },
+  update: {
+    execute: async (request) =>
+      updateCollectionRecord({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+    fieldsSchema: getFieldsSchema,
+    parseUnifiedFields,
+  },
+}
+
+export default handler
+
+export async function getFindQuerySchema({ credentials }) {
   return Type.Union([
     await makeSavedFilterQuerySchema(credentials, 'activity'),
     Type.Object(await makeOwnerSchema(credentials)),
   ])
 }
 
-export async function getActivitiesRecordSchema({ credentials }) {
+export async function getFieldsSchema({ credentials }) {
   return Type.Partial(
     Type.Object({
       type: await makeActivityTypeSchema(credentials),
@@ -43,4 +81,23 @@ export async function getActivitiesRecordSchema({ credentials }) {
       }),
     }),
   )
+}
+
+async function parseUnifiedFields({ udmKey, unifiedFields }) {
+  if (udmKey === 'crm-activities') {
+    const unifiedActivity = unifiedFields as UnifiedActivityFields
+    return {
+      fields: {
+        subject: unifiedActivity.title,
+        note: unifiedActivity.description,
+        deal_id: unifiedActivity.dealId,
+        lead_id: unifiedActivity.leadId,
+        person_id: unifiedActivity.contactId,
+        org_id: unifiedActivity.companyId,
+        // ToDo: other fields
+      },
+    }
+  } else {
+    return null
+  }
 }
