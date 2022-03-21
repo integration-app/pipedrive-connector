@@ -7,29 +7,30 @@ import {
 import { createRecord, getRecords, updateRecord } from '../api/records'
 import { isSearchQuery, search } from '../api/search'
 
-export async function findInCollection(
-  collection,
+export async function findInCollection({
   credentials,
-  query: any,
-  cursor?: string,
-): Promise<DataCollectionFindResponse> {
-  if (collection.searchItemType && isSearchQuery(query)) {
-    const records = await search(credentials, collection.searchItemType, query)
+  recordKey,
+  searchItemType = null,
+  query = null,
+  cursor = null,
+}): Promise<DataCollectionFindResponse> {
+  if (searchItemType && isSearchQuery(query)) {
+    const records = await search(credentials, searchItemType, query)
     return {
       records,
     }
   } else {
-    return getRecords(credentials, collection.key, query, cursor)
+    return getRecords(credentials, recordKey, query, cursor)
   }
 }
 
-export async function findOneInCollection(
-  collection,
+export async function findOneInCollection({
   credentials,
-  query,
-): Promise<DataCollectionFindOneResponse> {
-  if (collection.searchItemType && isSearchQuery(query)) {
-    const records = await search(credentials, collection.searchItemType, query)
+  searchItemType,
+  query = null,
+}): Promise<DataCollectionFindOneResponse> {
+  if (searchItemType && isSearchQuery(query)) {
+    const records = await search(credentials, searchItemType, query)
     return {
       record: records[0],
       multipleResults: records.length > 1,
@@ -42,19 +43,19 @@ export async function findOneInCollection(
   }
 }
 
-export async function insertCollectionRecord(
-  collection,
+export async function createCollectionRecord({
+  recordKey,
   credentials,
-  record,
-): Promise<DataCollectionCreateResponse> {
-  return createRecord(credentials, collection.key, record)
+  fields,
+}): Promise<DataCollectionCreateResponse> {
+  return createRecord(credentials, recordKey, fields)
 }
 
-export async function updateCollectionRecord(
-  collection,
+export async function updateCollectionRecord({
+  recordKey,
   credentials,
   id,
-  record,
-): Promise<DataCollectionUpdateResponse> {
-  return updateRecord(credentials, collection.key, id, record)
+  fields,
+}): Promise<DataCollectionUpdateResponse> {
+  return updateRecord(credentials, recordKey, id, fields)
 }
