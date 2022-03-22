@@ -5,9 +5,9 @@ export async function makeOwnerSchema(credentials) {
   const users = await getUsers(credentials)
   return Type.String({
     title: 'Owner',
-    enum: users.map((user) => ({
-      value: user.id.toString(),
-      label: user.name,
+    referenceRecords: users.map((user) => ({
+      id: user.id.toString(),
+      name: user.name,
     })),
   })
 }

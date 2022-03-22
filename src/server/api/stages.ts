@@ -2,12 +2,12 @@ import { Type } from '@sinclair/typebox'
 import { get } from '../api'
 
 export async function makeStageSchema(credentials) {
-  const users = await getStages(credentials)
+  const items = await getStages(credentials)
   return Type.String({
     title: 'Stage',
-    enum: users.map((item) => ({
-      value: item.id,
-      label: item.name,
+    referenceRecords: items.map((item) => ({
+      id: item.id,
+      name: item.name,
     })),
   })
 }

@@ -2,12 +2,12 @@ import { Type } from '@sinclair/typebox'
 import { get } from '../api'
 
 export async function makeLeadLabelSchema(credentials) {
-  const users = await getLeadLabels(credentials)
+  const items = await getLeadLabels(credentials)
   return Type.String({
     title: 'Label',
-    enum: users.map((item) => ({
-      value: item.id,
-      label: item.name,
+    referenceRecords: items.map((item) => ({
+      id: item.id,
+      name: item.name,
     })),
   })
 }

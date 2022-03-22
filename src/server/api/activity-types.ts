@@ -2,12 +2,12 @@ import { Type } from '@sinclair/typebox'
 import { get } from '../api'
 
 export async function makeActivityTypeSchema(credentials) {
-  const users = await getActivityTypes(credentials)
+  const activityTypes = await getActivityTypes(credentials)
   return Type.String({
     title: 'Activity Type',
-    enum: users.map((item) => ({
-      value: item.key_string,
-      label: item.name,
+    referenceRecords: activityTypes.map((item) => ({
+      id: item.key_string,
+      name: item.name,
     })),
   })
 }
