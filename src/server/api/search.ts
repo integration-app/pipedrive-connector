@@ -53,9 +53,11 @@ export async function search(
 
   const response = await get(credentials, 'itemSearch', parameters)
 
-  const records =
+  console.log('SEARCH RESPONSE', response)
+
+  const records: DataRecord[] =
     response.data?.items?.map((responseRecord) => ({
-      record: responseRecord.item,
+      fields: responseRecord.item,
       id: responseRecord.item.id.toString(),
     })) ?? []
 

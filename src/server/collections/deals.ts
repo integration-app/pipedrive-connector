@@ -22,7 +22,7 @@ const SEARCH_ITEM_TYPE = 'deal'
 const SEARCH_FIELDS = ['custom_fields', 'notes', 'title']
 
 const handler: DataCollectionHandler = {
-  name: 'persons',
+  name: 'Deals',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -31,7 +31,9 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-deals': parseUnifiedQuery,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -40,13 +42,17 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-deals': parseUnifiedQuery,
+    },
   },
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-deals': parseUnifiedFields,
+    },
   },
   update: {
     execute: async (request) =>
@@ -55,7 +61,9 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-deals': parseUnifiedFields,
+    },
   },
 }
 
@@ -111,33 +119,29 @@ export async function getFieldsSchema({ credentials }) {
   return type
 }
 
-async function parseUnifiedQuery({ udmKey, unifiedQuery }) {
-  if (udmKey === 'crm-deals') {
-    const dealsQuery = unifiedQuery as UnifiedDealQuery
-    if (dealsQuery.name) {
-      return {
-        query: {
-          search: {
-            fields: ['name'],
-            term: dealsQuery.name,
-          },
-        },
-      }
-    }
-  }
-  return null
-}
-
-async function parseUnifiedFields({ udmKey, unifiedFields }) {
-  if (udmKey === 'crm-deals' && unifiedFields) {
-    const unifiedDeal: UnifiedDealFields = unifiedFields
+async function parseUnifiedQuery({ unifiedQuery }) {
+  const dealsQuery = unifiedQuery as UnifiedDealQuery
+  if (dealsQuery.name) {
     return {
-      fields: {
-        name: unifiedDeal.name,
-        value: unifiedDeal.amount?.toString?.(),
-        org_id: unifiedDeal.companyId,
+      query: {
+        search: {
+          fields: ['name'],
+          term: dealsQuery.name,
+        },
       },
     }
+  } else {
+    return null
   }
-  return null
+}
+
+async function parseUnifiedFields({ unifiedFields }) {
+  const unifiedDeal: UnifiedDealFields = unifiedFields
+  return {
+    fields: {
+      name: unifiedDeal.name,
+      value: unifiedDeal.amount?.toString?.(),
+      org_id: unifiedDeal.companyId,
+    },
+  }
 }

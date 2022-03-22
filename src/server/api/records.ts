@@ -24,7 +24,7 @@ export async function getRecords(
     records:
       response.data?.map((item) => ({
         id: item.id,
-        record: item,
+        fields: item,
       })) ?? [],
     cursor: nextCursor,
   }
@@ -45,9 +45,9 @@ export async function updateRecord(
   credentials,
   recordKey,
   id,
-  record,
+  fields,
 ): Promise<DataCollectionUpdateResponse> {
-  const response = await put(credentials, `${recordKey}/${id}`, record)
+  const response = await put(credentials, `${recordKey}/${id}`, fields)
   return {
     id: response.data.id,
   }
