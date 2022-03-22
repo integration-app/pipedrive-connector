@@ -28,7 +28,7 @@ const SEARCH_FIELDS = [
 ]
 
 const handler: DataCollectionHandler = {
-  name: 'persons',
+  name: 'Leads',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -36,7 +36,9 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-leads': parseUnifiedQuery,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -45,13 +47,17 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-leads': parseUnifiedQuery,
+    },
   },
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-leads': parseUnifiedFields,
+    },
   },
   update: {
     execute: async (request) =>
@@ -60,7 +66,9 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-leads': parseUnifiedFields,
+    },
   },
 }
 
@@ -109,32 +117,27 @@ export async function getFieldsSchema({ credentials }) {
   return type
 }
 
-async function parseUnifiedQuery({ udmKey, unifiedQuery }) {
-  if (udmKey === 'crm-leads') {
-    const leadsQuery = unifiedQuery as UnifiedLeadQuery
-    if (leadsQuery.email) {
-      return {
-        query: {
-          search: {
-            fields: ['email'],
-            term: leadsQuery.email,
-          },
+async function parseUnifiedQuery({ unifiedQuery }) {
+  const leadsQuery = unifiedQuery as UnifiedLeadQuery
+  if (leadsQuery.email) {
+    return {
+      query: {
+        search: {
+          fields: ['email'],
+          term: leadsQuery.email,
         },
-      }
+      },
     }
   }
   return null
 }
 
-async function parseUnifiedFields({ udmKey, unifiedFields }) {
-  if (udmKey === 'crm-leads' && unifiedFields) {
-    const unifiedLead: UnifiedLeadFields = unifiedFields
-    return {
-      fields: {
-        title: `${unifiedLead.firstName ?? ''} ${unifiedLead.lastName ?? ''}`,
-        organization_id: unifiedLead.companyId,
-      },
-    }
+async function parseUnifiedFields({ unifiedFields }) {
+  const unifiedLead: UnifiedLeadFields = unifiedFields
+  return {
+    fields: {
+      title: `${unifiedLead.firstName ?? ''} ${unifiedLead.lastName ?? ''}`,
+      organization_id: unifiedLead.companyId,
+    },
   }
-  return null
 }

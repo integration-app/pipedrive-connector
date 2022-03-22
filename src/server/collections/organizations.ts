@@ -20,7 +20,7 @@ const SEARCH_ITEM_TYPE = 'organization'
 const SEARCH_FIELDS = ['address', 'custom_fields', 'name', 'notes']
 
 const handler: DataCollectionHandler = {
-  name: 'organizations',
+  name: 'Organizations',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -29,7 +29,9 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-companies': parseUnifiedQuery,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -38,13 +40,17 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-companies': parseUnifiedQuery,
+    },
   },
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-companies': parseUnifiedFields,
+    },
   },
   update: {
     execute: async (request) =>
@@ -53,7 +59,9 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-companies': parseUnifiedFields,
+    },
   },
 }
 
@@ -83,31 +91,26 @@ export async function getFieldsSchema({ credentials }) {
   return type
 }
 
-async function parseUnifiedQuery({ udmKey, unifiedQuery }) {
-  if (udmKey === 'crm-companies') {
-    const companiesQuery = unifiedQuery as UnifiedCompanyQuery
-    if (companiesQuery.name) {
-      return {
-        query: {
-          search: {
-            fields: ['name'],
-            term: companiesQuery.name,
-          },
+async function parseUnifiedQuery({ unifiedQuery }) {
+  const companiesQuery = unifiedQuery as UnifiedCompanyQuery
+  if (companiesQuery.name) {
+    return {
+      query: {
+        search: {
+          fields: ['name'],
+          term: companiesQuery.name,
         },
-      }
+      },
     }
   }
   return null
 }
 
-async function parseUnifiedFields({ udmKey, unifiedFields }) {
-  if (udmKey === 'crm-companies' && unifiedFields) {
-    const unifiedCompany: UnifiedCompanyFields = unifiedFields
-    return {
-      fields: {
-        name: unifiedCompany.name,
-      },
-    }
+async function parseUnifiedFields({ unifiedFields }) {
+  const unifiedCompany: UnifiedCompanyFields = unifiedFields
+  return {
+    fields: {
+      name: unifiedCompany.name,
+    },
   }
-  return null
 }

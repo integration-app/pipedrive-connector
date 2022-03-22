@@ -20,7 +20,7 @@ const SEARCH_ITEM_TYPE = 'person'
 const SEARCH_FIELDS = ['custom_fields', 'email', 'name', 'notes', 'phone']
 
 const handler: DataCollectionHandler = {
-  name: 'persons',
+  name: 'Persons',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -29,7 +29,12 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-contacts': parseFindUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-contacts': extractUnifiedFields,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -38,13 +43,20 @@ const handler: DataCollectionHandler = {
         searchItemType: SEARCH_ITEM_TYPE,
         ...request,
       }),
-    parseUnifiedQuery,
+    parseUnifiedQuery: {
+      'crm-contacts': parseFindOneUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-contacts': extractUnifiedFields,
+    },
   },
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-contacts': parseUnifiedFields,
+    },
   },
   update: {
     execute: async (request) =>
@@ -53,7 +65,9 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-contacts': parseUnifiedFields,
+    },
   },
 }
 
@@ -69,39 +83,6 @@ export async function getFindQuerySchema({ credentials }) {
 
 export async function getFindOneQuerySchema({}) {
   return makeSearchQuerySchema(SEARCH_FIELDS)
-}
-
-async function parseUnifiedQuery({ udmKey, unifiedQuery }) {
-  if (udmKey === 'crm-contacts') {
-    const contactsQuery = unifiedQuery as UnifiedContactQuery
-    if (contactsQuery.email) {
-      return {
-        query: {
-          search: {
-            fields: ['email'],
-            term: contactsQuery.email,
-          },
-        },
-      }
-    }
-  }
-  return null
-}
-
-async function parseUnifiedFields({ udmKey, unifiedFields }) {
-  if (udmKey === 'crm-contacts' && unifiedFields) {
-    const unifiedContact: UnifiedContactFields = unifiedFields
-    return {
-      fields: {
-        name: `${unifiedContact.firstName ?? ''} ${
-          unifiedContact.lastName ?? ''
-        }`,
-        email: [unifiedFields.email],
-        // ToDo: the rest of fields
-      },
-    }
-  }
-  return null
 }
 
 export async function getFieldsSchema({ credentials }) {
@@ -123,4 +104,62 @@ export async function getFieldsSchema({ credentials }) {
   )
   type.required = ['name']
   return type
+}
+
+async function parseFindOneUnifiedQuery({ unifiedQuery }) {
+  const contactsQuery = unifiedQuery as UnifiedContactQuery
+  if (contactsQuery.email) {
+    return {
+      query: {
+        search: {
+          fields: ['email'],
+          term: contactsQuery.email,
+        },
+      },
+    }
+  }
+  return null
+}
+
+async function parseFindUnifiedQuery({ unifiedQuery }) {
+  const contactsQuery = unifiedQuery as UnifiedContactQuery
+  if (contactsQuery.email) {
+    return {
+      query: {
+        $anyOfOption: {
+          index: 0,
+          value: {
+            search: {
+              fields: ['email'],
+              term: contactsQuery.email,
+            },
+          },
+        },
+      },
+    }
+  }
+  return null
+}
+
+function extractUnifiedFields({ fields }): UnifiedContactFields {
+  return {
+    firstName: fields.name ? fields.name.split(' ')[0] : undefined,
+    lastName: fields.name ? fields.name.split(' ')[1] : undefined,
+    email: fields.email?.[0]?.value,
+    companyId: fields.org_id,
+    companyName: fields.org_name,
+  }
+}
+
+async function parseUnifiedFields({ unifiedFields }) {
+  const unifiedContact: UnifiedContactFields = unifiedFields
+  return {
+    fields: {
+      name: `${unifiedContact.firstName ?? ''} ${
+        unifiedContact.lastName ?? ''
+      }`,
+      email: [unifiedFields.email],
+      // ToDo: the rest of fields
+    },
+  }
 }

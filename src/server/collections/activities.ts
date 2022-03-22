@@ -13,7 +13,7 @@ import {
 const RECORD_KEY = 'activities'
 
 const handler: DataCollectionHandler = {
-  name: 'persons',
+  name: 'Activities',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -21,12 +21,17 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
+    extractUnifiedFields: {
+      'crm-activities': extractUnifiedFields,
+    },
   },
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-activities': parseUnifiedFields,
+    },
   },
   update: {
     execute: async (request) =>
@@ -35,7 +40,9 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
     fieldsSchema: getFieldsSchema,
-    parseUnifiedFields,
+    parseUnifiedFields: {
+      'crm-activities': parseUnifiedFields,
+    },
   },
 }
 
@@ -81,6 +88,17 @@ export async function getFieldsSchema({ credentials }) {
       }),
     }),
   )
+}
+
+function extractUnifiedFields({ fields }): UnifiedActivityFields {
+  return {
+    title: fields.subject,
+    description: fields.note,
+    dealId: fields.deal_id,
+    leadId: fields.lead_id,
+    contactId: fields.person_id,
+    companyId: fields.org_id,
+  }
 }
 
 async function parseUnifiedFields({ udmKey, unifiedFields }) {
