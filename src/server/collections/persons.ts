@@ -21,6 +21,7 @@ const SEARCH_FIELDS = ['custom_fields', 'email', 'name', 'notes', 'phone']
 
 const handler: DataCollectionHandler = {
   name: 'Persons',
+
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -36,6 +37,7 @@ const handler: DataCollectionHandler = {
       'crm-contacts': extractUnifiedFields,
     },
   },
+
   findOne: {
     querySchema: getFindOneQuerySchema,
     execute: (request) =>
@@ -50,6 +52,7 @@ const handler: DataCollectionHandler = {
       'crm-contacts': extractUnifiedFields,
     },
   },
+
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
@@ -58,6 +61,7 @@ const handler: DataCollectionHandler = {
       'crm-contacts': parseUnifiedFields,
     },
   },
+
   update: {
     execute: async (request) =>
       updateCollectionRecord({

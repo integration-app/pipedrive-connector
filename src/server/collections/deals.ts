@@ -139,7 +139,7 @@ async function parseUnifiedFields({ unifiedFields }) {
   const unifiedDeal: UnifiedDealFields = unifiedFields
   return {
     fields: {
-      name: unifiedDeal.name,
+      title: unifiedDeal.name,
       value: unifiedDeal.amount?.toString?.(),
       org_id: unifiedDeal.companyId,
     },
