@@ -5,12 +5,13 @@ import {
 } from '@integration-app/sdk/connector-api'
 import { get, MAX_LIMIT, post, put } from '../api'
 
-export async function getRecords(
+export async function getRecords({
   credentials,
   recordKey,
   query,
   cursor = null,
-): Promise<DataCollectionFindResponse> {
+  parseRecord = defaultParseRecord,
+}): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const parameters = {
     ...(query ?? {}),
@@ -21,12 +22,16 @@ export async function getRecords(
   const hasMore = response.additional_data?.pagination?.more_items_in_collection
   const nextCursor = hasMore ? (parseInt(cursor) ?? 0 + limit).toString() : null
   return {
-    records:
-      response.data?.map((item) => ({
-        id: item.id,
-        fields: item,
-      })) ?? [],
+    records: response.data?.map(parseRecord) ?? [],
     cursor: nextCursor,
+  }
+}
+
+function defaultParseRecord(fields) {
+  return {
+    id: fields.id,
+    name: fields.name,
+    fields,
   }
 }
 

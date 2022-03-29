@@ -1,7 +1,6 @@
 import { Type } from '@sinclair/typebox'
 import { makeActivityTypeSchema } from '../api/activity-types'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
-import { makeOwnerSchema } from '../api/users'
 import { UnifiedActivityFields } from '@integration-app/sdk/udm/crm-activities'
 import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import {
@@ -9,11 +8,13 @@ import {
   createCollectionRecord,
   updateCollectionRecord,
 } from './common'
+import users from './users'
 
 const RECORD_KEY = 'activities'
 
 const handler: DataCollectionHandler = {
   name: 'Activities',
+  uri: '/data/collections/activities',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -51,7 +52,12 @@ export default handler
 export async function getFindQuerySchema({ credentials }) {
   return Type.Union([
     await makeSavedFilterQuerySchema(credentials, 'activity'),
-    Type.Object(await makeOwnerSchema(credentials)),
+    Type.Object({
+      owner_id: Type.String({
+        title: 'Owner',
+        referenceCollectionUri: users.uri,
+      }),
+    }),
   ])
 }
 
@@ -73,7 +79,10 @@ export async function getFieldsSchema({ credentials }) {
         format: 'time',
       }),
       location: Type.String(),
-      user_id: await makeOwnerSchema(credentials),
+      user_id: Type.String({
+        title: 'User',
+        referenceCollectionUri: users.uri,
+      }),
       person_id: Type.Integer({
         lookupCollectionUri: 'data/collections/persons',
       }),
@@ -98,6 +107,7 @@ function extractUnifiedFields({ fields }): UnifiedActivityFields {
     leadId: fields.lead_id,
     contactId: fields.person_id,
     companyId: fields.org_id,
+    userId: fields.user_id,
   }
 }
 
@@ -112,7 +122,7 @@ async function parseUnifiedFields({ udmKey, unifiedFields }) {
         lead_id: unifiedActivity.leadId,
         person_id: unifiedActivity.contactId,
         org_id: unifiedActivity.companyId,
-        // ToDo: other fields
+        user_id: unifiedActivity.userId,
       },
     }
   } else {

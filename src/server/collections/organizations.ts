@@ -2,7 +2,6 @@ import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeSearchQuerySchema } from '../api/search'
-import { makeOwnerSchema } from '../api/users'
 import { makeVisibleToSchema } from '../api/visibility'
 import {
   createCollectionRecord,
@@ -14,6 +13,7 @@ import {
   UnifiedCompanyFields,
   UnifiedCompanyQuery,
 } from '@integration-app/sdk/udm/crm-companies'
+import users from './users'
 
 const RECORD_KEY = 'organizations'
 const SEARCH_ITEM_TYPE = 'organization'
@@ -21,6 +21,7 @@ const SEARCH_FIELDS = ['address', 'custom_fields', 'name', 'notes']
 
 const handler: DataCollectionHandler = {
   name: 'Organizations',
+  uri: '/data/collections/organizations',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -32,6 +33,9 @@ const handler: DataCollectionHandler = {
     parseUnifiedQuery: {
       'crm-companies': parseUnifiedQuery,
     },
+    extractUnifiedFields: {
+      'crm-companies': extractUnifiedFields,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -42,6 +46,9 @@ const handler: DataCollectionHandler = {
       }),
     parseUnifiedQuery: {
       'crm-companies': parseUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-companies': extractUnifiedFields,
     },
   },
   create: {
@@ -71,7 +78,10 @@ export async function getFindQuerySchema({ credentials }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
     await makeSavedFilterQuerySchema(credentials, 'org'),
-    await makeOwnerSchema(credentials),
+    Type.String({
+      title: 'Owner',
+      referenceCollectionUri: users.uri,
+    }),
   ])
 }
 
@@ -79,11 +89,14 @@ export async function getFindOneQuerySchema({}) {
   return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
-export async function getFieldsSchema({ credentials }) {
+export async function getFieldsSchema({}) {
   const type = Type.Partial(
     Type.Object({
       name: Type.String(),
-      owner_id: await makeOwnerSchema(credentials),
+      owner_id: Type.String({
+        title: 'Owner',
+        referenceCollectionUri: users.uri,
+      }),
       visible_to: await makeVisibleToSchema(),
     }),
   )
@@ -111,6 +124,16 @@ async function parseUnifiedFields({ unifiedFields }) {
   return {
     fields: {
       name: unifiedCompany.name,
+      owner_id: unifiedCompany.userId,
+    },
+  }
+}
+
+function extractUnifiedFields({ fields }) {
+  return {
+    unifiedFields: {
+      name: fields.name,
+      userId: fields.owner_id?.id,
     },
   }
 }
