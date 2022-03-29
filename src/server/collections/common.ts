@@ -20,7 +20,7 @@ export async function findInCollection({
       records,
     }
   } else {
-    return getRecords(credentials, recordKey, query, cursor)
+    return getRecords({ credentials, recordKey, query, cursor })
   }
 }
 

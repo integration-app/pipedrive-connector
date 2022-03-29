@@ -3,7 +3,6 @@ import { Type } from '@sinclair/typebox'
 import { makeLeadLabelSchema } from '../api/lead-labels'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeSearchQuerySchema } from '../api/search'
-import { makeOwnerSchema } from '../api/users'
 import {
   findInCollection,
   findOneInCollection,
@@ -14,6 +13,7 @@ import {
   UnifiedLeadFields,
   UnifiedLeadQuery,
 } from '@integration-app/sdk/udm/crm-leads'
+import users from './users'
 
 const RECORD_KEY = 'leads'
 const SEARCH_ITEM_TYPE = 'lead'
@@ -29,6 +29,7 @@ const SEARCH_FIELDS = [
 
 const handler: DataCollectionHandler = {
   name: 'Leads',
+  uri: '/data/collections/leads',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -38,6 +39,9 @@ const handler: DataCollectionHandler = {
       }),
     parseUnifiedQuery: {
       'crm-leads': parseUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-leads': extractUnifiedFields,
     },
   },
   findOne: {
@@ -49,6 +53,9 @@ const handler: DataCollectionHandler = {
       }),
     parseUnifiedQuery: {
       'crm-leads': parseUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-leads': extractUnifiedFields,
     },
   },
   create: {
@@ -80,7 +87,10 @@ export async function getFindQuerySchema({ credentials }) {
     await makeSavedFilterQuerySchema(credentials, 'leads'),
     Type.Object(
       {
-        user_id: await makeOwnerSchema(credentials),
+        user_id: Type.String({
+          title: 'User',
+          referenceCollectionUri: users.uri,
+        }),
       },
       {
         title: 'Filter by Field',
@@ -97,7 +107,10 @@ export async function getFieldsSchema({ credentials }) {
   const type = Type.Partial(
     Type.Object({
       title: Type.String(),
-      owner_id: await makeOwnerSchema(credentials),
+      owner_id: Type.String({
+        title: 'Owner',
+        referenceCollectionUri: users.uri,
+      }),
       label_ids: Type.Array(await makeLeadLabelSchema({ credentials }), {
         title: 'Labels',
       }),
@@ -136,8 +149,19 @@ async function parseUnifiedFields({ unifiedFields }) {
   const unifiedLead: UnifiedLeadFields = unifiedFields
   return {
     fields: {
-      title: `${unifiedLead.firstName ?? ''} ${unifiedLead.lastName ?? ''}`,
+      title: unifiedLead.name,
       organization_id: unifiedLead.companyId,
+      owner_id: unifiedLead.userId,
+    },
+  }
+}
+
+function extractUnifiedFields({ fields }) {
+  return {
+    unifiedFields: {
+      name: fields.title,
+      companyId: fields.organization_id,
+      userId: fields.owner_id,
     },
   }
 }

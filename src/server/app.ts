@@ -2,14 +2,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { ConnectorServer } from '@integration-app/connector-sdk'
-import { DataLocationType } from '@integration-app/sdk/connector-api'
 import persons from './collections/persons'
 import deals from './collections/deals'
 import activities from './collections/activities'
 import leads from './collections/leads'
 import organizations from './collections/organizations'
 import { ConnectionMode } from '@integration-app/sdk/connectors'
-import { toHeaderCase } from 'js-convert-case'
+import users from './collections/users'
+import rootDirectory from './collections/rootDirectory'
 
 export const server = new ConnectorServer({
   baseUri: process.env.BASE_URI,
@@ -22,51 +22,36 @@ export const server = new ConnectorServer({
   secret: process.env.SECRET,
   data: {
     root: {
-      uri: 'data/root',
+      uri: rootDirectory.uri,
     },
     'crm-leads': {
-      uri: 'data/collections/leads',
+      uri: leads.uri,
     },
     'crm-contacts': {
-      uri: 'data/collections/persons',
+      uri: persons.uri,
     },
     'crm-companies': {
-      uri: 'data/collections/organizations',
+      uri: organizations.uri,
     },
     'crm-deals': {
-      uri: 'data/collections/deals',
+      uri: deals.uri,
     },
     'crm-activities': {
-      uri: 'data/collections/activities',
+      uri: activities.uri,
+    },
+    users: {
+      uri: users.uri,
     },
   } as any,
 })
 
 server.setupCredentialsForm({})
 
-server.dataDirectory('data/root', {
-  name: 'All Data',
-  list: {
-    execute: async () => {
-      const collections = [
-        'organizations',
-        'persons',
-        'deals',
-        'leads',
-        'activities',
-      ]
-      const locations = collections.map((collection) => ({
-        type: DataLocationType.collection,
-        uri: `data/collections/${collection}`,
-        name: toHeaderCase(collection),
-      }))
-      return { locations }
-    },
-  },
-})
+server.dataDirectory(rootDirectory)
 
-server.dataCollection('data/collections/organizations', organizations)
-server.dataCollection('data/collections/persons', persons)
-server.dataCollection('data/collections/deals', deals)
-server.dataCollection('data/collections/leads', leads)
-server.dataCollection('data/collections/activities', activities)
+server.dataCollection(organizations)
+server.dataCollection(persons)
+server.dataCollection(deals)
+server.dataCollection(leads)
+server.dataCollection(activities)
+server.dataCollection(users)

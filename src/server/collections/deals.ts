@@ -4,7 +4,6 @@ import { makePipelineSchema } from '../api/pipelines'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeSearchQuerySchema } from '../api/search'
 import { makeStageSchema } from '../api/stages'
-import { makeOwnerSchema } from '../api/users'
 import { makeVisibleToSchema } from '../api/visibility'
 import {
   findInCollection,
@@ -16,6 +15,7 @@ import {
   UnifiedDealFields,
   UnifiedDealQuery,
 } from '@integration-app/sdk/udm/crm-deals'
+import users from './users'
 
 const RECORD_KEY = 'deals'
 const SEARCH_ITEM_TYPE = 'deal'
@@ -23,6 +23,7 @@ const SEARCH_FIELDS = ['custom_fields', 'notes', 'title']
 
 const handler: DataCollectionHandler = {
   name: 'Deals',
+  uri: '/data/collections/deals',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -34,6 +35,9 @@ const handler: DataCollectionHandler = {
     parseUnifiedQuery: {
       'crm-deals': parseUnifiedQuery,
     },
+    extractUnifiedFields: {
+      'crm-deals': extractUnifiedFields,
+    },
   },
   findOne: {
     querySchema: getFindOneQuerySchema,
@@ -44,6 +48,9 @@ const handler: DataCollectionHandler = {
       }),
     parseUnifiedQuery: {
       'crm-deals': parseUnifiedQuery,
+    },
+    extractUnifiedFields: {
+      'crm-deals': extractUnifiedFields,
     },
   },
   create: {
@@ -75,7 +82,10 @@ export async function getFindQuerySchema({ credentials }) {
     await makeSavedFilterQuerySchema(credentials, 'deals'),
     Type.Object(
       {
-        user_id: await makeOwnerSchema(credentials),
+        user_id: Type.String({
+          title: 'User',
+          referenceCollectionUri: users.uri,
+        }),
         stage_id: await makeStageSchema(credentials),
         status: Type.String({
           title: 'Status',
@@ -99,7 +109,10 @@ export async function getFieldsSchema({ credentials }) {
       title: Type.String(),
       value: Type.String(),
       currency: Type.String(),
-      user_id: await makeOwnerSchema(credentials),
+      user_id: Type.String({
+        title: 'User',
+        referenceCollectionUri: users.uri,
+      }),
       person_id: Type.Integer({
         lookupCollectionUri: 'data/collections/persons',
       }),
@@ -142,6 +155,18 @@ async function parseUnifiedFields({ unifiedFields }) {
       name: unifiedDeal.name,
       value: unifiedDeal.amount?.toString?.(),
       org_id: unifiedDeal.companyId,
+      user_id: unifiedDeal.userId,
+    },
+  }
+}
+
+function extractUnifiedFields({ fields }) {
+  return {
+    unifiedFields: {
+      name: fields.name,
+      amount: fields.value ? parseFloat(fields.value) : null,
+      companyId: fields.org_id,
+      userId: fields.user_id?.id,
     },
   }
 }

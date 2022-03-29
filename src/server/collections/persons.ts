@@ -6,7 +6,6 @@ import {
 import { Type } from '@sinclair/typebox'
 import { makeSavedFilterQuerySchema } from '../api/saved-filters'
 import { makeSearchQuerySchema } from '../api/search'
-import { makeOwnerSchema } from '../api/users'
 import { makeVisibleToSchema } from '../api/visibility'
 import {
   findInCollection,
@@ -14,6 +13,7 @@ import {
   createCollectionRecord,
   updateCollectionRecord,
 } from './common'
+import users from './users'
 
 const RECORD_KEY = 'persons'
 const SEARCH_ITEM_TYPE = 'person'
@@ -21,6 +21,7 @@ const SEARCH_FIELDS = ['custom_fields', 'email', 'name', 'notes', 'phone']
 
 const handler: DataCollectionHandler = {
   name: 'Persons',
+  uri: '/data/collections/persons',
   find: {
     querySchema: getFindQuerySchema,
     execute: (request) =>
@@ -53,7 +54,7 @@ const handler: DataCollectionHandler = {
   create: {
     execute: async (request) =>
       createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-    fieldsSchema: getFieldsSchema,
+    fieldsSchema: getCreateFieldsSchema,
     parseUnifiedFields: {
       'crm-contacts': parseUnifiedFields,
     },
@@ -64,7 +65,7 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
-    fieldsSchema: getFieldsSchema,
+    fieldsSchema: getUpdateFieldsSchema,
     parseUnifiedFields: {
       'crm-contacts': parseUnifiedFields,
     },
@@ -73,23 +74,39 @@ const handler: DataCollectionHandler = {
 
 export default handler
 
-export async function getFindQuerySchema({ credentials }) {
+async function getFindQuerySchema({ credentials }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
     await makeSavedFilterQuerySchema(credentials, 'people'),
-    await makeOwnerSchema(credentials),
+    Type.String({
+      title: 'Owner',
+      referenceCollectionUri: users.uri,
+    }),
   ])
 }
 
-export async function getFindOneQuerySchema({}) {
+function getFindOneQuerySchema({}) {
   return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
-export async function getFieldsSchema({ credentials }) {
-  const type = Type.Partial(
+async function getCreateFieldsSchema({}) {
+  const schema = await getCommonFieldsSchema()
+  schema.required = ['name']
+  return schema
+}
+
+async function getUpdateFieldsSchema() {
+  return getCommonFieldsSchema()
+}
+
+async function getCommonFieldsSchema() {
+  return Type.Partial(
     Type.Object({
       name: Type.String(),
-      owner_id: await makeOwnerSchema(credentials),
+      owner_id: Type.String({
+        title: 'Owner',
+        referenceCollectionUri: users.uri,
+      }),
       org_id: Type.Integer({
         lookupCollectionUri: 'data/collections/organizations',
       }),
@@ -102,8 +119,6 @@ export async function getFieldsSchema({ credentials }) {
       }),
     }),
   )
-  type.required = ['name']
-  return type
 }
 
 async function parseFindOneUnifiedQuery({ unifiedQuery }) {
@@ -143,11 +158,11 @@ async function parseFindUnifiedQuery({ unifiedQuery }) {
 
 function extractUnifiedFields({ fields }): UnifiedContactFields {
   return {
-    firstName: fields.name ? fields.name.split(' ')[0] : undefined,
-    lastName: fields.name ? fields.name.split(' ')[1] : undefined,
+    name: fields.name,
     email: fields.email?.[0]?.value,
     companyId: fields.org_id,
     companyName: fields.org_name,
+    userId: fields.owner_id?.id,
   }
 }
 
@@ -155,11 +170,10 @@ async function parseUnifiedFields({ unifiedFields }) {
   const unifiedContact: UnifiedContactFields = unifiedFields
   return {
     fields: {
-      name: `${unifiedContact.firstName ?? ''} ${
-        unifiedContact.lastName ?? ''
-      }`,
+      name: unifiedContact.name,
       email: [unifiedFields.email],
-      // ToDo: the rest of fields
+      org_id: unifiedContact.companyId,
+      owner_id: unifiedContact.userId,
     },
   }
 }
