@@ -111,7 +111,7 @@ export async function getFieldsSchema({ credentials }) {
         title: 'Owner',
         referenceCollectionUri: users.uri,
       }),
-      label_ids: Type.Array(await makeLeadLabelSchema({ credentials }), {
+      label_ids: Type.Array(await makeLeadLabelSchema(credentials), {
         title: 'Labels',
       }),
       person_id: Type.Integer({
