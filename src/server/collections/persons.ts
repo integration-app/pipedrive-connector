@@ -108,6 +108,7 @@ async function getCommonFieldsSchema() {
         referenceCollectionUri: users.uri,
       }),
       org_id: Type.Integer({
+        title: 'Organization',
         referenceCollectionUri: 'data/collections/organizations',
       }),
       email: Type.Array(Type.String(), { title: 'Email(s)' }),
