@@ -114,10 +114,10 @@ export async function getFieldsSchema({ credentials }) {
         referenceCollectionUri: users.uri,
       }),
       person_id: Type.Integer({
-        lookupCollectionUri: 'data/collections/persons',
+        referenceCollectionUri: 'data/collections/persons',
       }),
       org_id: Type.Integer({
-        lookupCollectionUri: 'data/collections/organizations',
+        referenceCollectionUri: 'data/collections/organizations',
       }),
       pipeline_id: await makePipelineSchema(credentials),
       stage_id: await makeStageSchema(credentials),

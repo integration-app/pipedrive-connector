@@ -115,10 +115,10 @@ export async function getFieldsSchema({ credentials }) {
         title: 'Labels',
       }),
       person_id: Type.Integer({
-        lookupCollectionUri: 'data/collections/persons',
+        referenceCollectionUri: 'data/collections/persons',
       }),
       organization_id: Type.Integer({
-        lookupCollectionUri: 'data/collections/organizations',
+        referenceCollectionUri: 'data/collections/organizations',
       }),
       expected_close_date: Type.String({
         format: 'date',

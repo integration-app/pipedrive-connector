@@ -108,7 +108,7 @@ async function getCommonFieldsSchema() {
         referenceCollectionUri: users.uri,
       }),
       org_id: Type.Integer({
-        lookupCollectionUri: 'data/collections/organizations',
+        referenceCollectionUri: 'data/collections/organizations',
       }),
       email: Type.Array(Type.String(), { title: 'Email(s)' }),
       phone: Type.Array(Type.String(), { title: 'Phone(s)' }),
