@@ -167,8 +167,8 @@ function extractUnifiedFields({ fields }) {
     unifiedFields: {
       name: fields.name,
       amount: fields.value ? parseFloat(fields.value) : null,
-      companyId: fields.org_id,
-      userId: fields.user_id?.id,
+      companyId: fields.org_id?.toString(),
+      userId: fields.user_id?.id?.toString(),
     },
   }
 }

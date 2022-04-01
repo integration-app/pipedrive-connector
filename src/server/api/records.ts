@@ -29,7 +29,7 @@ export async function getRecords({
 
 function defaultParseRecord(fields) {
   return {
-    id: fields.id,
+    id: fields.id.toString(),
     name: fields.name,
     fields,
   }
@@ -42,7 +42,7 @@ export async function createRecord(
 ): Promise<DataCollectionCreateResponse> {
   const response = await post(credentials, recordKey, record)
   return {
-    id: response.data.id,
+    id: response.data.id.toString(),
   }
 }
 
@@ -54,6 +54,6 @@ export async function updateRecord(
 ): Promise<DataCollectionUpdateResponse> {
   const response = await put(credentials, `${recordKey}/${id}`, fields)
   return {
-    id: response.data.id,
+    id: response.data.id.toString(),
   }
 }

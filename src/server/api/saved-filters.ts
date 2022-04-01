@@ -8,7 +8,7 @@ export async function makeSavedFilterQuerySchema(credentials, itemType) {
       filter_id: Type.String({
         referenceRecords:
           filters?.map((filter: any) => {
-            return { id: filter.id, name: filter.name }
+            return { id: filter.id.toString(), name: filter.name }
           }) ?? [],
         title: 'Filter',
       }),
