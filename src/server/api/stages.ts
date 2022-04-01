@@ -6,7 +6,7 @@ export async function makeStageSchema(credentials) {
   return Type.String({
     title: 'Stage',
     referenceRecords: items.map((item) => ({
-      id: item.id,
+      id: item.id.toString(),
       name: item.name,
     })),
   })

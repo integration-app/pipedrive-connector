@@ -6,7 +6,7 @@ export async function makeLeadLabelSchema(credentials) {
   return Type.String({
     title: 'Label',
     referenceRecords: items.map((item) => ({
-      id: item.id,
+      id: item.id.toString(),
       name: item.name,
     })),
   })

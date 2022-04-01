@@ -6,7 +6,7 @@ export async function makePipelineSchema(credentials) {
   return Type.String({
     title: 'Pipeline',
     referenceRecords: items.map((item) => ({
-      id: item.id,
+      id: item.id.toString(),
       name: item.name,
     })),
   })
