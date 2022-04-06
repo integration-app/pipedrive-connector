@@ -1,8 +1,8 @@
 import { Type } from '@sinclair/typebox'
-import { get } from '../api'
 
-export async function makeSavedFilterQuerySchema(credentials, itemType) {
-  const filters = await getFilters(credentials, itemType)
+export async function makeSavedFilterQuerySchema(apiClient, itemType) {
+  console.log('makeSavedFilterQuerySchema', apiClient)
+  const filters = await getFilters(apiClient, itemType)
   return Type.Object(
     {
       filter_id: Type.String({
@@ -19,8 +19,8 @@ export async function makeSavedFilterQuerySchema(credentials, itemType) {
   )
 }
 
-export async function getFilters(credentials, type: string) {
-  const response = await get(credentials, 'filters', {
+export async function getFilters(apiClient, type: string) {
+  const response = await apiClient.get('filters', {
     type,
   })
   return response.data

@@ -74,10 +74,10 @@ const handler: DataCollectionHandler = {
 
 export default handler
 
-async function getFindQuerySchema({ credentials }) {
+async function getFindQuerySchema({ apiClient }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
-    await makeSavedFilterQuerySchema(credentials, 'people'),
+    await makeSavedFilterQuerySchema(apiClient, 'people'),
     Type.String({
       title: 'Owner',
       referenceCollectionUri: users.uri,

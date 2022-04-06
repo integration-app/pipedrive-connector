@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { ConnectorServer } from '@integration-app/connector-sdk'
+import { ConnectorServer, RestApiClient } from '@integration-app/connector-sdk'
 import persons from './collections/persons'
 import deals from './collections/deals'
 import activities from './collections/activities'
@@ -20,6 +20,14 @@ export const server = new ConnectorServer({
   bucket: process.env.S3_BUCKET,
   tmpBucket: process.env.S3_TMP_BUCKET,
   secret: process.env.SECRET,
+  makeApiClient: ({ credentials }) => {
+    return new RestApiClient({
+      baseUri: 'https://api.pipedrive.com/v1',
+      query: {
+        api_token: credentials.api_token,
+      },
+    })
+  },
   data: {
     root: {
       uri: rootDirectory.uri,
