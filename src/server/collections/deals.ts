@@ -76,17 +76,17 @@ const handler: DataCollectionHandler = {
 
 export default handler
 
-export async function getFindQuerySchema({ credentials }) {
+export async function getFindQuerySchema({ apiClient }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
-    await makeSavedFilterQuerySchema(credentials, 'deals'),
+    await makeSavedFilterQuerySchema(apiClient, 'deals'),
     Type.Object(
       {
         user_id: Type.String({
           title: 'User',
           referenceCollectionUri: users.uri,
         }),
-        stage_id: await makeStageSchema(credentials),
+        stage_id: await makeStageSchema(apiClient),
         status: Type.String({
           title: 'Status',
           enum: ['open', 'won', 'lost'],
@@ -103,7 +103,7 @@ export async function getFindOneQuerySchema({}) {
   return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
-export async function getFieldsSchema({ credentials }) {
+export async function getFieldsSchema({ apiClient }) {
   const type = Type.Partial(
     Type.Object({
       title: Type.String(),
@@ -121,8 +121,8 @@ export async function getFieldsSchema({ credentials }) {
         title: 'Organization',
         referenceCollectionUri: 'data/collections/organizations',
       }),
-      pipeline_id: await makePipelineSchema(credentials),
-      stage_id: await makeStageSchema(credentials),
+      pipeline_id: await makePipelineSchema(apiClient),
+      stage_id: await makeStageSchema(apiClient),
       status: Type.String({ enum: ['open', 'won', 'lost'] }),
       expected_close_date: Type.String({ format: 'date' }),
       probability: Type.Integer(),

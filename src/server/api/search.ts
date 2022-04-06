@@ -1,6 +1,6 @@
 import { DataRecord } from '@integration-app/sdk/connector-api'
 import { Type } from '@sinclair/typebox'
-import { get, MAX_LIMIT } from '../api'
+import { MAX_LIMIT } from '.'
 
 /**
  * Create a query schema to search for records using itemSearch
@@ -36,7 +36,7 @@ export function isSearchQuery(query: any) {
  * @returns
  */
 export async function search(
-  credentials,
+  apiClient,
   itemType,
   query,
 ): Promise<DataRecord[]> {
@@ -51,9 +51,7 @@ export async function search(
     parameters.fields = query.search.fields.join(',')
   }
 
-  const response = await get(credentials, 'itemSearch', parameters)
-
-  console.log('SEARCH RESPONSE', response)
+  const response = await apiClient.get('itemSearch', parameters)
 
   const records: DataRecord[] =
     response.data?.items?.map((responseRecord) => ({

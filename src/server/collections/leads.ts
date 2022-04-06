@@ -81,10 +81,10 @@ const handler: DataCollectionHandler = {
 
 export default handler
 
-export async function getFindQuerySchema({ credentials }) {
+export async function getFindQuerySchema({ apiClient }) {
   return Type.Union([
     makeSearchQuerySchema(SEARCH_FIELDS),
-    await makeSavedFilterQuerySchema(credentials, 'leads'),
+    await makeSavedFilterQuerySchema(apiClient, 'leads'),
     Type.Object(
       {
         user_id: Type.String({
@@ -103,7 +103,7 @@ export async function getFindOneQuerySchema({}) {
   return makeSearchQuerySchema(SEARCH_FIELDS)
 }
 
-export async function getFieldsSchema({ credentials }) {
+export async function getFieldsSchema({ apiClient }) {
   const type = Type.Partial(
     Type.Object({
       title: Type.String(),
@@ -111,7 +111,7 @@ export async function getFieldsSchema({ credentials }) {
         title: 'Owner',
         referenceCollectionUri: users.uri,
       }),
-      label_ids: Type.Array(await makeLeadLabelSchema(credentials), {
+      label_ids: Type.Array(await makeLeadLabelSchema(apiClient), {
         title: 'Labels',
       }),
       person_id: Type.Integer({

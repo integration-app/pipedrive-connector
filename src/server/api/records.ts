@@ -3,10 +3,10 @@ import {
   DataCollectionFindResponse,
   DataCollectionUpdateResponse,
 } from '@integration-app/sdk/connector-api'
-import { get, MAX_LIMIT, post, put } from '../api'
+import { MAX_LIMIT } from '.'
 
 export async function getRecords({
-  credentials,
+  apiClient,
   recordKey,
   query,
   cursor = null,
@@ -18,7 +18,7 @@ export async function getRecords({
     start: cursor ?? '0',
     limit,
   }
-  const response = await get(credentials, recordKey, parameters)
+  const response = await apiClient.get(recordKey, parameters)
   const hasMore = response.additional_data?.pagination?.more_items_in_collection
   const nextCursor = hasMore ? (parseInt(cursor) ?? 0 + limit).toString() : null
   return {
@@ -36,23 +36,23 @@ function defaultParseRecord(fields) {
 }
 
 export async function createRecord(
-  credentials,
+  apiClient,
   recordKey,
   record,
 ): Promise<DataCollectionCreateResponse> {
-  const response = await post(credentials, recordKey, record)
+  const response = await apiClient.post(recordKey, record)
   return {
     id: response.data.id.toString(),
   }
 }
 
 export async function updateRecord(
-  credentials,
+  apiClient,
   recordKey,
   id,
   fields,
 ): Promise<DataCollectionUpdateResponse> {
-  const response = await put(credentials, `${recordKey}/${id}`, fields)
+  const response = await apiClient.put(`${recordKey}/${id}`, fields)
   return {
     id: response.data.id.toString(),
   }

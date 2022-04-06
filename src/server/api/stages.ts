@@ -1,8 +1,7 @@
 import { Type } from '@sinclair/typebox'
-import { get } from '../api'
 
-export async function makeStageSchema(credentials) {
-  const items = await getStages(credentials)
+export async function makeStageSchema(apiClient) {
+  const items = await getStages(apiClient)
   return Type.String({
     title: 'Stage',
     referenceRecords: items.map((item) => ({
@@ -12,7 +11,7 @@ export async function makeStageSchema(credentials) {
   })
 }
 
-export async function getStages(credentials) {
-  const response = await get(credentials, 'stages')
+export async function getStages(apiClient) {
+  const response = await apiClient.get('stages')
   return response.data
 }

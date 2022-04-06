@@ -1,8 +1,7 @@
 import { Type } from '@sinclair/typebox'
-import { get } from '../api'
 
-export async function makeLeadLabelSchema(credentials) {
-  const items = await getLeadLabels(credentials)
+export async function makeLeadLabelSchema(apiClient) {
+  const items = await getLeadLabels(apiClient)
   return Type.String({
     title: 'Label',
     referenceRecords: items.map((item) => ({
@@ -12,7 +11,7 @@ export async function makeLeadLabelSchema(credentials) {
   })
 }
 
-export async function getLeadLabels(credentials) {
-  const response = await get(credentials, 'leadLabels')
+export async function getLeadLabels(apiClient) {
+  const response = await apiClient.get('leadLabels')
   return response.data
 }

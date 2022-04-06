@@ -49,9 +49,9 @@ const handler: DataCollectionHandler = {
 
 export default handler
 
-export async function getFindQuerySchema({ credentials }) {
+export async function getFindQuerySchema({ apiClient }) {
   return Type.Union([
-    await makeSavedFilterQuerySchema(credentials, 'activity'),
+    await makeSavedFilterQuerySchema(apiClient, 'activity'),
     Type.Object({
       owner_id: Type.String({
         title: 'Owner',
@@ -61,10 +61,10 @@ export async function getFindQuerySchema({ credentials }) {
   ])
 }
 
-export async function getFieldsSchema({ credentials }) {
+export async function getFieldsSchema({ apiClient }) {
   return Type.Partial(
     Type.Object({
-      type: await makeActivityTypeSchema(credentials),
+      type: await makeActivityTypeSchema(apiClient),
       subject: Type.String(),
       note: Type.String(),
       public_description: Type.String(),
@@ -87,12 +87,15 @@ export async function getFieldsSchema({ credentials }) {
         referenceCollectionUri: 'data/collections/persons',
       }),
       org_id: Type.Integer({
+        title: 'Organization',
         referenceCollectionUri: 'data/collections/organizations',
       }),
       deal_id: Type.Integer({
+        title: 'Deal',
         referenceCollectionUri: 'data/collections/deals',
       }),
       lead_id: Type.Integer({
+        title: 'Lead',
         referenceCollectionUri: 'data/collections/leads',
       }),
     }),

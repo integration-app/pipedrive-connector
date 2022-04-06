@@ -1,8 +1,7 @@
 import { Type } from '@sinclair/typebox'
-import { get } from '../api'
 
-export async function makeActivityTypeSchema(credentials) {
-  const activityTypes = await getActivityTypes(credentials)
+export async function makeActivityTypeSchema(apiClient) {
+  const activityTypes = await getActivityTypes(apiClient)
   return Type.String({
     title: 'Activity Type',
     referenceRecords: activityTypes.map((item) => ({
@@ -12,7 +11,7 @@ export async function makeActivityTypeSchema(credentials) {
   })
 }
 
-export async function getActivityTypes(credentials) {
-  const response = await get(credentials, 'activityTypes')
+export async function getActivityTypes(apiClient) {
+  const response = await apiClient.get('activityTypes')
   return response.data
 }
