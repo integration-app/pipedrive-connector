@@ -164,11 +164,9 @@ async function parseUnifiedFields({ unifiedFields }) {
 
 function extractUnifiedFields({ fields }) {
   return {
-    unifiedFields: {
-      name: fields.name,
-      amount: fields.value ? parseFloat(fields.value) : null,
-      companyId: fields.org_id?.toString(),
-      userId: fields.user_id?.id?.toString(),
-    },
+    name: fields.name,
+    amount: fields.value ? parseFloat(fields.value) : null,
+    companyId: fields.org_id?.toString(),
+    userId: fields.user_id?.id?.toString(),
   }
 }
