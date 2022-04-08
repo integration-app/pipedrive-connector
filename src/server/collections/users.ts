@@ -43,10 +43,8 @@ export default {
 
 async function extractUnifiedFields({ fields }) {
   return {
-    unifiedFields: {
-      email: fields.email,
-      name: fields.name,
-    },
+    email: fields.email,
+    name: fields.name,
   }
 }
 

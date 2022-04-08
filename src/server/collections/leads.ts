@@ -158,10 +158,8 @@ async function parseUnifiedFields({ unifiedFields }) {
 
 function extractUnifiedFields({ fields }) {
   return {
-    unifiedFields: {
-      name: fields.title,
-      companyId: fields.organization_id,
-      userId: fields.owner_id,
-    },
+    name: fields.title,
+    companyId: fields.organization_id,
+    userId: fields.owner_id,
   }
 }
