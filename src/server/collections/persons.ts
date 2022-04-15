@@ -1,4 +1,9 @@
-import { DataCollectionHandler } from '@integration-app/connector-sdk'
+import {
+  DataCollectionHandler,
+  ConnectorDataCollectionSubscribeRequest,
+  ConnectorDataCollectionUnsubscribeRequest,
+  ConnectorSubscriptionWebhookRequest,
+} from '@integration-app/connector-sdk'
 import {
   UnifiedContactQuery,
   UnifiedContactFields,
@@ -14,6 +19,16 @@ import {
   updateCollectionRecord,
 } from './common'
 import users from './users'
+import {
+  DataCollectionSubscribeResponse,
+  DataCollectionSubscriptionMode,
+  DataCollectionUnsubscribeResponse,
+  DataEvent,
+  DataEventType,
+} from '@integration-app/sdk/connector-api'
+import { defaultParseRecord } from '../api/records'
+import { BadRequestError } from '@integration-app/sdk/errors'
+import axios from 'axios'
 
 const RECORD_KEY = 'persons'
 const SEARCH_ITEM_TYPE = 'person'
@@ -70,6 +85,9 @@ const handler: DataCollectionHandler = {
       'crm-contacts': parseUnifiedFields,
     },
   },
+  subscribe: subscribeToCollection,
+  unsubscribe: unsubscribeFromCollection,
+  handleSubscriptionWebhook,
 }
 
 export default handler
@@ -176,5 +194,103 @@ async function parseUnifiedFields({ unifiedFields }) {
       org_id: unifiedContact.companyId,
       owner_id: unifiedContact.userId,
     },
+  }
+}
+
+async function subscribeToCollection({
+  apiClient,
+  subscriptionManager,
+  callbackUri,
+  events,
+}: ConnectorDataCollectionSubscribeRequest): Promise<DataCollectionSubscribeResponse> {
+  if (!callbackUri) {
+    throw new BadRequestError(
+      'Callback URI is required to subscribe to this collection',
+    )
+  }
+  const subscription = await subscriptionManager.createSubscription({
+    callbackUri,
+    events,
+  })
+  const webhookResponse = await apiClient.post('webhooks', {
+    subscription_url: subscription.webhookUri,
+    event_action: '*',
+    event_object: 'person',
+  })
+  subscription.data.webhookId = webhookResponse.data.id
+  await subscriptionManager.saveSubscription(subscription)
+  return {
+    subscriptionId: subscription.id,
+    mode: DataCollectionSubscriptionMode.PUSH,
+  }
+}
+
+async function unsubscribeFromCollection({
+  apiClient,
+  subscriptionId,
+  subscriptionManager,
+}: ConnectorDataCollectionUnsubscribeRequest): Promise<DataCollectionUnsubscribeResponse> {
+  const subscription = await subscriptionManager.getSubscription(subscriptionId)
+  console.log('Unsubscribing from subscription', subscription)
+  await apiClient.delete(`webhooks/${subscription.data.webhookId}`)
+  return {}
+}
+
+async function handleSubscriptionWebhook({
+  apiClient,
+  subscriptionManager,
+  subscription,
+  credentials,
+  parameters,
+  body,
+}: ConnectorSubscriptionWebhookRequest) {
+  const eventType = getDataEventType(body)
+
+  const event: DataEvent = {
+    type: eventType,
+    record:
+      eventType === DataEventType.DELETED
+        ? defaultParseRecord(body.previous)
+        : defaultParseRecord(body.current),
+  }
+
+  const callbackUri = subscription.data.callbackUri
+
+  try {
+    await axios.post(callbackUri, {
+      subscriptionId: subscription.id,
+      events: [event],
+    })
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      // Trigger callback is not recognized - let's disable the subscription
+      await unsubscribeFromCollection({
+        apiClient,
+        subscriptionId: subscription.id,
+        subscriptionManager,
+        credentials,
+        parameters,
+      })
+      await subscriptionManager.deleteSubscription(subscription.id)
+    } else {
+      throw error
+    }
+  }
+}
+
+function getDataEventType(pipedriveEventBody) {
+  switch (pipedriveEventBody.meta?.action) {
+    case 'updated':
+      return DataEventType.UPDATED
+    case 'added':
+      return DataEventType.CREATED
+    case 'deleted':
+      return DataEventType.DELETED
+    case 'merged':
+      return DataEventType.DELETED
+    default:
+      throw new BadRequestError(
+        `Unknown event type: ${pipedriveEventBody.meta?.action}`,
+      )
   }
 }
