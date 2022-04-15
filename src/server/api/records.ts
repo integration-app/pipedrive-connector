@@ -27,7 +27,7 @@ export async function getRecords({
   }
 }
 
-function defaultParseRecord(fields) {
+export function defaultParseRecord(fields) {
   return {
     id: fields.id.toString(),
     name: fields.name,
