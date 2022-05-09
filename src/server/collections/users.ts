@@ -33,13 +33,15 @@ export default {
   extractUnifiedFields: {
     users: extractUnifiedFields,
   },
-  find: (request) =>
-    getRecords({
-      // If query is provided: https://developers.pipedrive.com/docs/api/v1/Users#findUsersByName
-      // Otherwise: https://developers.pipedrive.com/docs/api/v1/Users#getUsers
-      recordKey: request.query?.term ? 'users/find' : 'users',
-      ...request,
-    }),
+  find: {
+    handler: (request) =>
+      getRecords({
+        // If query is provided: https://developers.pipedrive.com/docs/api/v1/Users#findUsersByName
+        // Otherwise: https://developers.pipedrive.com/docs/api/v1/Users#getUsers
+        recordKey: request.query?.term ? 'users/find' : 'users',
+        ...request,
+      }),
+  },
 }
 
 async function extractUnifiedFields({ fields }) {

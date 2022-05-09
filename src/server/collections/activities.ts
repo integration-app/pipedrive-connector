@@ -21,18 +21,24 @@ const handler: DataCollectionHandler = {
   extractUnifiedFields: {
     'crm-activities': extractUnifiedFields,
   },
-  find: async (request) =>
-    findInCollection({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
-  create: async (request) =>
-    createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-  update: async (request) =>
-    updateCollectionRecord({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
+  find: {
+    handler: async (request) =>
+      findInCollection({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
+  create: {
+    handler: async (request) =>
+      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+  },
+  update: {
+    handler: async (request) =>
+      updateCollectionRecord({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
 }
 
 export default handler
