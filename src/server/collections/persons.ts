@@ -35,21 +35,29 @@ const handler: DataCollectionHandler = {
   extractUnifiedFields: {
     'crm-contacts': extractUnifiedFields,
   },
-  find: (request) =>
-    findInCollection({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
-  create: async (request) =>
-    createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-  update: async (request) =>
-    updateCollectionRecord({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
-  subscribe: subscribeToCollection,
-  unsubscribe: unsubscribeFromCollection,
-  handleSubscriptionWebhook,
+  find: {
+    handler: (request) =>
+      findInCollection({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
+  create: {
+    handler: async (request) =>
+      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+  },
+  update: {
+    handler: async (request) =>
+      updateCollectionRecord({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
+  events: {
+    subscribeHandler: subscribeToCollection,
+    unsubscribeHandler: unsubscribeFromCollection,
+    webhookHandler: handleSubscriptionWebhook,
+  },
 }
 
 export default handler

@@ -30,8 +30,8 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@integration-app/connector-sdk": "^0.4.0",
-    "@integration-app/sdk": "^0.10.0",
+    "@integration-app/connector-sdk": "^0.4.1",
+    "@integration-app/sdk": "^0.10.4",
     "@integration-app/ui": "^0.2.2",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",

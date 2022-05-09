@@ -8,6 +8,10 @@ import {
 } from './common'
 import { UnifiedCompanyFields } from '@integration-app/sdk/udm/companies'
 import users from './users'
+import {
+  DataRecord,
+  DataCollectionLookupResponse,
+} from '@integration-app/sdk/connector-api'
 
 const RECORD_KEY = 'organizations'
 
@@ -21,21 +25,62 @@ const handler: DataCollectionHandler = {
   extractUnifiedFields: {
     'crm-companies': extractUnifiedFields,
   },
-  find: (request) =>
-    findInCollection({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
-  create: async (request) =>
-    createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-  update: async (request) =>
-    updateCollectionRecord({
-      recordKey: RECORD_KEY,
-      ...request,
-    }),
+  find: {
+    handler: (request) =>
+      findInCollection({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
+  lookup: {
+    fields: ['name'],
+    handler: lookup,
+  },
+  create: {
+    handler: async (request) =>
+      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+  },
+  update: {
+    handler: async (request) =>
+      updateCollectionRecord({
+        recordKey: RECORD_KEY,
+        ...request,
+      }),
+  },
 }
 
 export default handler
+
+function parseRecord(record): DataRecord {
+  return record
+    ? {
+        id: record.id,
+        name: record.name,
+        fields: record,
+      }
+    : null
+}
+
+async function lookup({
+  apiClient,
+  fields = null,
+}): Promise<DataCollectionLookupResponse> {
+  if (fields.name) {
+    const response = await apiClient.get('itemSearch', {
+      fields: 'name',
+      term: fields.name,
+      exact_match: true,
+      limit: 1,
+    })
+    return {
+      record: parseRecord(response.data.items?.[0]?.item),
+    }
+  } else {
+    return {
+      record: null,
+    }
+  }
+}
 
 async function getFieldsSchema({}) {
   const type = Type.Partial(
