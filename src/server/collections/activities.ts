@@ -1,7 +1,6 @@
 import { Type } from '@sinclair/typebox'
 import { makeActivityTypeSchema } from '../api/activity-types'
-import { makeSavedFilterQuerySchema } from '../api/saved-filters'
-import { UnifiedActivityFields } from '@integration-app/sdk/udm/crm-activities'
+import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
 import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import {
   findInCollection,
@@ -15,53 +14,30 @@ const RECORD_KEY = 'activities'
 const handler: DataCollectionHandler = {
   name: 'Activities',
   uri: '/data/collections/activities',
-  find: {
-    querySchema: getFindQuerySchema,
-    execute: (request) =>
-      findInCollection({
-        recordKey: RECORD_KEY,
-        ...request,
-      }),
-    extractUnifiedFields: {
-      'crm-activities': extractUnifiedFields,
-    },
+  fieldsSchema: getFieldsSchema,
+  parseUnifiedFields: {
+    'crm-activities': parseUnifiedFields,
   },
-  create: {
-    execute: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-    fieldsSchema: getFieldsSchema,
-    parseUnifiedFields: {
-      'crm-activities': parseUnifiedFields,
-    },
+  extractUnifiedFields: {
+    'crm-activities': extractUnifiedFields,
   },
-  update: {
-    execute: async (request) =>
-      updateCollectionRecord({
-        recordKey: RECORD_KEY,
-        ...request,
-      }),
-    fieldsSchema: getFieldsSchema,
-    parseUnifiedFields: {
-      'crm-activities': parseUnifiedFields,
-    },
-  },
+  find: async (request) =>
+    findInCollection({
+      recordKey: RECORD_KEY,
+      ...request,
+    }),
+  create: async (request) =>
+    createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+  update: async (request) =>
+    updateCollectionRecord({
+      recordKey: RECORD_KEY,
+      ...request,
+    }),
 }
 
 export default handler
 
-export async function getFindQuerySchema({ apiClient }) {
-  return Type.Union([
-    await makeSavedFilterQuerySchema(apiClient, 'activity'),
-    Type.Object({
-      owner_id: Type.String({
-        title: 'Owner',
-        referenceCollectionUri: users.uri,
-      }),
-    }),
-  ])
-}
-
-export async function getFieldsSchema({ apiClient }) {
+async function getFieldsSchema({ apiClient }) {
   return Type.Partial(
     Type.Object({
       type: await makeActivityTypeSchema(apiClient),
@@ -114,21 +90,17 @@ function extractUnifiedFields({ fields }): UnifiedActivityFields {
   }
 }
 
-async function parseUnifiedFields({ udmKey, unifiedFields }) {
-  if (udmKey === 'crm-activities') {
-    const unifiedActivity = unifiedFields as UnifiedActivityFields
-    return {
-      fields: {
-        subject: unifiedActivity.title,
-        note: unifiedActivity.description,
-        deal_id: unifiedActivity.dealId,
-        lead_id: unifiedActivity.leadId,
-        person_id: unifiedActivity.contactId,
-        org_id: unifiedActivity.companyId,
-        user_id: unifiedActivity.userId,
-      },
-    }
-  } else {
-    return null
+async function parseUnifiedFields({ unifiedFields }) {
+  const unifiedActivity = unifiedFields as UnifiedActivityFields
+  return {
+    fields: {
+      subject: unifiedActivity.title,
+      note: unifiedActivity.description,
+      deal_id: unifiedActivity.dealId,
+      lead_id: unifiedActivity.leadId,
+      person_id: unifiedActivity.contactId,
+      org_id: unifiedActivity.companyId,
+      user_id: unifiedActivity.userId,
+    },
   }
 }

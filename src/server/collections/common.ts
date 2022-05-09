@@ -1,6 +1,5 @@
 import {
   DataCollectionCreateResponse,
-  DataCollectionFindOneResponse,
   DataCollectionFindResponse,
   DataCollectionUpdateResponse,
 } from '@integration-app/sdk/connector-api'
@@ -21,25 +20,6 @@ export async function findInCollection({
     }
   } else {
     return getRecords({ apiClient, recordKey, query, cursor })
-  }
-}
-
-export async function findOneInCollection({
-  apiClient,
-  searchItemType,
-  query = null,
-}): Promise<DataCollectionFindOneResponse> {
-  if (searchItemType && isSearchQuery(query)) {
-    const records = await search(apiClient, searchItemType, query)
-    return {
-      record: records[0],
-      multipleResults: records.length > 1,
-    }
-  } else {
-    return {
-      record: null,
-      multipleResults: false,
-    }
   }
 }
 

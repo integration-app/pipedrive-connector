@@ -1,107 +1,41 @@
 import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
 import { makeLeadLabelSchema } from '../api/lead-labels'
-import { makeSavedFilterQuerySchema } from '../api/saved-filters'
-import { makeSearchQuerySchema } from '../api/search'
 import {
   findInCollection,
-  findOneInCollection,
   createCollectionRecord,
   updateCollectionRecord,
 } from './common'
-import {
-  UnifiedLeadFields,
-  UnifiedLeadQuery,
-} from '@integration-app/sdk/udm/crm-leads'
+import { UnifiedLeadFields } from '@integration-app/sdk/udm/leads'
 import users from './users'
 
 const RECORD_KEY = 'leads'
-const SEARCH_ITEM_TYPE = 'lead'
-const SEARCH_FIELDS = [
-  'custom_fields',
-  'notes',
-  'email',
-  'organization_name',
-  'person_name',
-  'phone',
-  'title',
-]
 
 const handler: DataCollectionHandler = {
   name: 'Leads',
   uri: '/data/collections/leads',
-  find: {
-    querySchema: getFindQuerySchema,
-    execute: (request) =>
-      findInCollection({
-        recordKey: RECORD_KEY,
-        ...request,
-      }),
-    parseUnifiedQuery: {
-      'crm-leads': parseUnifiedQuery,
-    },
-    extractUnifiedFields: {
-      'crm-leads': extractUnifiedFields,
-    },
+  fieldsSchema: getFieldsSchema,
+  parseUnifiedFields: {
+    'crm-leads': parseUnifiedFields,
   },
-  findOne: {
-    querySchema: getFindOneQuerySchema,
-    execute: (request) =>
-      findOneInCollection({
-        searchItemType: SEARCH_ITEM_TYPE,
-        ...request,
-      }),
-    parseUnifiedQuery: {
-      'crm-leads': parseUnifiedQuery,
-    },
-    extractUnifiedFields: {
-      'crm-leads': extractUnifiedFields,
-    },
+  extractUnifiedFields: {
+    'crm-leads': extractUnifiedFields,
   },
-  create: {
-    execute: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
-    fieldsSchema: getFieldsSchema,
-    parseUnifiedFields: {
-      'crm-leads': parseUnifiedFields,
-    },
-  },
-  update: {
-    execute: async (request) =>
-      updateCollectionRecord({
-        recordKey: RECORD_KEY,
-        ...request,
-      }),
-    fieldsSchema: getFieldsSchema,
-    parseUnifiedFields: {
-      'crm-leads': parseUnifiedFields,
-    },
-  },
+  find: (request) =>
+    findInCollection({
+      recordKey: RECORD_KEY,
+      ...request,
+    }),
+  create: async (request) =>
+    createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+  update: async (request) =>
+    updateCollectionRecord({
+      recordKey: RECORD_KEY,
+      ...request,
+    }),
 }
 
 export default handler
-
-export async function getFindQuerySchema({ apiClient }) {
-  return Type.Union([
-    makeSearchQuerySchema(SEARCH_FIELDS),
-    await makeSavedFilterQuerySchema(apiClient, 'leads'),
-    Type.Object(
-      {
-        user_id: Type.String({
-          title: 'User',
-          referenceCollectionUri: users.uri,
-        }),
-      },
-      {
-        title: 'Filter by Field',
-      },
-    ),
-  ])
-}
-
-export async function getFindOneQuerySchema({}) {
-  return makeSearchQuerySchema(SEARCH_FIELDS)
-}
 
 export async function getFieldsSchema({ apiClient }) {
   const type = Type.Partial(
@@ -128,21 +62,6 @@ export async function getFieldsSchema({ apiClient }) {
   )
   type.required = ['title']
   return type
-}
-
-async function parseUnifiedQuery({ unifiedQuery }) {
-  const leadsQuery = unifiedQuery as UnifiedLeadQuery
-  if (leadsQuery.email) {
-    return {
-      query: {
-        search: {
-          fields: ['email'],
-          term: leadsQuery.email,
-        },
-      },
-    }
-  }
-  return null
 }
 
 async function parseUnifiedFields({ unifiedFields }) {

@@ -9,22 +9,20 @@ import users from './users'
 export default {
   name: 'All Data',
   uri: 'data/root',
-  list: {
-    execute: async () => {
-      const collections = [
-        organizations,
-        persons,
-        deals,
-        leads,
-        activities,
-        users,
-      ]
-      const locations = collections.map((collection) => ({
-        type: DataLocationType.collection,
-        uri: collection.uri,
-        name: collection.name,
-      }))
-      return { locations }
-    },
+  list: async () => {
+    const collections = [
+      organizations,
+      persons,
+      deals,
+      leads,
+      activities,
+      users,
+    ]
+    const locations = collections.map((collection) => ({
+      type: DataLocationType.collection,
+      uri: collection.uri,
+      name: collection.name,
+    }))
+    return { locations }
   },
 }
