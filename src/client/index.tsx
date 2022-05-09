@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import { FormComposer, FormInputType } from '@integration-app/ui'
-import NewConnectionPage from '@integratio-app/ui/NewConnectionPage'
+import NewConnectionPage from '@integration-app/ui/NewConnectionPage'
 
 const schema = [
   {
