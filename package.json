@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@integration-app/connector-sdk": "^0.4.1",
-    "@integration-app/sdk": "^0.10.4",
-    "@integration-app/ui": "^0.2.2",
+    "@integration-app/sdk": "^0.10.5",
+    "@integration-app/ui": "^0.0.11",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
