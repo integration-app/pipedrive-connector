@@ -6,7 +6,7 @@ const TEST_ACCESS_TOKEN_JSON = env
   .required()
   .asString()
 
-import { server } from '../src/server/app'
+import { server } from '../src/app'
 
 export function makeRequest(uri: string, payload?: any) {
   return supertest('http://endpoint:3000')

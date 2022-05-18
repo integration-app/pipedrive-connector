@@ -3,7 +3,7 @@
   "execMap": {
     "ts": "node -r ts-node/register"
   },
-  "exec": "ts-node src/server/index.ts",
+  "exec": "ts-node src/index.ts",
   "watch": [
     "**"
   ],

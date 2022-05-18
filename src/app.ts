@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config()
 
 import { ConnectorServer, RestApiClient } from '@integration-app/connector-sdk'
@@ -20,6 +20,20 @@ export const server = new ConnectorServer({
   bucket: process.env.S3_BUCKET,
   tmpBucket: process.env.S3_TMP_BUCKET,
   secret: process.env.SECRET,
+  ui: {
+    description: 'Enter your Pipedrive API token into the field below.',
+    schema: {
+      type: 'object',
+      properties: {
+        api_token: {
+          type: 'string',
+          title: 'Pipedrive API Token',
+        },
+      },
+    },
+    helpUri:
+      'https://support.pipedrive.com/en/article/how-can-i-find-my-personal-api-key',
+  },
   makeApiClient: ({ credentials }) => {
     return new RestApiClient({
       baseUri: 'https://api.pipedrive.com/v1',
@@ -52,8 +66,6 @@ export const server = new ConnectorServer({
     },
   } as any,
 })
-
-server.setupCredentialsForm({})
 
 server.dataDirectory(rootDirectory)
 
