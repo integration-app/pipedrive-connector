@@ -1,5 +1,5 @@
 import * as env from 'env-var'
-import supertest from 'supertest'
+import * as supertest from 'supertest'
 
 const TEST_ACCESS_TOKEN_JSON = env
   .get('TEST_ACCESS_TOKEN_JSON')
