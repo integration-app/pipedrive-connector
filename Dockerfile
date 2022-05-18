@@ -12,7 +12,6 @@ COPY public /app/public
 
 COPY src /app/src
 COPY tsconfig*.json /app/
-COPY rollup.config.js /app/
 
 RUN npm run build
 
