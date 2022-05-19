@@ -1,5 +1,10 @@
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../api/records'
+import {
+  handleSubscriptionWebhook,
+  subscribeToCollection,
+  unsubscribeFromCollection,
+} from '../api/subscriptions'
 
 const FIELDS_SCHEMA = Type.Partial(
   Type.Object({
@@ -41,6 +46,12 @@ export default {
         recordKey: request.query?.term ? 'users/find' : 'users',
         ...request,
       }),
+  },
+  events: {
+    subscribeHandler: (request) =>
+      subscribeToCollection({ ...request, eventObject: 'user' }),
+    unsubscribeHandler: unsubscribeFromCollection,
+    webhookHandler: handleSubscriptionWebhook,
   },
 }
 

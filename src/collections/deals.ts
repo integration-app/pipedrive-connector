@@ -10,6 +10,11 @@ import {
 } from './common'
 import { UnifiedDealFields } from '@integration-app/sdk/udm/deals'
 import users from './users'
+import {
+  handleSubscriptionWebhook,
+  subscribeToCollection,
+  unsubscribeFromCollection,
+} from '../api/subscriptions'
 
 const RECORD_KEY = 'deals'
 
@@ -40,6 +45,12 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
+  },
+  events: {
+    subscribeHandler: (request) =>
+      subscribeToCollection({ ...request, eventObject: 'deal' }),
+    unsubscribeHandler: unsubscribeFromCollection,
+    webhookHandler: handleSubscriptionWebhook,
   },
 }
 

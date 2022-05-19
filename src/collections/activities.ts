@@ -8,6 +8,11 @@ import {
   updateCollectionRecord,
 } from './common'
 import users from './users'
+import {
+  handleSubscriptionWebhook,
+  subscribeToCollection,
+  unsubscribeFromCollection,
+} from '../api/subscriptions'
 
 const RECORD_KEY = 'activities'
 
@@ -38,6 +43,12 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
+  },
+  events: {
+    subscribeHandler: (request) =>
+      subscribeToCollection({ ...request, eventObject: 'activity' }),
+    unsubscribeHandler: unsubscribeFromCollection,
+    webhookHandler: handleSubscriptionWebhook,
   },
 }
 
