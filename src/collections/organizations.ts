@@ -12,6 +12,11 @@ import {
   DataRecord,
   DataCollectionLookupResponse,
 } from '@integration-app/sdk/connector-api'
+import {
+  handleSubscriptionWebhook,
+  subscribeToCollection,
+  unsubscribeFromCollection,
+} from '../api/subscriptions'
 
 const RECORD_KEY = 'organizations'
 
@@ -46,6 +51,12 @@ const handler: DataCollectionHandler = {
         recordKey: RECORD_KEY,
         ...request,
       }),
+  },
+  events: {
+    subscribeHandler: (request) =>
+      subscribeToCollection({ ...request, eventObject: 'organization' }),
+    unsubscribeHandler: unsubscribeFromCollection,
+    webhookHandler: handleSubscriptionWebhook,
   },
 }
 

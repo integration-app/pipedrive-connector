@@ -8,6 +8,11 @@ import {
 } from './common'
 import { UnifiedLeadFields } from '@integration-app/sdk/udm/leads'
 import users from './users'
+import {
+  fullScanEventsHandler,
+  fullScanSubscribeHandler,
+  fullScanUnsubscribeHandler,
+} from '../api/subscriptions'
 
 const RECORD_KEY = 'leads'
 
@@ -22,11 +27,7 @@ const handler: DataCollectionHandler = {
     'crm-leads': extractUnifiedFields,
   },
   find: {
-    handler: (request) =>
-      findInCollection({
-        recordKey: RECORD_KEY,
-        ...request,
-      }),
+    handler: findHandler,
   },
   create: {
     handler: async (request) =>
@@ -39,9 +40,23 @@ const handler: DataCollectionHandler = {
         ...request,
       }),
   },
+  events: {
+    subscribeHandler: (request) =>
+      fullScanSubscribeHandler({ ...request, findHandler }),
+    unsubscribeHandler: fullScanUnsubscribeHandler,
+    eventsHandler: (request) =>
+      fullScanEventsHandler({ ...request, findHandler }),
+  },
 }
 
 export default handler
+
+async function findHandler(request) {
+  return findInCollection({
+    recordKey: RECORD_KEY,
+    ...request,
+  })
+}
 
 export async function getFieldsSchema({ apiClient }) {
   const type = Type.Partial(
