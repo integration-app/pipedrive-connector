@@ -94,7 +94,7 @@ async function parseUnifiedFields({ unifiedFields }) {
       title: unifiedDeal.name,
       value: unifiedDeal.amount?.toString?.(),
       org_id: unifiedDeal.companyId,
-      user_id: unifiedDeal.userId,
+      user_id: unifiedDeal.ownerId,
     },
   }
 }
@@ -104,6 +104,6 @@ function extractUnifiedFields({ fields }) {
     name: fields.title,
     amount: fields.value ? parseFloat(fields.value) : null,
     companyId: fields.org_id?.toString(),
-    userId: fields.user_id?.id?.toString(),
+    ownerId: fields.user_id?.id?.toString(),
   }
 }
