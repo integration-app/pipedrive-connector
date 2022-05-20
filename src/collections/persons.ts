@@ -21,10 +21,10 @@ const handler: DataCollectionHandler = {
   uri: '/data/collections/persons',
   fieldsSchema: getFieldsSchema,
   parseUnifiedFields: {
-    'crm-contacts': parseUnifiedFields,
+    contacts: parseUnifiedFields,
   },
   extractUnifiedFields: {
-    'crm-contacts': extractUnifiedFields,
+    contacts: extractUnifiedFields,
   },
   find: {
     handler: (request) =>

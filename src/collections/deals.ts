@@ -23,10 +23,10 @@ const handler: DataCollectionHandler = {
   uri: '/data/collections/deals',
   fieldsSchema: getFieldsSchema,
   parseUnifiedFields: {
-    'crm-deals': parseUnifiedFields,
+    deals: parseUnifiedFields,
   },
   extractUnifiedFields: {
-    'crm-deals': extractUnifiedFields,
+    deals: extractUnifiedFields,
   },
   find: {
     handler: (request) =>
@@ -91,7 +91,7 @@ async function parseUnifiedFields({ unifiedFields }) {
   const unifiedDeal: UnifiedDealFields = unifiedFields
   return {
     fields: {
-      name: unifiedDeal.name,
+      title: unifiedDeal.name,
       value: unifiedDeal.amount?.toString?.(),
       org_id: unifiedDeal.companyId,
       user_id: unifiedDeal.userId,
@@ -101,7 +101,7 @@ async function parseUnifiedFields({ unifiedFields }) {
 
 function extractUnifiedFields({ fields }) {
   return {
-    name: fields.name,
+    name: fields.title,
     amount: fields.value ? parseFloat(fields.value) : null,
     companyId: fields.org_id?.toString(),
     userId: fields.user_id?.id?.toString(),

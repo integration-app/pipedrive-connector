@@ -25,10 +25,10 @@ const handler: DataCollectionHandler = {
   uri: '/data/collections/organizations',
   fieldsSchema: getFieldsSchema,
   parseUnifiedFields: {
-    'crm-companies': parseUnifiedFields,
+    companies: parseUnifiedFields,
   },
   extractUnifiedFields: {
-    'crm-companies': extractUnifiedFields,
+    companies: extractUnifiedFields,
   },
   find: {
     handler: (request) =>
