@@ -1,4 +1,5 @@
 import { DataCollectionHandler } from '@integration-app/connector-sdk'
+import { DataRecord } from '@integration-app/sdk/connector-api'
 import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
 import {
@@ -21,17 +22,22 @@ const handler: DataCollectionHandler = {
   uri: '/data/collections/persons',
   fieldsSchema: getFieldsSchema,
   parseUnifiedFields: {
-    'crm-contacts': parseUnifiedFields,
+    contacts: parseUnifiedFields,
   },
   extractUnifiedFields: {
-    'crm-contacts': extractUnifiedFields,
+    contacts: extractUnifiedFields,
   },
   find: {
-    handler: (request) =>
-      findInCollection({
+    handler: async (request) => {
+      const response = await findInCollection({
         recordKey: RECORD_KEY,
         ...request,
-      }),
+      })
+      return {
+        ...response,
+        records: response.records.map(processRecord),
+      }
+    },
   },
   create: {
     handler: async (request) =>
@@ -75,6 +81,21 @@ async function getFieldsSchema() {
       }),
     }),
   )
+}
+
+function processRecord(record: DataRecord) {
+  // Bring the structure to fieldSchema we use in other operations.
+  const fields = {
+    ...record.fields,
+    org_id: record.fields.org_id?.value,
+    owner_id: record.fields.owner_id?.id,
+    phone: record.fields.phone?.map((phone) => phone.value),
+    email: record.fields.email?.map((email) => email.value),
+  }
+  return {
+    ...record,
+    fields,
+  }
 }
 
 function extractUnifiedFields({ fields }): UnifiedContactFields {

@@ -21,10 +21,10 @@ const handler: DataCollectionHandler = {
   uri: '/data/collections/activities',
   fieldsSchema: getFieldsSchema,
   parseUnifiedFields: {
-    'crm-activities': parseUnifiedFields,
+    activities: parseUnifiedFields,
   },
   extractUnifiedFields: {
-    'crm-activities': extractUnifiedFields,
+    activities: extractUnifiedFields,
   },
   find: {
     handler: async (request) =>
