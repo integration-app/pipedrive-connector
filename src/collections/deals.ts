@@ -15,8 +15,10 @@ import {
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
+import { lookupRecords } from '../api/records'
 
-const RECORD_KEY = 'deals'
+const OBJECT_PATH = 'deals'
+const LOOKUP_FIELDS = ['title']
 
 const handler: DataCollectionHandler = {
   name: 'Deals',
@@ -31,18 +33,23 @@ const handler: DataCollectionHandler = {
   find: {
     handler: (request) =>
       findInCollection({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
+  lookup: {
+    fields: LOOKUP_FIELDS,
+    handler: async (request) =>
+      lookupRecords({ ...request, path: OBJECT_PATH }),
+  },
   create: {
     handler: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+      createCollectionRecord({ path: OBJECT_PATH, ...request }),
   },
   update: {
     handler: async (request) =>
       updateCollectionRecord({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },

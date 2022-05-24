@@ -43,9 +43,13 @@ export default {
       getRecords({
         // If query is provided: https://developers.pipedrive.com/docs/api/v1/Users#findUsersByName
         // Otherwise: https://developers.pipedrive.com/docs/api/v1/Users#getUsers
-        recordKey: request.query?.term ? 'users/find' : 'users',
+        path: request.query?.term ? 'users/find' : 'users',
         ...request,
       }),
+  },
+  lookup: {
+    fields: ['name', 'email'],
+    handler: lookupUsers,
   },
   events: {
     subscribeHandler: (request) =>
@@ -59,5 +63,29 @@ async function extractUnifiedFields({ fields }) {
   return {
     email: fields.email,
     name: fields.name,
+  }
+}
+
+async function lookupUsers({ apiClient, fields }) {
+  if (fields.email) {
+    return getRecords({
+      path: 'users/find',
+      apiClient,
+      query: {
+        term: fields.email,
+        search_by: 'email',
+      },
+    })
+  } else if (fields.name) {
+    return getRecords({
+      path: 'users/find',
+      apiClient,
+      query: {
+        term: fields.name,
+        search_by: 'name',
+      },
+    })
+  } else {
+    throw new Error('Lookup fields were not provided')
   }
 }

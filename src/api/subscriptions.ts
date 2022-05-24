@@ -13,7 +13,7 @@ import {
   DataEventType,
 } from '@integration-app/sdk/connector-api'
 import { BadRequestError } from '@integration-app/sdk/errors'
-import { defaultParseRecord } from './records'
+import { defaultExtractRecord } from './records'
 import axios from 'axios'
 import { ConnectorDataCollectionEventsRequest } from '@integration-app/connector-sdk/dist/server'
 
@@ -94,8 +94,8 @@ export async function handleSubscriptionWebhook({
     type: eventType,
     record:
       eventType === DataEventType.DELETED
-        ? defaultParseRecord(body.previous)
-        : defaultParseRecord(body.current),
+        ? defaultExtractRecord(body.previous)
+        : defaultExtractRecord(body.current),
   }
 
   const callbackUri = subscription.data.callbackUri

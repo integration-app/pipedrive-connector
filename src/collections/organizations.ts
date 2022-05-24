@@ -9,16 +9,19 @@ import {
 import { UnifiedCompanyFields } from '@integration-app/sdk/udm/companies'
 import users from './users'
 import {
+  DataCollectionFindResponse,
   DataRecord,
-  DataCollectionLookupResponse,
 } from '@integration-app/sdk/connector-api'
 import {
   handleSubscriptionWebhook,
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
+import { lookupRecords } from '../api/records'
 
-const RECORD_KEY = 'organizations'
+const OBJECT_PATH = 'organizations'
+
+const LOOKUP_FIELDS = ['name']
 
 const handler: DataCollectionHandler = {
   name: 'Organizations',
@@ -33,22 +36,23 @@ const handler: DataCollectionHandler = {
   find: {
     handler: (request) =>
       findInCollection({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
   lookup: {
-    fields: ['name'],
-    handler: lookup,
+    fields: LOOKUP_FIELDS,
+    handler: async (request) =>
+      lookupRecords({ ...request, path: OBJECT_PATH }),
   },
   create: {
     handler: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+      createCollectionRecord({ path: OBJECT_PATH, ...request }),
   },
   update: {
     handler: async (request) =>
       updateCollectionRecord({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
@@ -72,24 +76,19 @@ function parseRecord(record): DataRecord {
     : null
 }
 
-async function lookup({
+export async function searchRecord({
   apiClient,
-  fields = null,
-}): Promise<DataCollectionLookupResponse> {
-  if (fields.name) {
-    const response = await apiClient.get('itemSearch', {
-      fields: 'name',
-      term: fields.name,
-      exact_match: true,
-      limit: 1,
-    })
-    return {
-      record: parseRecord(response.data.items?.[0]?.item),
-    }
-  } else {
-    return {
-      record: null,
-    }
+  field,
+  term,
+}): Promise<DataCollectionFindResponse> {
+  const response = await apiClient.get('itemSearch', {
+    fields: field,
+    term: term,
+    exact_match: true,
+    limit: 1,
+  })
+  return {
+    records: response.data.items.map(parseRecord),
   }
 }
 

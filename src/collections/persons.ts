@@ -2,6 +2,7 @@ import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import { DataRecord } from '@integration-app/sdk/connector-api'
 import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
+import { lookupRecords } from '../api/records'
 import {
   handleSubscriptionWebhook,
   subscribeToCollection,
@@ -15,7 +16,8 @@ import {
 } from './common'
 import users from './users'
 
-const RECORD_KEY = 'persons'
+const OBJECT_PATH = 'persons'
+const LOOKUP_FIELDS = ['email', 'name', 'phone']
 
 const handler: DataCollectionHandler = {
   name: 'Persons',
@@ -30,7 +32,7 @@ const handler: DataCollectionHandler = {
   find: {
     handler: async (request) => {
       const response = await findInCollection({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       })
       return {
@@ -39,14 +41,19 @@ const handler: DataCollectionHandler = {
       }
     },
   },
+  lookup: {
+    fields: LOOKUP_FIELDS,
+    handler: async (request) =>
+      lookupRecords({ ...request, path: OBJECT_PATH }),
+  },
   create: {
     handler: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+      createCollectionRecord({ path: OBJECT_PATH, ...request }),
   },
   update: {
     handler: async (request) =>
       updateCollectionRecord({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },

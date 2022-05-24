@@ -4,38 +4,29 @@ import {
   DataCollectionUpdateResponse,
 } from '@integration-app/sdk/connector-api'
 import { createRecord, getRecords, updateRecord } from '../api/records'
-import { isSearchQuery, search } from '../api/search'
 
 export async function findInCollection({
   apiClient,
-  recordKey,
-  searchItemType = null,
+  path,
   query = null,
   cursor = null,
 }): Promise<DataCollectionFindResponse> {
-  if (searchItemType && isSearchQuery(query)) {
-    const records = await search(apiClient, searchItemType, query)
-    return {
-      records,
-    }
-  } else {
-    return getRecords({ apiClient, recordKey, query, cursor })
-  }
+  return getRecords({ apiClient, path, query, cursor })
 }
 
 export async function createCollectionRecord({
-  recordKey,
+  path,
   apiClient,
   fields,
 }): Promise<DataCollectionCreateResponse> {
-  return createRecord(apiClient, recordKey, fields)
+  return createRecord(apiClient, path, fields)
 }
 
 export async function updateCollectionRecord({
-  recordKey,
+  path,
   apiClient,
   id,
   fields,
 }): Promise<DataCollectionUpdateResponse> {
-  return updateRecord(apiClient, recordKey, id, fields)
+  return updateRecord(apiClient, path, id, fields)
 }
