@@ -13,8 +13,10 @@ import {
   fullScanSubscribeHandler,
   fullScanUnsubscribeHandler,
 } from '../api/subscriptions'
+import { lookupRecords } from '../api/records'
 
-const RECORD_KEY = 'leads'
+const OBJECT_PATH = 'leads'
+const LOOKUP_FIELDS = ['title']
 
 const handler: DataCollectionHandler = {
   name: 'Leads',
@@ -29,14 +31,19 @@ const handler: DataCollectionHandler = {
   find: {
     handler: findHandler,
   },
+  lookup: {
+    fields: LOOKUP_FIELDS,
+    handler: async (request) =>
+      lookupRecords({ ...request, path: OBJECT_PATH }),
+  },
   create: {
     handler: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+      createCollectionRecord({ path: OBJECT_PATH, ...request }),
   },
   update: {
     handler: async (request) =>
       updateCollectionRecord({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
@@ -53,7 +60,7 @@ export default handler
 
 async function findHandler(request) {
   return findInCollection({
-    recordKey: RECORD_KEY,
+    path: OBJECT_PATH,
     ...request,
   })
 }

@@ -14,7 +14,7 @@ import {
   unsubscribeFromCollection,
 } from '../api/subscriptions'
 
-const RECORD_KEY = 'activities'
+const OBJECT_PATH = 'activities'
 
 const handler: DataCollectionHandler = {
   name: 'Activities',
@@ -29,18 +29,18 @@ const handler: DataCollectionHandler = {
   find: {
     handler: async (request) =>
       findInCollection({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
   create: {
     handler: async (request) =>
-      createCollectionRecord({ recordKey: RECORD_KEY, ...request }),
+      createCollectionRecord({ path: OBJECT_PATH, ...request }),
   },
   update: {
     handler: async (request) =>
       updateCollectionRecord({
-        recordKey: RECORD_KEY,
+        path: OBJECT_PATH,
         ...request,
       }),
   },
