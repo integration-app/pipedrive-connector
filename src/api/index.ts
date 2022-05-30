@@ -13,8 +13,18 @@ export function makeAPIClient(apiToken) {
 
 export async function testConnection(apiToken) {
   const apiClient = makeAPIClient(apiToken)
-  const result = await apiClient.get('/users/me')
-  if (!result.success) {
-    throw new Error('Test failed: unexpected response from `/users/me` request')
+  try {
+    const result = await apiClient.get('/users/me')
+    if (!result.success) {
+      throw new Error(
+        'Test failed: unexpected response from `/users/me` request',
+      )
+    }
+  } catch (e: any) {
+    if (e.data?.data?.errorCode === 401) {
+      throw new Error('Invalid API token')
+    } else {
+      throw e
+    }
   }
 }
