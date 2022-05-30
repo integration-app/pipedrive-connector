@@ -9,7 +9,8 @@ import leads from './collections/leads'
 import organizations from './collections/organizations'
 import { ConnectionMode } from '@integration-app/sdk/connectors'
 import users from './collections/users'
-import rootDirectory from './collections/rootDirectory'
+import rootDirectory from './directories/root'
+import { testConnection } from './api'
 
 export const server = new ConnectorServer({
   baseUri: process.env.BASE_URI,
@@ -33,6 +34,8 @@ export const server = new ConnectorServer({
     },
     helpUri:
       'https://support.pipedrive.com/en/article/how-can-i-find-my-personal-api-key',
+    testHandler: ({ connectionParameters }) =>
+      testConnection(connectionParameters.api_token),
   },
   makeApiClient: ({ credentials }) => {
     return new RestApiClient({
