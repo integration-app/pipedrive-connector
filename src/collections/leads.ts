@@ -69,7 +69,7 @@ export async function getFieldsSchema({ apiClient }) {
   const type = Type.Partial(
     Type.Object({
       title: Type.String(),
-      owner_id: Type.String({
+      owner_id: Type.Number({
         title: 'Owner',
         referenceCollectionUri: users.uri,
       }),

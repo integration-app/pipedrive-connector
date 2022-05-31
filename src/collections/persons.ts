@@ -71,7 +71,7 @@ async function getFieldsSchema() {
   return Type.Partial(
     Type.Object({
       name: Type.String(),
-      owner_id: Type.String({
+      owner_id: Type.Number({
         title: 'Owner',
         referenceCollectionUri: users.uri,
       }),
