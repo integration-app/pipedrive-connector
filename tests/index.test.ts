@@ -1,6 +1,22 @@
 import { makeRequest } from './config'
 import * as random from 'generate-random-data'
 
+const SUPPORTED_FEATURES = {
+  test: true,
+  udm: {
+    contacts: {
+      unifiedFields: ['name', 'email'],
+      events: true,
+      find: true,
+      create: true,
+      update: true,
+    },
+    companies: {
+      unifiedFields: ['name'],
+    },
+  },
+}
+
 describe('UDM', () => {
   let spec: any
 
@@ -37,11 +53,17 @@ describe('UDM', () => {
         },
       )
 
-      console.log('Create Response', createResponse)
-
       expect(createResponse.id).toBeDefined()
 
-      console.log('CREATED CONTACT', createResponse.id)
+      const findByIdResponse = await makeRequest(
+        `${contactsCollectionUri}/find-by-id`,
+        {
+          id: createResponse.id,
+          udm: 'contacts',
+        },
+      )
+
+      expect(findByIdResponse.record.unifiedFields).toEqual(unifiedFields)
     })
   })
 })
