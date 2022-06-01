@@ -1,5 +1,6 @@
 import {
   DataCollectionCreateResponse,
+  DataCollectionFindByIdResponse,
   DataCollectionFindResponse,
   DataCollectionLookupResponse,
   DataCollectionUpdateResponse,
@@ -12,7 +13,7 @@ export async function getRecords({
   path,
   query,
   cursor = null,
-  extractRecord = defaultExtractRecord,
+  extractRecord = null,
 }): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const parameters = {
@@ -24,8 +25,22 @@ export async function getRecords({
   const hasMore = response.additional_data?.pagination?.more_items_in_collection
   const nextCursor = hasMore ? (parseInt(cursor) ?? 0 + limit).toString() : null
   return {
-    records: response.data ? response.data.map(extractRecord) : [],
+    records: response.data
+      ? response.data.map(extractRecord ?? defaultExtractRecord)
+      : [],
     cursor: nextCursor,
+  }
+}
+
+export async function findRecordById({
+  apiClient,
+  path,
+  id,
+  extractRecord = null,
+}): Promise<DataCollectionFindByIdResponse> {
+  const response = await apiClient.get(`${path}/${id}`)
+  return {
+    record: (extractRecord ?? defaultExtractRecord)(response),
   }
 }
 
@@ -37,7 +52,7 @@ export async function lookupRecords({
   apiClient,
   path,
   fields,
-  extractRecord = defaultExtractRecord,
+  extractRecord = null,
 }): Promise<DataCollectionLookupResponse> {
   const [field, term] = Object.entries(fields ?? [])[0]
 
@@ -61,28 +76,28 @@ export async function lookupRecords({
   return {
     records: response.data.items
       .map((searchItem) => searchItem.item)
-      .map(extractRecord),
+      .map(extractRecord ?? defaultExtractRecord),
   }
 }
 
-export async function createRecord(
+export async function createRecord({
   apiClient,
-  objectKey,
-  record,
-): Promise<DataCollectionCreateResponse> {
-  const response = await apiClient.post(objectKey, record)
+  path,
+  fields,
+}): Promise<DataCollectionCreateResponse> {
+  const response = await apiClient.post(path, fields)
   return {
     id: response.data.id.toString(),
   }
 }
 
-export async function updateRecord(
+export async function updateRecord({
+  path,
   apiClient,
-  objectKey,
   id,
   fields,
-): Promise<DataCollectionUpdateResponse> {
-  const response = await apiClient.put(`${objectKey}/${id}`, fields)
+}): Promise<DataCollectionUpdateResponse> {
+  const response = await apiClient.put(`${path}/${id}`, fields)
   return {
     id: response.data.id.toString(),
   }
