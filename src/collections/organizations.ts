@@ -29,6 +29,11 @@ const organizations = objectCollectionHandler({
 
 export default organizations
 
+export const ORGANIZATION_SCHEMA = Type.Integer({
+  title: 'Organization',
+  referenceCollectionUri: organizations.uri,
+})
+
 async function parseUnifiedFields({ unifiedFields }) {
   const unifiedCompany: UnifiedCompanyFields = unifiedFields
   return {

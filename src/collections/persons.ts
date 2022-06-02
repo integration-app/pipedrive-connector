@@ -46,6 +46,11 @@ const persons = objectCollectionHandler({
 
 export default persons
 
+export const PERSON_SCHEMA = Type.Integer({
+  title: 'Person',
+  referenceCollectionUri: persons.uri,
+})
+
 function extractRecord(item: any) {
   // Bring the structure to fieldSchema we use in other operations.
   const fields = {
