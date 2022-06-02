@@ -1,98 +1,57 @@
-import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
-import { makePipelineSchema } from '../api/pipelines'
-import { makeStageSchema } from '../api/stages'
-import { makeVisibleToSchema } from '../api/visibility'
-import {
-  findInCollection,
-  createCollectionRecord,
-  updateCollectionRecord,
-} from './common'
+import { objectCollectionHandler } from './common'
 import { UnifiedDealFields } from '@integration-app/sdk/udm/deals'
-import users from './users'
-import {
-  handleSubscriptionWebhook,
-  subscribeToCollection,
-  unsubscribeFromCollection,
-} from '../api/subscriptions'
-import { lookupRecords } from '../api/records'
+import { PIPELINE_SCHEMA, STAGES_SCHEMA } from './references'
+import { USER_SCHEMA } from './users'
 
-const OBJECT_PATH = 'deals'
-const LOOKUP_FIELDS = ['title']
+const FIELDS_SCHEMA = Type.Object({
+  title: Type.String(),
+  value: Type.String(),
+  currency: Type.String(),
+  user_id: USER_SCHEMA,
+  person_id: Type.Integer({
+    title: 'Person',
+    referenceCollectionUri: 'data/collections/persons',
+  }),
+  org_id: Type.Integer({
+    title: 'Organization',
+    referenceCollectionUri: 'data/collections/organizations',
+  }),
+  pipeline_id: PIPELINE_SCHEMA,
+  stage_id: STAGES_SCHEMA,
+  status: Type.String({ enum: ['open', 'won', 'lost'] }),
+  expected_close_date: Type.String({ format: 'date' }),
+  probability: Type.Integer(),
+  lost_reason: Type.String(),
+})
 
-const handler: DataCollectionHandler = {
+const MODIFIABLE_FIELDS = [
+  'title',
+  'value',
+  'currency',
+  'user_id',
+  'person_id',
+  'org_id',
+  'pipeline_id',
+  'stage_id',
+  'status',
+  'expected_close_date',
+  'probability',
+  'lost_reason',
+]
+
+export default objectCollectionHandler({
+  path: 'deals',
   name: 'Deals',
-  uri: '/data/collections/deals',
-  fieldsSchema: getFieldsSchema,
-  parseUnifiedFields: {
-    deals: parseUnifiedFields,
-  },
-  extractUnifiedFields: {
-    deals: extractUnifiedFields,
-  },
-  find: {
-    handler: (request) =>
-      findInCollection({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  lookup: {
-    fields: LOOKUP_FIELDS,
-    handler: async (request) =>
-      lookupRecords({ ...request, path: OBJECT_PATH }),
-  },
-  create: {
-    handler: async (request) =>
-      createCollectionRecord({ path: OBJECT_PATH, ...request }),
-  },
-  update: {
-    handler: async (request) =>
-      updateCollectionRecord({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  events: {
-    subscribeHandler: (request) =>
-      subscribeToCollection({ ...request, eventObject: 'deal' }),
-    unsubscribeHandler: unsubscribeFromCollection,
-    webhookHandler: handleSubscriptionWebhook,
-  },
-}
-
-export default handler
-
-async function getFieldsSchema({ apiClient }) {
-  const type = Type.Partial(
-    Type.Object({
-      title: Type.String(),
-      value: Type.String(),
-      currency: Type.String(),
-      user_id: Type.String({
-        title: 'User',
-        referenceCollectionUri: users.uri,
-      }),
-      person_id: Type.Integer({
-        title: 'Person',
-        referenceCollectionUri: 'data/collections/persons',
-      }),
-      org_id: Type.Integer({
-        title: 'Organization',
-        referenceCollectionUri: 'data/collections/organizations',
-      }),
-      pipeline_id: await makePipelineSchema(apiClient),
-      stage_id: await makeStageSchema(apiClient),
-      status: Type.String({ enum: ['open', 'won', 'lost'] }),
-      expected_close_date: Type.String({ format: 'date' }),
-      probability: Type.Integer(),
-      lost_reason: Type.String(),
-      visible_to: await makeVisibleToSchema(),
-    }),
-  )
-  type.required = ['title']
-  return type
-}
+  fieldsSchema: FIELDS_SCHEMA,
+  createFields: MODIFIABLE_FIELDS,
+  updateFields: MODIFIABLE_FIELDS,
+  lookupFields: ['title'],
+  eventObject: 'deal',
+  udm: 'deals',
+  parseUnifiedFields,
+  extractUnifiedFields,
+})
 
 async function parseUnifiedFields({ unifiedFields }) {
   const unifiedDeal: UnifiedDealFields = unifiedFields

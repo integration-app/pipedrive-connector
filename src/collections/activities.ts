@@ -1,99 +1,70 @@
 import { Type } from '@sinclair/typebox'
-import { makeActivityTypeSchema } from '../api/activity-types'
 import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
-import { DataCollectionHandler } from '@integration-app/connector-sdk'
-import {
-  findInCollection,
-  createCollectionRecord,
-  updateCollectionRecord,
-} from './common'
-import users from './users'
-import {
-  handleSubscriptionWebhook,
-  subscribeToCollection,
-  unsubscribeFromCollection,
-} from '../api/subscriptions'
+import { objectCollectionHandler } from './common'
+import { USER_SCHEMA } from './users'
+import { ACTIVITY_TYPE_SCHEMA } from './references'
+import { PERSON_SCHEMA } from './persons'
+import { ORGANIZATION_SCHEMA } from './organizations'
 
-const OBJECT_PATH = 'activities'
+const FIELDS_SCHEMA = Type.Object({
+  type: ACTIVITY_TYPE_SCHEMA,
+  subject: Type.String(),
+  note: Type.String(),
+  public_description: Type.String(),
+  done: Type.Boolean(),
+  due_date: Type.String({
+    format: 'date',
+  }),
+  due_time: Type.String({
+    format: 'time',
+  }),
+  duration: Type.String({
+    format: 'time',
+  }),
+  location: Type.String(),
+  user_id: USER_SCHEMA,
+  person_id: PERSON_SCHEMA,
+  org_id: ORGANIZATION_SCHEMA,
+  deal_id: Type.Integer({
+    title: 'Deal',
+    referenceCollectionUri: 'data/collections/deals',
+  }),
+  lead_id: Type.Integer({
+    title: 'Lead',
+    referenceCollectionUri: 'data/collections/leads',
+  }),
+})
 
-const handler: DataCollectionHandler = {
+const MODIFIABLE_FIELDS = [
+  'type',
+  'subject',
+  'note',
+  'public_description',
+  'done',
+  'due_date',
+  'due_time',
+  'duration',
+  'location',
+  'user_id',
+  'person_id',
+  'org_id',
+  'deal_id',
+  'lead_id',
+]
+
+const activities = objectCollectionHandler({
+  path: 'activities',
   name: 'Activities',
-  uri: '/data/collections/activities',
-  fieldsSchema: getFieldsSchema,
-  parseUnifiedFields: {
-    activities: parseUnifiedFields,
-  },
-  extractUnifiedFields: {
-    activities: extractUnifiedFields,
-  },
-  find: {
-    handler: async (request) =>
-      findInCollection({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  create: {
-    handler: async (request) =>
-      createCollectionRecord({ path: OBJECT_PATH, ...request }),
-  },
-  update: {
-    handler: async (request) =>
-      updateCollectionRecord({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  events: {
-    subscribeHandler: (request) =>
-      subscribeToCollection({ ...request, eventObject: 'activity' }),
-    unsubscribeHandler: unsubscribeFromCollection,
-    webhookHandler: handleSubscriptionWebhook,
-  },
-}
+  fieldsSchema: FIELDS_SCHEMA,
+  createFields: MODIFIABLE_FIELDS,
+  updateFields: MODIFIABLE_FIELDS,
+  eventObject: 'activity',
+  udm: 'activities',
+  parseUnifiedFields,
+  extractUnifiedFields,
+})
 
-export default handler
-
-async function getFieldsSchema({ apiClient }) {
-  return Type.Partial(
-    Type.Object({
-      type: await makeActivityTypeSchema(apiClient),
-      subject: Type.String(),
-      note: Type.String(),
-      public_description: Type.String(),
-      done: Type.Boolean(),
-      due_date: Type.String({
-        format: 'date',
-      }),
-      due_time: Type.String({
-        format: 'time',
-      }),
-      duration: Type.String({
-        format: 'time',
-      }),
-      location: Type.String(),
-      user_id: Type.String({
-        title: 'User',
-        referenceCollectionUri: users.uri,
-      }),
-      person_id: Type.Integer({
-        referenceCollectionUri: 'data/collections/persons',
-      }),
-      org_id: Type.Integer({
-        title: 'Organization',
-        referenceCollectionUri: 'data/collections/organizations',
-      }),
-      deal_id: Type.Integer({
-        title: 'Deal',
-        referenceCollectionUri: 'data/collections/deals',
-      }),
-      lead_id: Type.Integer({
-        title: 'Lead',
-        referenceCollectionUri: 'data/collections/leads',
-      }),
-    }),
-  )
-}
+export default activities
 
 function extractUnifiedFields({ fields }): UnifiedActivityFields {
   return {

@@ -1,111 +1,38 @@
-import { DataCollectionHandler } from '@integration-app/connector-sdk'
+import { objectCollectionHandler } from './common'
 import { Type } from '@sinclair/typebox'
-import { makeVisibleToSchema } from '../api/visibility'
-import {
-  createCollectionRecord,
-  findInCollection,
-  updateCollectionRecord,
-} from './common'
 import { UnifiedCompanyFields } from '@integration-app/sdk/udm/companies'
-import users from './users'
-import {
-  DataCollectionFindResponse,
-  DataRecord,
-} from '@integration-app/sdk/connector-api'
-import {
-  handleSubscriptionWebhook,
-  subscribeToCollection,
-  unsubscribeFromCollection,
-} from '../api/subscriptions'
-import { lookupRecords } from '../api/records'
+import { USER_SCHEMA } from './users'
 
-const OBJECT_PATH = 'organizations'
+const FIELDS_SCHEMA = Type.Object({
+  name: Type.String(),
+  owner_id: {
+    ...USER_SCHEMA,
+    title: 'Owner',
+  },
+})
 
-const LOOKUP_FIELDS = ['name']
+const MODIFIABLE_FIELDS = ['name', 'owner_id']
 
-const handler: DataCollectionHandler = {
+const organizations = objectCollectionHandler({
+  path: 'organizations',
   name: 'Organizations',
-  uri: '/data/collections/organizations',
-  fieldsSchema: getFieldsSchema,
-  parseUnifiedFields: {
-    companies: parseUnifiedFields,
-  },
-  extractUnifiedFields: {
-    companies: extractUnifiedFields,
-  },
-  find: {
-    handler: (request) =>
-      findInCollection({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  lookup: {
-    fields: LOOKUP_FIELDS,
-    handler: async (request) =>
-      lookupRecords({ ...request, path: OBJECT_PATH }),
-  },
-  create: {
-    handler: async (request) =>
-      createCollectionRecord({ path: OBJECT_PATH, ...request }),
-  },
-  update: {
-    handler: async (request) =>
-      updateCollectionRecord({
-        path: OBJECT_PATH,
-        ...request,
-      }),
-  },
-  events: {
-    subscribeHandler: (request) =>
-      subscribeToCollection({ ...request, eventObject: 'organization' }),
-    unsubscribeHandler: unsubscribeFromCollection,
-    webhookHandler: handleSubscriptionWebhook,
-  },
-}
+  fieldsSchema: FIELDS_SCHEMA,
+  createFields: MODIFIABLE_FIELDS,
+  updateFields: MODIFIABLE_FIELDS,
+  requiredFields: ['name'],
+  lookupFields: ['name'],
+  eventObject: 'organization',
+  udm: 'companies',
+  parseUnifiedFields,
+  extractUnifiedFields,
+})
 
-export default handler
+export default organizations
 
-function parseRecord(record): DataRecord {
-  return record
-    ? {
-        id: record.id,
-        name: record.name,
-        fields: record,
-      }
-    : null
-}
-
-export async function searchRecord({
-  apiClient,
-  field,
-  term,
-}): Promise<DataCollectionFindResponse> {
-  const response = await apiClient.get('itemSearch', {
-    fields: field,
-    term: term,
-    exact_match: true,
-    limit: 1,
-  })
-  return {
-    records: response.data.items.map(parseRecord),
-  }
-}
-
-async function getFieldsSchema({}) {
-  const type = Type.Partial(
-    Type.Object({
-      name: Type.String(),
-      owner_id: Type.Number({
-        title: 'Owner',
-        referenceCollectionUri: users.uri,
-      }),
-      visible_to: await makeVisibleToSchema(),
-    }),
-  )
-  type.required = ['name']
-  return type
-}
+export const ORGANIZATION_SCHEMA = Type.Integer({
+  title: 'Organization',
+  referenceCollectionUri: organizations.uri,
+})
 
 async function parseUnifiedFields({ unifiedFields }) {
   const unifiedCompany: UnifiedCompanyFields = unifiedFields

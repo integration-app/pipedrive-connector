@@ -1,10 +1,6 @@
+import { objectCollectionHandler } from './common'
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../api/records'
-import {
-  handleSubscriptionWebhook,
-  subscribeToCollection,
-  unsubscribeFromCollection,
-} from '../api/subscriptions'
 
 const FIELDS_SCHEMA = Type.Partial(
   Type.Object({
@@ -31,33 +27,25 @@ const FIELDS_SCHEMA = Type.Partial(
   }),
 )
 
-export default {
-  name: 'Users',
-  uri: '/data/collections/users',
-  fieldsSchema: FIELDS_SCHEMA,
-  extractUnifiedFields: {
-    users: extractUnifiedFields,
-  },
-  find: {
-    handler: (request) =>
-      getRecords({
-        // If query is provided: https://developers.pipedrive.com/docs/api/v1/Users#findUsersByName
-        // Otherwise: https://developers.pipedrive.com/docs/api/v1/Users#getUsers
-        path: request.query?.term ? 'users/find' : 'users',
-        ...request,
-      }),
-  },
-  lookup: {
-    fields: ['name', 'email'],
-    handler: lookupUsers,
-  },
-  events: {
-    subscribeHandler: (request) =>
-      subscribeToCollection({ ...request, eventObject: 'user' }),
-    unsubscribeHandler: unsubscribeFromCollection,
-    webhookHandler: handleSubscriptionWebhook,
-  },
+const users = {
+  ...objectCollectionHandler({
+    path: 'users',
+    name: 'Users',
+    fieldsSchema: FIELDS_SCHEMA,
+    lookupFields: ['name', 'email'],
+    eventObject: 'user',
+    udm: 'users',
+    extractUnifiedFields,
+  }),
+  lookup: lookupUsers,
 }
+
+export default users
+
+export const USER_SCHEMA = Type.String({
+  title: 'User',
+  referenceCollectionUri: users.uri,
+})
 
 async function extractUnifiedFields({ fields }) {
   return {

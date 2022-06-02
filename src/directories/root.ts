@@ -1,4 +1,5 @@
 import {
+  DataDirectory,
   DataDirectoryListResponse,
   DataLocationType,
 } from '@integration-app/sdk/connector-api'
@@ -10,24 +11,39 @@ import persons from '../collections/persons'
 import users from '../collections/users'
 
 export default {
-  name: 'All Data',
   uri: 'data/root',
-  list: {
-    handler: async (): Promise<DataDirectoryListResponse> => {
-      const collections = [
-        organizations,
-        persons,
-        deals,
-        leads,
-        activities,
-        users,
-      ]
-      const locations = collections.map((collection) => ({
-        type: DataLocationType.collection,
-        uri: collection.uri as string,
-        name: collection.name as string,
-      }))
-      return { locations }
-    },
+
+  spec,
+
+  list: async (request): Promise<DataDirectoryListResponse> => {
+    const collections = [
+      organizations,
+      persons,
+      deals,
+      leads,
+      activities,
+      users,
+    ]
+    const locations = await Promise.all(
+      collections.map(async (collection) => {
+        const spec =
+          typeof collection.spec === 'function'
+            ? await collection.spec(request)
+            : collection.spec
+        return {
+          type: DataLocationType.collection,
+          uri: collection.uri as string,
+          name: spec.name as string,
+        }
+      }),
+    )
+    return { locations }
   },
+}
+
+async function spec(): Promise<DataDirectory> {
+  return {
+    type: DataLocationType.directory,
+    name: 'All Data',
+  }
 }

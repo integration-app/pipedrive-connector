@@ -11,6 +11,12 @@ import { ConnectionMode } from '@integration-app/sdk/connectors'
 import users from './collections/users'
 import rootDirectory from './directories/root'
 import { testConnection } from './api'
+import {
+  activityTypes,
+  leadLabels,
+  pipelines,
+  stages,
+} from './collections/references'
 
 export const server = new ConnectorServer({
   baseUri: process.env.BASE_URI,
@@ -78,3 +84,7 @@ server.dataCollection(deals)
 server.dataCollection(leads)
 server.dataCollection(activities)
 server.dataCollection(users)
+server.dataCollection(pipelines)
+server.dataCollection(stages)
+server.dataCollection(activityTypes)
+server.dataCollection(leadLabels)
