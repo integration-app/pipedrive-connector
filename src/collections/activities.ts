@@ -3,6 +3,8 @@ import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
 import { objectCollectionHandler } from './common'
 import { USER_SCHEMA } from './users'
 import { ACTIVITY_TYPE_SCHEMA } from './references'
+import { PERSON_SCHEMA } from './persons'
+import { ORGANIZATION_SCHEMA } from './organizations'
 
 const FIELDS_SCHEMA = Type.Object({
   type: ACTIVITY_TYPE_SCHEMA,
@@ -21,13 +23,8 @@ const FIELDS_SCHEMA = Type.Object({
   }),
   location: Type.String(),
   user_id: USER_SCHEMA,
-  person_id: Type.Integer({
-    referenceCollectionUri: 'data/collections/persons',
-  }),
-  org_id: Type.Integer({
-    title: 'Organization',
-    referenceCollectionUri: 'data/collections/organizations',
-  }),
+  person_id: PERSON_SCHEMA,
+  org_id: ORGANIZATION_SCHEMA,
   deal_id: Type.Integer({
     title: 'Deal',
     referenceCollectionUri: 'data/collections/deals',
