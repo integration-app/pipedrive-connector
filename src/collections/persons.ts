@@ -1,18 +1,13 @@
 import { objectCollectionHandler } from './common'
 import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
-import users from './users'
+import { USER_SCHEMA } from './users'
+import { ORGANIZATION_SCHEMA } from './organizations'
 
 const FIELDS_SCHEMA = Type.Object({
   name: Type.String(),
-  owner_id: Type.Number({
-    title: 'Owner',
-    referenceCollectionUri: users.uri,
-  }),
-  org_id: Type.Integer({
-    title: 'Organization',
-    referenceCollectionUri: 'data/collections/organizations',
-  }),
+  owner_id: USER_SCHEMA,
+  org_id: ORGANIZATION_SCHEMA,
   email: Type.Array(Type.String(), { title: 'Email(s)' }),
   phone: Type.Array(Type.String(), { title: 'Phone(s)' }),
   marketing_status: Type.String({
@@ -35,6 +30,7 @@ const persons = objectCollectionHandler({
   name: 'Persons',
   fieldsSchema: FIELDS_SCHEMA,
   createFields: MODIFIABLE_FIELDS,
+  requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
   lookupFields: ['email', 'name', 'phone'],
   eventObject: 'person',
@@ -82,11 +78,7 @@ async function parseUnifiedFields({ unifiedFields }) {
   return {
     fields: {
       name: unifiedContact.name,
-      email: [
-        {
-          value: unifiedFields.email,
-        },
-      ],
+      email: unifiedFields.email ? [unifiedFields.email] : undefined,
       org_id: unifiedContact.companyId,
       owner_id: unifiedContact.userId,
     },

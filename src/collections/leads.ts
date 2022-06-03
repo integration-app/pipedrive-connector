@@ -3,6 +3,8 @@ import { Type } from '@sinclair/typebox'
 import { UnifiedLeadFields } from '@integration-app/sdk/udm/leads'
 import users from './users'
 import { LEAD_LABEL_SCHEMA } from './references'
+import { PERSON_SCHEMA } from './persons'
+import { ORGANIZATION_SCHEMA } from './organizations'
 
 const FIELDS_SCHEMA = Type.Object({
   title: Type.String(),
@@ -13,12 +15,8 @@ const FIELDS_SCHEMA = Type.Object({
   label_ids: Type.Array(LEAD_LABEL_SCHEMA, {
     title: 'Labels',
   }),
-  person_id: Type.Integer({
-    referenceCollectionUri: 'data/collections/persons',
-  }),
-  organization_id: Type.Integer({
-    referenceCollectionUri: 'data/collections/organizations',
-  }),
+  person_id: PERSON_SCHEMA,
+  organization_id: ORGANIZATION_SCHEMA,
   expected_close_date: Type.String({
     format: 'date',
     title: 'Expected Close Date',
@@ -48,6 +46,11 @@ const leads = objectCollectionHandler({
 })
 
 export default leads
+
+export const LEAD_SCHEMA = Type.Integer({
+  title: 'Lead',
+  referenceCollectionUri: leads.uri,
+})
 
 async function parseUnifiedFields({ unifiedFields }) {
   const unifiedLead: UnifiedLeadFields = unifiedFields

@@ -3,20 +3,16 @@ import { objectCollectionHandler } from './common'
 import { UnifiedDealFields } from '@integration-app/sdk/udm/deals'
 import { PIPELINE_SCHEMA, STAGES_SCHEMA } from './references'
 import { USER_SCHEMA } from './users'
+import { ORGANIZATION_SCHEMA } from './organizations'
+import { PERSON_SCHEMA } from './persons'
 
 const FIELDS_SCHEMA = Type.Object({
   title: Type.String(),
   value: Type.String(),
   currency: Type.String(),
   user_id: USER_SCHEMA,
-  person_id: Type.Integer({
-    title: 'Person',
-    referenceCollectionUri: 'data/collections/persons',
-  }),
-  org_id: Type.Integer({
-    title: 'Organization',
-    referenceCollectionUri: 'data/collections/organizations',
-  }),
+  person_id: PERSON_SCHEMA,
+  org_id: ORGANIZATION_SCHEMA,
   pipeline_id: PIPELINE_SCHEMA,
   stage_id: STAGES_SCHEMA,
   status: Type.String({ enum: ['open', 'won', 'lost'] }),
@@ -40,17 +36,25 @@ const MODIFIABLE_FIELDS = [
   'lost_reason',
 ]
 
-export default objectCollectionHandler({
+const deals = objectCollectionHandler({
   path: 'deals',
   name: 'Deals',
   fieldsSchema: FIELDS_SCHEMA,
   createFields: MODIFIABLE_FIELDS,
+  requiredFields: ['title'],
   updateFields: MODIFIABLE_FIELDS,
   lookupFields: ['title'],
   eventObject: 'deal',
   udm: 'deals',
   parseUnifiedFields,
   extractUnifiedFields,
+})
+
+export default deals
+
+export const DEAL_SCHEMA = Type.Integer({
+  title: 'Deal',
+  referenceCollectionUri: deals.uri,
 })
 
 async function parseUnifiedFields({ unifiedFields }) {
