@@ -1,6 +1,7 @@
 import { objectCollectionHandler } from './common'
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../api/records'
+import { UnifiedUserFields } from '@integration-app/sdk/udm/users'
 
 const FIELDS_SCHEMA = Type.Partial(
   Type.Object({
@@ -31,10 +32,12 @@ const users = {
   ...objectCollectionHandler({
     path: 'users',
     name: 'Users',
+    createFields: ['name', 'email'],
     fieldsSchema: FIELDS_SCHEMA,
     lookupFields: ['name', 'email'],
     eventObject: 'user',
     udm: 'users',
+    parseUnifiedFields,
     extractUnifiedFields,
   }),
   lookup: lookupUsers,
@@ -51,6 +54,16 @@ async function extractUnifiedFields({ fields }) {
   return {
     email: fields.email,
     name: fields.name,
+  }
+}
+
+async function parseUnifiedFields({ unifiedFields }) {
+  const userFields = unifiedFields as UnifiedUserFields
+  return {
+    fields: {
+      name: userFields.name,
+      email: userFields.email,
+    },
   }
 }
 

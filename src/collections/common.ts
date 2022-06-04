@@ -28,6 +28,7 @@ export function objectCollectionHandler({
   parseUnifiedFields = null,
   extractUnifiedFields = null,
   createFields = null,
+  requiredFields = null,
   updateFields = null,
   lookupFields = null,
   eventObject = null,
@@ -59,6 +60,17 @@ export function objectCollectionHandler({
       if (lookupFields) {
         spec.lookup = {
           fields: lookupFields,
+        }
+      }
+      if (createFields) {
+        spec.create = {
+          fields: createFields,
+          requiredFields,
+        }
+      }
+      if (updateFields) {
+        spec.update = {
+          fields: updateFields,
         }
       }
       return spec
