@@ -3,6 +3,7 @@ import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
 import { USER_SCHEMA } from './users'
 import { ORGANIZATION_SCHEMA } from './organizations'
+import splitName from 'split-human-name'
 
 const FIELDS_SCHEMA = Type.Object({
   name: Type.String(),
@@ -64,12 +65,16 @@ function extractRecord(item: any) {
 }
 
 function extractUnifiedFields({ fields }): UnifiedContactFields {
+  const { firstName, lastName } = splitName(fields.name ?? '')
   return {
-    name: fields.name,
+    fullName: fields.name,
+    firstName,
+    lastName,
     email: fields.email?.[0]?.value,
+    phone: fields.phone?.[0]?.value,
     companyId: fields.org_id,
     companyName: fields.org_name,
-    userId: fields.owner_id?.id,
+    ownerId: fields.owner_id?.id,
   }
 }
 
@@ -77,10 +82,10 @@ async function parseUnifiedFields({ unifiedFields }) {
   const unifiedContact: UnifiedContactFields = unifiedFields
   return {
     fields: {
-      name: unifiedContact.name,
+      name: unifiedContact.fullName,
       email: unifiedFields.email ? [unifiedFields.email] : undefined,
       org_id: unifiedContact.companyId,
-      owner_id: unifiedContact.userId,
+      owner_id: unifiedContact.ownerId,
     },
   }
 }
