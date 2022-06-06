@@ -40,7 +40,7 @@ export async function findRecordById({
 }): Promise<DataCollectionFindByIdResponse> {
   const response = await apiClient.get(`${path}/${id}`)
   return {
-    record: (extractRecord ?? defaultExtractRecord)(response),
+    record: (extractRecord ?? defaultExtractRecord)(response.data),
   }
 }
 

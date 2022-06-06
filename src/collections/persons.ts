@@ -3,7 +3,7 @@ import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
 import { USER_SCHEMA } from './users'
 import { ORGANIZATION_SCHEMA } from './organizations'
-import splitName from 'split-human-name'
+import * as splitName from 'split-human-name'
 
 const FIELDS_SCHEMA = Type.Object({
   name: Type.String(),
