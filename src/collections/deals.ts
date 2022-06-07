@@ -1,10 +1,10 @@
+import { UnifiedDealFields } from '@integration-app/sdk/udm/deals'
 import { Type } from '@sinclair/typebox'
 import { objectCollectionHandler } from './common'
-import { UnifiedDealFields } from '@integration-app/sdk/udm/deals'
-import { PIPELINE_SCHEMA, STAGES_SCHEMA } from './references'
-import { USER_SCHEMA } from './users'
 import { ORGANIZATION_SCHEMA } from './organizations'
 import { PERSON_SCHEMA } from './persons'
+import { PIPELINE_SCHEMA, STAGES_SCHEMA } from './references'
+import { USER_SCHEMA } from './users'
 
 const FIELDS_SCHEMA = Type.Object({
   title: Type.String(),
@@ -77,3 +77,5 @@ function extractUnifiedFields({ fields }) {
     ownerId: fields.user_id?.id?.toString(),
   }
 }
+
+export { MODIFIABLE_FIELDS as dealFieldsToUpdate }

@@ -1,6 +1,6 @@
-import { objectCollectionHandler } from './common'
-import { Type } from '@sinclair/typebox'
 import { UnifiedCompanyFields } from '@integration-app/sdk/udm/companies'
+import { Type } from '@sinclair/typebox'
+import { objectCollectionHandler } from './common'
 import { USER_SCHEMA } from './users'
 
 const FIELDS_SCHEMA = Type.Object({
@@ -50,3 +50,5 @@ function extractUnifiedFields({ fields }) {
     userId: fields.owner_id?.id,
   }
 }
+
+export { MODIFIABLE_FIELDS as companyFieldsToUpdate }

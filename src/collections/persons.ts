@@ -1,8 +1,8 @@
-import { objectCollectionHandler } from './common'
 import { UnifiedContactFields } from '@integration-app/sdk/udm/contacts'
 import { Type } from '@sinclair/typebox'
-import { USER_SCHEMA } from './users'
+import { objectCollectionHandler } from './common'
 import { ORGANIZATION_SCHEMA } from './organizations'
+import { USER_SCHEMA } from './users'
 
 const FIELDS_SCHEMA = Type.Object({
   name: Type.String(),
@@ -84,3 +84,5 @@ async function parseUnifiedFields({ unifiedFields }) {
     },
   }
 }
+
+export { MODIFIABLE_FIELDS as contactFieldsToUpdate }
