@@ -22,8 +22,8 @@ export async function getRecords({
     limit,
   }
   const response = await apiClient.get(path, parameters)
-  const hasMore = response.additional_data?.pagination?.more_items_in_collection
-  const nextCursor = hasMore ? (parseInt(cursor) ?? 0 + limit).toString() : null
+  const nextCursor =
+    response.additional_data?.pagination?.next_start?.toString()
   return {
     records: response.data
       ? response.data.map(extractRecord ?? defaultExtractRecord)
