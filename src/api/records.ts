@@ -26,7 +26,9 @@ export async function getRecords({
     response.additional_data?.pagination?.next_start?.toString()
   return {
     records: response.data
-      ? response.data.map(extractRecord ?? defaultExtractRecord)
+      ? await Promise.all(
+          response.data.map(extractRecord ?? defaultExtractRecord),
+        )
       : [],
     cursor: nextCursor,
   }
@@ -40,7 +42,7 @@ export async function findRecordById({
 }): Promise<DataCollectionFindByIdResponse> {
   const response = await apiClient.get(`${path}/${id}`)
   return {
-    record: (extractRecord ?? defaultExtractRecord)(response.data),
+    record: await (extractRecord ?? defaultExtractRecord)(response.data),
   }
 }
 
@@ -54,10 +56,16 @@ export async function lookupRecords({
   fields,
   extractRecord = null,
 }): Promise<DataCollectionLookupResponse> {
-  const [field, term] = Object.entries(fields ?? [])[0]
+  const firstField = Object.entries(fields ?? [])[0]
+  let field = firstField?.[0]
+  const term = firstField?.[1]
 
-  if (!fields || !term) {
+  if (!field || !term) {
     throw new Error('Lookup fields were not provided')
+  }
+
+  if (field?.startsWith('lookup_')) {
+    field = field.replace('lookup_', '')
   }
 
   const parameters = {
@@ -74,9 +82,11 @@ export async function lookupRecords({
   }
 
   return {
-    records: response.data.items
-      .map((searchItem) => searchItem.item)
-      .map(extractRecord ?? defaultExtractRecord),
+    records: await Promise.all(
+      response.data.items
+        .map((searchItem) => searchItem.item)
+        .map(extractRecord ?? defaultExtractRecord),
+    ),
   }
 }
 

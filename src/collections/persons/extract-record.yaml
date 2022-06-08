@@ -1,0 +1,109 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  name:
+    $var: $.name
+  first_name:
+    $var: $.first_name
+  last_name:
+    $var: $.last_name
+  phone:
+    $iterate:
+      locator: $.phone
+      items:
+        $var: $.phone.$current.value
+  email:
+    $iterate:
+      locator: $.email
+      items:
+        $var: $.email.$current.value
+  owner_id:
+    $var: $.owner_id.id
+  owner:
+    id:
+      $var: $.owner_id.id
+    name:
+      $var: $.owner_id.name
+    email:
+      $var: $.owner_id.email
+  org_id:
+    $var: $.data[0].org_id.value
+  org:
+    name:
+      $var: $.org_id.name
+    people_count:
+      $var: $.org_id.people_count
+    owner_id:
+      $var: $.data[0].org_id.owner_id
+    address:
+      $var: $.org_id.address
+    active_flag:
+      $var: $.org_id.active_flag
+    cc_email:
+      $var: $.org_id.cc_email
+  open_deals_count:
+    $var: $.open_deals_count
+  related_open_deals_count:
+    $var: $.related_open_deals_count
+  closed_deals_count:
+    $var: $.closed_deals_count
+  related_closed_deals_count:
+    $var: $.related_closed_deals_count
+  participant_open_deals_count:
+    $var: $.participant_open_deals_count
+  participant_closed_deals_count:
+    $var: $.participant_closed_deals_count
+  email_messages_count:
+    $var: $.email_messages_count
+  activities_count:
+    $var: $.activities_count
+  done_activities_count:
+    $var: $.done_activities_count
+  undone_activities_count:
+    $var: $.undone_activities_count
+  files_count:
+    $var: $.files_count
+  notes_count:
+    $var: $.notes_count
+  followers_count:
+    $var: $.followers_count
+  won_deals_count:
+    $var: $.won_deals_count
+  related_won_deals_count:
+    $var: $.related_won_deals_count
+  lost_deals_count:
+    $var: $.lost_deals_count
+  related_lost_deals_count:
+    $var: $.related_lost_deals_count
+  active_flag:
+    $var: $.active_flag
+  update_time:
+    $var: $.update_time
+  add_time:
+    $var: $.add_time
+  visible_to:
+    $var: $.visible_to
+  marketing_status:
+    $var: $.marketing_status
+  next_activity_date:
+    $var: $.next_activity_date
+  next_activity_time:
+    $var: $.next_activity_time
+  next_activity_id:
+    $var: $.next_activity_id
+  last_activity_id:
+    $var: $.last_activity_id
+  last_activity_date:
+    $var: $.last_activity_date
+  last_incoming_mail_time:
+    $var: $.last_incoming_mail_time
+  last_outgoing_mail_time:
+    $var: $.last_outgoing_mail_time
+  label:
+    $var: $.label
+  cc_email:
+    $var: $.cc_email
