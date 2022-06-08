@@ -1,12 +1,12 @@
-import { Type } from '@sinclair/typebox'
 import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
+import { Type } from '@sinclair/typebox'
 import { objectCollectionHandler } from './common'
-import { USER_SCHEMA } from './users'
-import { ACTIVITY_TYPE_SCHEMA } from './references'
-import { PERSON_SCHEMA } from './persons'
-import { ORGANIZATION_SCHEMA } from './organizations'
 import { DEAL_SCHEMA } from './deals'
 import { LEAD_SCHEMA } from './leads'
+import { ORGANIZATION_SCHEMA } from './organizations'
+import { PERSON_SCHEMA } from './persons'
+import { ACTIVITY_TYPE_SCHEMA } from './references'
+import { USER_SCHEMA } from './users'
 
 const FIELDS_SCHEMA = Type.Object({
   type: ACTIVITY_TYPE_SCHEMA,
@@ -112,6 +112,11 @@ const activities = objectCollectionHandler({
 })
 
 export default activities
+
+export const ACTIVITY_SCHEMA = Type.Integer({
+  title: 'Activity',
+  referenceCollectionUri: activities.uri,
+})
 
 function extractUnifiedFields({ fields }): UnifiedActivityFields {
   return {
