@@ -112,8 +112,6 @@ function extractRecord(item: any) {
     ...item,
     creator_user_id: item.creator_user_id.id,
     user_id: item.user_id?.id,
-    phone: item.phone?.map((phone) => phone.value),
-    email: item.email?.map((email) => email.value),
   }
   return {
     id: item.id.toString(),
