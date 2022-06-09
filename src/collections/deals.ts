@@ -111,6 +111,8 @@ function extractRecord(item: any) {
   const fields = {
     ...item,
     creator_user_id: item.creator_user_id.id,
+    org_id: item.org_id?.value,
+    person_id: item.person_id?.value,
     user_id: item.user_id?.id,
   }
   return {
