@@ -18,11 +18,15 @@ import {
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
+import * as yaml from 'js-yaml'
+import * as fs from 'fs'
+import { buildData } from '@integration-app/sdk/data-builder'
 
 export function objectCollectionHandler({
+  directory = null,
   path,
   name,
-  fieldsSchema,
+  fieldsSchema = null,
   udm = null,
   extractRecord = null,
   parseUnifiedFields = null,
@@ -33,9 +37,10 @@ export function objectCollectionHandler({
   lookupFields = null,
   eventObject = null,
 }: {
+  directory?: string
   path: string
   name: string
-  fieldsSchema: any
+  fieldsSchema?: any
   udm?: string
   extractRecord?: (record: any) => any
   parseUnifiedFields?: ParseUnifiedFieldsHandler
@@ -47,6 +52,36 @@ export function objectCollectionHandler({
   eventObject?: string
 }): DataCollectionHandler {
   const find = (request) => getRecords({ ...request, path, extractRecord })
+
+  if (!fieldsSchema && directory) {
+    fieldsSchema = loadSchema(`${directory}/fields-schema.yaml`)
+    if (!fieldsSchema) {
+      throw new Error('Fields schema is required')
+    }
+  }
+  if (!extractUnifiedFields && directory) {
+    const dataBuilder = dataBuilderFromYaml(
+      `${directory}/extract-unified-fields.yaml`,
+    )
+    extractUnifiedFields = async ({ fields }) => await dataBuilder(fields)
+  }
+
+  if (!parseUnifiedFields && directory) {
+    const dataBuilder = dataBuilderFromYaml(
+      `${directory}/parse-unified-fields.yaml`,
+    )
+    parseUnifiedFields = async ({ unifiedFields }) => ({
+      fields: await dataBuilder(unifiedFields),
+    })
+  }
+
+  if (
+    !extractRecord &&
+    directory &&
+    fs.existsSync(`${directory}/extract-record.yaml`)
+  ) {
+    extractRecord = dataBuilderFromYaml(`${directory}/extract-record.yaml`)
+  }
 
   const handler: DataCollectionHandler = {
     uri: `/data/${path}`,
@@ -119,4 +154,21 @@ export function objectCollectionHandler({
   }
 
   return handler
+}
+
+function loadSchema(path) {
+  const schema = loadYaml(path)
+  // ToDo: validate schema
+  return schema
+}
+
+function dataBuilderFromYaml(path): (data: any) => Promise<any> {
+  const recipe = loadYaml(path)
+  return async (data) => {
+    return buildData(recipe, data)
+  }
+}
+
+function loadYaml(path) {
+  return yaml.load(fs.readFileSync(path))
 }
