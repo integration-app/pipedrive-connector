@@ -1,0 +1,24 @@
+creator_user_id:
+  $var: $.createdBy
+user_id:
+  $var: $.ownerId
+person_id:
+  $var: $.contactId
+org_id:
+  $var: $.companyId
+stage_id:
+  $var: $.stage
+title:
+  $var: $.name
+value:
+  $var: $.amount
+currency:
+  $var: $.currency
+add_time:
+  $var: $.createdTime
+update_time:
+  $var: $.updatedTime
+renewal_type:
+  $var: $.type
+status:
+  $var: $.status

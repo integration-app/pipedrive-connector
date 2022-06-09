@@ -1,0 +1,189 @@
+type: object
+properties:
+  id:
+    type: integer
+  creator_user_id:
+    type: string
+    referenceCollectionUri: /data/users
+  creator_user:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+  user_id:
+    type: string
+    referenceCollectionUri: /data/users
+  user:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+  person_id:
+    type: string
+    referenceCollectionUri: /data/persons
+  person:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: array
+        items:
+          type: object
+          properties:
+            label:
+              type: string
+            value:
+              type: string
+            primary:
+              type: boolean
+      phone:
+        type: array
+        items:
+          type: object
+          properties:
+            value:
+              type: string
+            primary:
+              type: boolean
+      owner_id:
+        type: integer
+      value:
+        type: integer
+  org_id:
+    type: integer
+    referenceCollectionUri: /data/organizations
+  org:
+    type: object
+    properties:
+      name:
+        type: string
+      people_count:
+        type: integer
+      owner_id:
+        type: integer
+      address:
+        type: string
+  stage_id:
+    type: integer
+  title:
+    type: string
+  value:
+    type: integer
+  currency:
+    type: string
+  add_time:
+    type: string
+    format: date-time
+  update_time:
+    type: string
+    format: date-time
+  stage_change_time:
+    type: string
+    format: date-time
+  active:
+    type: boolean
+  status:
+    type: string
+  probability:
+    type: number
+  next_activity_date:
+    type: string
+    format: date
+  next_activity_time:
+    type: string
+    format: time
+  next_activity_id:
+    type: string
+    referenceCollectionUri: /data/activities
+  last_activity_id:
+    type: string
+    referenceCollectionUri: /data/activities
+  last_activity_date:
+    type: string
+    format: date
+  lost_reason:
+    type: string
+  visible_to:
+    type: string
+  close_time:
+    type: string
+    format: date-time
+  pipeline_id:
+    type: integer
+    referenceCollectionUri: /data/pipelines
+  won_time:
+    type: string
+    format: date-time
+  first_won_time:
+    type: string
+    format: date-time
+  lost_time:
+    type: string
+    format: date-time
+  products_count:
+    type: integer
+  notes_count:
+    type: integer
+  email_messages_count:
+    type: integer
+  activities_count:
+    type: integer
+  done_activities_count:
+    type: integer
+  undone_activities_count:
+    type: integer
+  participants_count:
+    type: integer
+  expected_close_date:
+    type: string
+    format: date
+  last_incoming_mail_time:
+    type: string
+    format: date-time
+  last_outgoing_mail_time:
+    type: string
+    format: date-time
+  label:
+    type: string
+  renewal_type:
+    type: string
+  stage_order_nr:
+    type: integer
+  person_name:
+    type: string
+  org_name:
+    type: string
+  next_activity_subject:
+    type: string
+  next_activity_type:
+    type: string
+  next_activity_duration:
+    type: integer
+  next_activity_note:
+    type: string
+  group_id:
+    type: string
+  group_name:
+    type: string
+  formatted_value:
+    type: string
+  weighted_value:
+    type: integer
+  formatted_weighted_value:
+    type: string
+  weighted_value_currency:
+    type: string
+  rotten_time:
+    type: string
+    format: date-time
+  owner_name:
+    type: string
