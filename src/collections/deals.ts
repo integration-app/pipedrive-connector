@@ -69,7 +69,7 @@ async function parseUnifiedFields({ unifiedFields }) {
   }
 }
 
-function extractUnifiedFields({ fields }) {
+async function extractUnifiedFields({ fields }) {
   return {
     name: fields.title,
     amount: fields.value ? parseFloat(fields.value) : null,

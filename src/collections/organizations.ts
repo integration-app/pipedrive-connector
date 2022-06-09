@@ -44,7 +44,7 @@ async function parseUnifiedFields({ unifiedFields }) {
   }
 }
 
-function extractUnifiedFields({ fields }) {
+async function extractUnifiedFields({ fields }) {
   return {
     name: fields.name,
     userId: fields.owner_id?.id,
