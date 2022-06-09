@@ -1,9 +1,10 @@
 {
   "scripts": {
     "dev": "nodemon",
-    "build": "npm run clean && npm run build:compile",
+    "build": "npm run clean && npm run build:compile && npm run build:copy",
     "clean": "rimraf dist",
     "build:compile": "tsc --project tsconfig.build.json",
+    "build:copy": "copy src/**/*.yaml dist/",
     "start": "NODE_ENV=production node dist/index.js",
     "test": "jest"
   },
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "copy": "^0.3.2",
     "env-var": "^7.1.1",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
