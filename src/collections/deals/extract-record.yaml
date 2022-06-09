@@ -17,42 +17,42 @@ fields:
   user_id:
     $var: $.user_id.id
   user:
-      id:
-        $var: $.user_id.id
-      name:
-        $var: $.user_id.name
-      email:
-        $var: $.user_id.email
+    id:
+      $var: $.user_id.id
+    name:
+      $var: $.user_id.name
+    email:
+      $var: $.user_id.email
   person_id:
     $var: $.person_id.value
   person:
-      name:
-        $var: $.person_id.name
-      email:
-        $iterate:
-          locator: $.person_id.email
-          items:
-            $var: $.person_id.email.$current.value
-      phone:
-        $iterate:
-          locator: $.person_id.phone
-          items:
-            $var: $.person_id.phone.$current.value
-      owner_id:
-        $var: $.person_id.owner_id
-      value:
-        $var: $.person_id.value
+    name:
+      $var: $.person_id.name
+    email:
+      $iterate:
+        locator: $.person_id.email
+        items:
+          $var: $.person_id.email.$current.value
+    phone:
+      $iterate:
+        locator: $.person_id.phone
+        items:
+          $var: $.person_id.phone.$current.value
+    owner_id:
+      $var: $.person_id.owner_id
+    value:
+      $var: $.person_id.value
   org_id:
     $var: $.org_id.value
   org:
-      name:
-        $var: $.org_id.name
-      people_count:
-        $var: $.org_id.people_count
-      owner_id:
-        $var: $.org_id.owner_id
-      address:
-        $var: $.org_id.address
+    name:
+      $var: $.org_id.name
+    people_count:
+      $var: $.org_id.people_count
+    owner_id:
+      $var: $.org_id.owner_id
+    address:
+      $var: $.org_id.address
   stage_id:
     $var: $.stage_id
   title:
