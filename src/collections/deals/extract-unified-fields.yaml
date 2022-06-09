@@ -1,5 +1,7 @@
 amount:
   $var: value
+probability:
+  $var: probability
 currency:
   $var: currency
 companyId:

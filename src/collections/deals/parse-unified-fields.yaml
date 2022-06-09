@@ -12,6 +12,8 @@ title:
   $var: $.name
 value:
   $var: $.amount
+probability:
+  $var: $.probability
 currency:
   $var: $.currency
 add_time:
