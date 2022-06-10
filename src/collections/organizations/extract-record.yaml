@@ -1,0 +1,107 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  company_id:
+    $var: $.company_id
+  owner_id:
+    $var: $.owner_id.id
+  owner:
+    id:
+      $var: $.owner_id.id
+    name:
+      $var: $.owner_id.name
+    email:
+      $var: $.owner_id.email
+    active_flag:
+      $var: $.owner_id.active_flag
+  name:
+    $var: $.name
+  open_deals_count:
+    $var: $.open_deals_count
+  related_open_deals_count:
+    $var: $.related_open_deals_count
+  closed_deals_count:
+    $var: $.closed_deals_count
+  related_closed_deals_count:
+    $var: $.related_closed_deals_count
+  email_messages_count:
+    $var: $.email_messages_count
+  people_count:
+    $var: $.people_count
+  activities_count:
+    $var: $.activities_count
+  done_activities_count:
+    $var: $.done_activities_count
+  undone_activities_count:
+    $var: $.undone_activities_count
+  files_count:
+    $var: $.files_count
+  notes_count:
+    $var: $.notes_count
+  followers_count:
+    $var: $.followers_count
+  won_deals_count:
+    $var: $.won_deals_count
+  related_won_deals_count:
+    $var: $.related_won_deals_count
+  lost_deals_count:
+    $var: $.lost_deals_count
+  related_lost_deals_count:
+    $var: $.related_lost_deals_count
+  active_flag:
+    $var: $.active_flag
+  category_id:
+    $var: $.category_id
+  picture_id:
+    $var: $.picture_id
+  country_code:
+    $var: $.country_code
+  update_time:
+    $var: $.update_time
+  add_time:
+    $var: $.add_time
+  visible_to:
+    $var: $.visible_to
+  next_activity_date:
+    $var: $.next_activity_date
+  next_activity_time:
+    $var: $.next_activity_time
+  next_activity_id:
+    $var: $.next_activity_id
+  last_activity_id:
+    $var: $.last_activity_id
+  last_activity_date:
+    $var: $.last_activity_date
+  label:
+    $var: $.label
+  address:
+    $var: $.address
+  address_components:
+    address_subpremise:
+      $var: $.address_subpremise
+    address_street_number:
+      $var: $.address_street_number
+    address_route:
+      $var: $.address_route
+    address_sublocality:
+      $var: $.address_sublocality
+    address_locality:
+      $var: $.address_locality
+    address_admin_area_level_1:
+      $var: $.address_admin_area_level_1
+    address_admin_area_level_2:
+      $var: $.address_admin_area_level_2
+    address_country:
+      $var: $.address_country
+    address_postal_code:
+      $var: $.address_postal_code
+    address_formatted_address:
+      $var: $.address_formatted_address
+  owner_name:
+    $var: $.owner_name
+  cc_email:
+    $var: $.cc_email

@@ -1,0 +1,45 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  title:
+    $var: $.title
+  owner_id:
+    $var: $.owner_id
+  creator_id:
+    $var: $.creator_id
+  label_ids:
+    $iterate:
+      locator: $.label_ids
+      items:
+        $var: $.label_ids.$current
+  value:
+    amount:
+      $var: $.value.amount
+    currency:
+      $var: $.value.currency
+  expected_close_date:
+    $var: $.expected_close_date
+  person_id:
+    $var: $.person_id
+  organization_id:
+    $var: $.organization_id
+  is_archived:
+    $var: $.is_archived
+  source_name:
+    $var: $.source_name
+  was_seen:
+    $var: $.was_seen
+  next_activity_id:
+    $var: $.next_activity_id
+  add_time:
+    $var: $.add_time
+  update_time:
+    $var: $.update_time
+  visible_to:
+    $var: $.visible_to
+  cc_email:
+    $var: $.cc_email

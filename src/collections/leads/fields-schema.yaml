@@ -1,0 +1,56 @@
+type: object
+properties:
+  id:
+    type: string
+  title:
+    type: string
+  owner_id:
+    title: Owner
+    type: integer
+  creator_id:
+    title: Creator
+    type: integer
+  label_ids:
+    title: Label(s)
+    type: array
+    items:
+      type: string
+  value:
+    type: object
+    properties:
+      amount:
+        type: integer
+      currency:
+        type: string
+  expected_close_date:
+    title: Expected Close Date
+    type: string
+    format: date
+  person_id:
+    title: Person
+    type: integer
+    referenceCollectionUri: /data/persons
+  organization_id:
+    title: Organization
+    type: integer
+    referenceCollectionUri: /data/organizations
+  is_archived:
+    type: boolean
+  source_name:
+    type: string
+  was_seen:
+    type: boolean
+  next_activity_id:
+    title: Next Activity
+    type: integer
+    referenceCollectionUri: /data/activities
+  add_time:
+    type: string
+    format: date-time
+  update_time:
+    type: string
+    format: date-time
+  visible_to:
+    type: string
+  cc_email:
+    type: string
