@@ -11,7 +11,7 @@ properties:
     title: Creator
     type: integer
   label_ids:
-    title: Labels
+    title: Label(s)
     type: array
     items:
       type: string

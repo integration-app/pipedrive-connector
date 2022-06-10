@@ -5,15 +5,17 @@ name:
 fields:
   id:
     $var: $.id
-  name:
-    $var: $.name
+  title:
+    $var: $.title
   owner_id:
     $var: $.owner_id
   creator_id:
     $var: $.creator_id
   label_ids:
-    items:
-      $var: $.label_ids.$current.value
+    $iterate:
+      locator: $.label_ids
+      items:
+        $var: $.label_ids.$current
   value:
     amount:
       $var: $.value.amount
@@ -23,10 +25,8 @@ fields:
     $var: $.expected_close_date
   person_id:
     $var: $.person_id
-    referenceCollectionUri: /data/persons
   organization_id:
     $var: $.organization_id
-    referenceCollectionUri: /data/organizations
   is_archived:
     $var: $.is_archived
   source_name:
@@ -35,7 +35,6 @@ fields:
     $var: $.was_seen
   next_activity_id:
     $var: $.next_activity_id
-    referenceCollectionUri: /data/activities
   add_time:
     $var: $.add_time
   update_time:

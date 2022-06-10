@@ -1,6 +1,6 @@
 name:
   $var: $.title
-companyId:
-  $var: $.organization_id
 userId:
   $var: $.owner_id
+companyId:
+  $var: $.organization_id
