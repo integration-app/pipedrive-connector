@@ -31,14 +31,14 @@ fields:
     email:
       $var: $.owner_id.email
   org_id:
-    $var: $.data[0].org_id.value
+    $var: $.org_id.value
   org:
     name:
       $var: $.org_id.name
     people_count:
       $var: $.org_id.people_count
     owner_id:
-      $var: $.data[0].org_id.owner_id
+      $var: $.org_id.owner_id
     address:
       $var: $.org_id.address
     active_flag:
