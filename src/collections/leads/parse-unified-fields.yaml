@@ -1,0 +1,6 @@
+title:
+  $var: $.name
+owner_id:
+  $var: $.userId
+organization_id:
+  $var: $.companyId
