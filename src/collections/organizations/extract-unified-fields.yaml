@@ -1,0 +1,4 @@
+name:
+  $var: $.name
+userId:
+  $var: $.owner_id

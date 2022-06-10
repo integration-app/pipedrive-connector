@@ -1,0 +1,118 @@
+type: object
+properties:
+  id:
+    type: integer
+  company_id:
+    type: integer
+  owner_id:
+    title: Owner
+    type: integer
+    referenceCollectionUri: /data/users
+  owner:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+      active_flag:
+        type: boolean
+  name:
+    type: string
+  open_deals_count:
+    type: integer
+  related_open_deals_count:
+    type: integer
+  closed_deals_count:
+    type: integer
+  related_closed_deals_count:
+    type: integer
+  email_messages_count:
+    type: integer
+  people_count:
+    type: integer
+  activities_count:
+    type: integer
+  done_activities_count:
+    type: integer
+  undone_activities_count:
+    type: integer
+  files_count:
+    type: integer
+  notes_count:
+    type: integer
+  followers_count:
+    type: integer
+  won_deals_count:
+    type: integer
+  related_won_deals_count:
+    type: integer
+  lost_deals_count:
+    type: integer
+  related_lost_deals_count:
+    type: integer
+  active_flag:
+    type: boolean
+  category_id:
+    type: string
+  picture_id:
+    type: string
+  country_code:
+    type: string
+  first_char:
+    type: string
+  update_time:
+    type: string
+  add_time:
+    type: string
+  visible_to:
+    type: string
+  next_activity_date:
+    type: string
+    format: date
+  next_activity_time:
+    type: string
+    format: time
+  next_activity_id:
+    type: integer
+    referenceCollectionUri: /data/activities
+  last_activity_id:
+    type: integer
+    referenceCollectionUri: /data/activities
+  last_activity_date:
+    type: string
+    format: date
+  label:
+    type: string
+  address:
+    type: string
+  address_components:
+    title: Address
+    type: object
+    properties:  # Pipedrive has address properties as separate fields
+      address_subpremise:
+        type: string
+      address_street_number:
+        type: string
+      address_route:
+        type: string
+      address_sublocality:
+        type: string
+      address_locality:
+        type: string
+      address_admin_area_level_1:
+        type: string
+      address_admin_area_level_2:
+        type: string
+      address_country:
+        type: string
+      address_postal_code:
+        type: string
+      address_formatted_address:
+        type: string
+  owner_name:
+    type: string
+  cc_email:
+    type: string
