@@ -1,0 +1,43 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  name:
+    $var: $.name
+  email:
+    $var: $.email
+  phone:
+    $var: $.phone
+  lang:
+    $var: $.lang
+  locale:
+    $var: $.locale
+  timezone_name:
+    $var: $.timezone_name
+  timezone_offset:
+    $var: $.timezone_offset
+  default_currency:
+    $var: $.default_currency
+  icon_url:
+    $var: $.icon_url
+  active_flag:
+    $var: $.active_flag
+  is_admin:
+    $var: $.is_admin
+  role_id:
+    $var: $.role_id
+  created:
+    $var: $.created
+  modified:
+    $var: $.modified
+  last_login:
+    $var: $.last_login
+  signup_flow_variation:
+    $var: $.signup_flow_variation
+  has_created_company:
+    $var: $.has_created_company
+  is_you:
+    $var: $.is_you
