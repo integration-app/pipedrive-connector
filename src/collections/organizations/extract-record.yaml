@@ -60,8 +60,6 @@ fields:
     $var: $.picture_id
   country_code:
     $var: $.country_code
-  first_char:
-    $var: $.first_char
   update_time:
     $var: $.update_time
   add_time:

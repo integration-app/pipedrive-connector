@@ -61,8 +61,6 @@ properties:
     type: string
   country_code:
     type: string
-  first_char:
-    type: string
   update_time:
     type: string
   add_time:
