@@ -107,8 +107,10 @@ properties:
     format: date-time
   next_activity_id:
     type: integer
+    referenceCollectionUri: /data/activities
   last_activity_id:
     type: integer
+    referenceCollectionUri: /data/activities
   last_activity_date:
     type: string
     format: date-time
