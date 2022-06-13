@@ -1,0 +1,16 @@
+org_id:
+  $var: $.companyId
+user_id:
+  $var: $.userId
+duration:
+  $var: $.durationSeconds
+subject:
+  $var: $.title
+public_description:
+  $var: $.description
+person_id:
+  $var: $.contactId
+deal_id:
+  $var: $.dealId
+lead_id:
+  $var: $.leadId
