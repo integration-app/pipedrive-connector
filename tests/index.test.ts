@@ -12,50 +12,53 @@ const SUPPORTED_FEATURES = {
     contacts: {
       unifiedFields: ['fullName', 'email', 'companyId', 'ownerId'],
       collectionName: 'persons',
-      fields: {
-        fullName: { update: true, create: true, lookup: true },
-        email: { update: true, create: true, lookup: true },
-        phone: { update: true, create: true, lookup: false },
-      },
       fieldsToUpdate: contactFieldsToUpdate,
       create: true,
       find: true,
       update: true,
-      events: true,
+      events: false,
     },
-    // companies: {
-    //   unifiedFields: ['name', 'email', 'companyId', 'companyName', 'userId'],
-    //   fieldsToUpdate: companyFieldsToUpdate,
-    //   events: true,
-    //   find: true,
-    //   create: true,
-    //   update: true,
-    // },
-    // activities: {
-    //   unifiedFields: [
-    //     'type',
-    //     'description',
-    //     'title',
-    //     'dealId',
-    //     'leadId',
-    //     'contactId',
-    //     'companyId',
-    //     'userId',
-    //   ],
-    //   fieldsToUpdate: activityFieldsToUpdate,
-    //   events: true,
-    //   find: true,
-    //   create: true,
-    //   update: true,
-    // },
-    // deals: {
-    //   unifiedFields: ['name', 'ownerId', 'companyId', 'amount'],
-    //   fieldsToUpdate: dealFieldsToUpdate,
-    //   events: true,
-    //   find: true,
-    //   create: true,
-    //   update: true,
-    // },
+    leads: {
+      unifiedFields: ['name', 'email', 'companyName', 'companyId', 'userId'],
+      collectionName: 'leads',
+      fieldsToUpdate: contactFieldsToUpdate,
+      create: true,
+      find: true,
+      update: true,
+      events: false,
+    },
+    companies: {
+      unifiedFields: ['name', 'userId'],
+      collectionName: 'organizations',
+      events: false,
+      find: true,
+      create: true,
+      update: true,
+    },
+    activities: {
+      unifiedFields: [
+        'description',
+        'title',
+        'dealId',
+        'leadId',
+        'contactId',
+        'companyId',
+        'userId',
+      ],
+      collectionName: 'activities',
+      events: false,
+      find: true,
+      create: true,
+      update: true,
+    },
+    deals: {
+      unifiedFields: ['name', 'ownerId', 'companyId', 'amount'],
+      collectionName: 'deals',
+      events: false,
+      find: true,
+      create: true,
+      update: true,
+    },
   },
 }
 // generate random data based on types (from UNIFIED_DATA_MODELS in sdk)
@@ -67,8 +70,14 @@ function fillWithValue(field: string) {
       return random.email('test.org')
     case 'phone':
       return random.mobile().toString()
+    case 'amount':
+      return random.integer(0, 100)
+    case 'name':
+      return 'Test Name - ' + random.integer()
+    case 'companyName':
+      return 'Test Company - ' + random.integer()
     default:
-      return random.string(8)
+      return 'Test Default - ' + random.string(4)
   }
 }
 
@@ -105,16 +114,6 @@ const realReferences = async (
   }
   return references
 }
-// const data = res.records[0].unifiedFields
-// const references = {}
-// for (const field of fieldsToFind) {
-//   const value = data[field]
-//   if (value) {
-//     references[field] = value
-//   }
-// }
-// return references
-// }
 
 describe('UDM', () => {
   let spec: any
@@ -132,7 +131,7 @@ describe('UDM', () => {
     const fieldsWithReference: string[] = Object.keys(
       udmFieldsDescription,
     ).filter((field) => udmFieldsDescription[field].referenceUdm)
-    // create a separate function that will find a valid userId/companyid etc
+
     describe(`${collection}`, () => {
       it(`should have ${collection} UDM`, async () => {
         expect(spec.data[collection]).toBeDefined()
@@ -145,7 +144,7 @@ describe('UDM', () => {
         )
         const collectionUri = spec.data[collection].uri
         const unifiedFields = { ...basicFieldValues, ...references }
-        console.log(unifiedFields)
+
         const fieldsResponse = await makeRequest(
           `${collectionUri}/parse-unified-fields`,
           {
@@ -154,13 +153,12 @@ describe('UDM', () => {
           },
         )
         const fields = fieldsResponse.fields
-        console.log(`Original ${collection} fields: ${fields}`)
+
         let newRecordId = null
         if (collectionProperties.create) {
           const createResponse = await makeRequest(`${collectionUri}/create`, {
             fields,
           })
-          console.log(createResponse)
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)
@@ -173,7 +171,6 @@ describe('UDM', () => {
               udm: collection,
             },
           )
-          console.log(findByIdResponse)
           expect(findByIdResponse.record.unifiedFields).toMatchObject(
             unifiedFields,
           )
