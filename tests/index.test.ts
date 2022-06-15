@@ -96,7 +96,7 @@ const realReferences = async (
   for (const record of data) {
     for (const field of fieldsToFind) {
       if (record.unifiedFields[field]) {
-        references[field] = record[field]
+        references[field] = record.unifiedFields[field]
       }
     }
     if (Object.keys(references).length === fieldsToFind.length) {
@@ -160,6 +160,7 @@ describe('UDM', () => {
           const createResponse = await makeRequest(`${collectionUri}/create`, {
             fields,
           })
+          console.log(createResponse)
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)
@@ -172,18 +173,21 @@ describe('UDM', () => {
               udm: collection,
             },
           )
-          expect(findByIdResponse.record.unifiedFields).toEqual(unifiedFields)
-        }
-        if (collectionProperties.update) {
-          const updCreatedRecord = await makeRequest(
-            `${collectionUri}/update`,
-            {
-              id: newRecordId,
-              fields: generateRandomValues(collectionProperties.fieldsToUpdate), // crfeate new unified fields, parse and find this record
-            },
+          console.log(findByIdResponse)
+          expect(findByIdResponse.record.unifiedFields).toMatchObject(
+            unifiedFields,
           )
-          expect(updCreatedRecord.fields.name).toBeDefined()
         }
+        // if (collectionProperties.update) {
+        //   const updCreatedRecord = await makeRequest(
+        //     `${collectionUri}/update`,
+        //     {
+        //       id: newRecordId,
+        //       fields: generateRandomValues(collectionProperties.fieldsToUpdate), // crfeate new unified fields, parse and find this record
+        //     },
+        //   )
+        //   expect(updCreatedRecord.fields.name).toBeDefined()
+        // }
       })
     })
   }
