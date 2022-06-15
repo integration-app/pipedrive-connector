@@ -26,5 +26,5 @@ export async function makeRequest(uri: string, payload?: any) {
     .post(uri)
     .set('Authorization', `Bearer ${token}`)
     .send(payload)
-  return response.body
+  return response.body // catch throuw error if status != 200
 }

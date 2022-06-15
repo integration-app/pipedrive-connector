@@ -32,7 +32,6 @@
     "@sinclair/typebox": "^0.22.1",
     "axios": "^0.26.0",
     "dotenv": "^10.0.0",
-    "generate-random-data": "^0.0.3",
     "js-convert-case": "^4.2.0",
     "split-human-name": "^2.0.12",
     "url-join": "^4.0.1"
@@ -44,6 +43,7 @@
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "generate-random-data": "^0.0.3",
     "jest": "^27.3.1",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",
