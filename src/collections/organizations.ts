@@ -50,5 +50,3 @@ function extractUnifiedFields({ fields }) {
     userId: fields.owner_id?.id,
   }
 }
-
-export { MODIFIABLE_FIELDS as companyFieldsToUpdate }

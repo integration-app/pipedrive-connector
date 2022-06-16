@@ -77,5 +77,3 @@ function extractUnifiedFields({ fields }) {
     ownerId: fields.user_id?.id?.toString(),
   }
 }
-
-export { MODIFIABLE_FIELDS as dealFieldsToUpdate }

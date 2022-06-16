@@ -139,5 +139,3 @@ async function parseUnifiedFields({ unifiedFields }) {
     },
   }
 }
-
-export { MODIFIABLE_FIELDS as activityFieldsToUpdate }
