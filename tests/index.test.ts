@@ -8,7 +8,7 @@ const SUPPORTED_FEATURES = {
     contacts: {
       unifiedFields: ['fullName', 'email', 'companyId', 'ownerId'],
       collectionName: 'persons',
-      fieldsToUpdate: ['name', 'email', 'phone'],
+      updatableFields: ['name'], // make it work for email and phone that are Arrays
       create: true,
       find: true,
       update: true,
@@ -17,16 +17,16 @@ const SUPPORTED_FEATURES = {
     leads: {
       unifiedFields: ['name', 'companyId', 'userId'],
       collectionName: 'leads',
-      fieldsToUpdate: ['title', 'expected_close_date'],
+      updatableFields: ['title', 'expected_close_date'],
       create: true,
       find: true,
-      update: true,
+      update: false,
       events: false,
     },
     companies: {
       unifiedFields: ['name', 'userId'],
       collectionName: 'organizations',
-      fieldsToUpdate: ['name'],
+      updatableFields: ['name'],
       find: true,
       create: true,
       update: true,
@@ -43,7 +43,7 @@ const SUPPORTED_FEATURES = {
         'userId',
       ],
       collectionName: 'activities',
-      fieldsToUpdate: ['subject', 'note'],
+      updatableFields: ['subject'],
       find: true,
       create: true,
       update: true,
@@ -52,7 +52,7 @@ const SUPPORTED_FEATURES = {
     deals: {
       unifiedFields: ['name', 'ownerId', 'companyId', 'amount'],
       collectionName: 'deals',
-      fieldsToUpdate: ['title', 'value'],
+      updatableFields: ['title', 'value'],
       find: true,
       create: true,
       update: true,
@@ -178,16 +178,19 @@ describe('UDM', () => {
             unifiedFields,
           )
         }
-        // if (collectionProperties.update) {
-        //   const updCreatedRecord = await makeRequest(
-        //     `${collectionUri}/update`,
-        //     {
-        //       id: newRecordId,
-        //       fields: generateRandomValues(collectionProperties.fieldsToUpdate), // crfeate new unified fields, parse and find this record
-        //     },
-        //   )
-        //   expect(updCreatedRecord.fields.name).toBeDefined()
-        // }
+        if (collectionProperties.update) {
+          const fieldsToUpdate = generateRandomValues(
+            collectionProperties.updatableFields,
+          )
+          const updatedRecord = await makeRequest(`${collectionUri}/update`, {
+            id: newRecordId,
+            fields: fieldsToUpdate,
+          })
+          const res = updatedRecord.logs[0].response.data.data
+          for (const field in fieldsToUpdate) {
+            expect(res[field]).toEqual(fieldsToUpdate[field])
+          }
+        }
       })
     })
   }
