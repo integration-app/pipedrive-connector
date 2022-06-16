@@ -1,0 +1,26 @@
+amount:
+  $var: value
+probability:
+  $var: probability
+currency:
+  $var: currency
+companyId:
+  $var: org_id
+contactId:
+  $var: person_id
+stage:
+  $var: stage_id
+status:
+  $var: status
+ownerId:
+  $var: user_id
+createdTime:
+  $var: add_time
+createdBy:
+  $var: creator_user_id
+updatedTime:
+  $var: update_time
+name:
+  $var: title
+type:
+  $var: renewal_type

@@ -1,0 +1,14 @@
+name:
+  $var: $.fullName
+first_name:
+  $var: $.firstName
+last_name:
+  $var: $.lastName
+phone:
+  - $var: $.phone
+email:
+  - $var: $.email
+owner_id:
+  $var: $.ownerId
+org_id:
+  $var: $.companyId

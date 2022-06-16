@@ -1,0 +1,153 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  creator_user_id:
+    $var: $.creator_user_id.id
+  creator_user:
+    id:
+      $var: $.creator_user_id.id
+    name:
+      $var: $.creator_user_id.name
+    email:
+      $var: $.creator_user_id.email
+  user_id:
+    $var: $.user_id.id
+  user:
+    id:
+      $var: $.user_id.id
+    name:
+      $var: $.user_id.name
+    email:
+      $var: $.user_id.email
+  person_id:
+    $var: $.person_id.value
+  person:
+    name:
+      $var: $.person_id.name
+    email:
+      $iterate:
+        locator: $.person_id.email
+        items:
+          $var: $.person_id.email.$current.value
+    phone:
+      $iterate:
+        locator: $.person_id.phone
+        items:
+          $var: $.person_id.phone.$current.value
+    owner_id:
+      $var: $.person_id.owner_id
+    value:
+      $var: $.person_id.value
+  org_id:
+    $var: $.org_id.value
+  org:
+    name:
+      $var: $.org_id.name
+    people_count:
+      $var: $.org_id.people_count
+    owner_id:
+      $var: $.org_id.owner_id
+    address:
+      $var: $.org_id.address
+  stage_id:
+    $var: $.stage_id
+  title:
+    $var: $.title
+  value:
+    $var: $.value
+  currency:
+    $var: $.currency
+  add_time:
+    $var: $.add_time
+  update_time:
+    $var: $.update_time
+  stage_change_time:
+    $var: $.stage_change_time
+  active:
+    $var: $.active
+  status:
+    $var: $.status
+  probability:
+    $var: $.probability
+  next_activity_date:
+    $var: $.next_activity_date
+  next_activity_time:
+    $var: $.next_activity_time
+  next_activity_id:
+    $var: $.next_activity_id
+  last_activity_id:
+    $var: $.last_activity_id
+  last_activity_date:
+    $var: $.last_activity_date
+  lost_reason:
+    $var: $.lost_reason
+  visible_to:
+    $var: $.visible_to
+  close_time:
+    $var: $.close_time
+  pipeline_id:
+    $var: $.pipeline_id
+  won_time:
+    $var: $.won_time
+  first_won_time:
+    $var: $.first_won_time
+  lost_time:
+    $var: $.lost_time
+  products_count:
+    $var: $.products_count
+  notes_count:
+    $var: $.notes_count
+  email_messages_count:
+    $var: $.email_messages_count
+  activities_count:
+    $var: $.activities_count
+  done_activities_count:
+    $var: $.done_activities_count
+  undone_activities_count:
+    $var: $.undone_activities_count
+  participants_count:
+    $var: $.participants_count
+  expected_close_date:
+    $var: $.expected_close_date
+  last_incoming_mail_time:
+    $var: $.last_incoming_mail_time
+  last_outgoing_mail_time:
+    $var: $.last_outgoing_mail_time
+  label:
+    $var: $.label
+  renewal_type:
+    $var: $.renewal_type
+  stage_order_nr:
+    $var: $.stage_order_nr
+  person_name:
+    $var: $.person_name
+  org_name:
+    $var: $.org_name
+  next_activity_subject:
+    $var: $.next_activity_subject
+  next_activity_type:
+    $var: $.next_activity_type
+  next_activity_duration:
+    $var: $.next_activity_duration
+  next_activity_note:
+    $var: $.next_activity_note
+  group_id:
+    $var: $.group_id
+  group_name:
+    $var: $.group_name
+  formatted_value:
+    $var: $.formatted_value
+  weighted_value:
+    $var: $.weighted_value
+  formatted_weighted_value:
+    $var: $.formatted_weighted_value
+  weighted_value_currency:
+    $var: $.weighted_value_currency
+  rotten_time:
+    $var: $.rotten_time
+  owner_name:
+    $var: $.owner_name

@@ -1,0 +1,43 @@
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  email:
+    type: string
+  phone:
+    type: string
+  lang:
+    type: integer
+  locale:
+    type: string
+  timezone_name:
+    type: string
+  timezone_offset:
+    type: string
+  default_currency:
+    type: string
+  icon_url:
+    type: string
+  active_flag:
+    type: boolean
+  is_admin:
+    type: integer
+  role_id:
+    type: integer
+  created:
+    type: string
+    format: date-time
+  modified:
+    type: string
+    format: date-time
+  last_login:
+    type: string
+    format: date-time
+  signup_flow_variation:
+    type: string
+  has_created_company:
+    type: boolean
+  is_you:
+    type: boolean
