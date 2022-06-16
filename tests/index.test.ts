@@ -1,9 +1,5 @@
 import { UNIFIED_DATA_MODELS } from '@integration-app/sdk/udm/index'
 import * as random from 'generate-random-data'
-// import activityFieldsToUpdate from '../src/collections/activities'
-// import dealFieldsToUpdate from '../src/collections/deals'
-// import companyFieldsToUpdate from '../src/collections/organizations'
-import contactFieldsToUpdate from '../src/collections/persons'
 import { makeRequest } from './config'
 
 const SUPPORTED_FEATURES = {
@@ -12,16 +8,16 @@ const SUPPORTED_FEATURES = {
     contacts: {
       unifiedFields: ['fullName', 'email', 'companyId', 'ownerId'],
       collectionName: 'persons',
-      fieldsToUpdate: contactFieldsToUpdate,
+      fieldsToUpdate: ['name', 'email', 'phone'],
       create: true,
       find: true,
       update: true,
       events: false,
     },
     leads: {
-      unifiedFields: ['name', 'email', 'companyName', 'companyId', 'userId'],
+      unifiedFields: ['name', 'companyId', 'userId'],
       collectionName: 'leads',
-      fieldsToUpdate: contactFieldsToUpdate,
+      fieldsToUpdate: ['title', 'expected_close_date'],
       create: true,
       find: true,
       update: true,
@@ -30,10 +26,11 @@ const SUPPORTED_FEATURES = {
     companies: {
       unifiedFields: ['name', 'userId'],
       collectionName: 'organizations',
-      events: false,
+      fieldsToUpdate: ['name'],
       find: true,
       create: true,
       update: true,
+      events: false,
     },
     activities: {
       unifiedFields: [
@@ -46,18 +43,20 @@ const SUPPORTED_FEATURES = {
         'userId',
       ],
       collectionName: 'activities',
-      events: false,
+      fieldsToUpdate: ['subject', 'note'],
       find: true,
       create: true,
       update: true,
+      events: false,
     },
     deals: {
       unifiedFields: ['name', 'ownerId', 'companyId', 'amount'],
       collectionName: 'deals',
-      events: false,
+      fieldsToUpdate: ['title', 'value'],
       find: true,
       create: true,
       update: true,
+      events: false,
     },
   },
 }
@@ -71,9 +70,17 @@ function fillWithValue(field: string) {
     case 'phone':
       return random.mobile().toString()
     case 'amount':
-      return random.integer(0, 100)
+      return random.integer(0, 1000000)
+    case 'value':
+      return random.integer(0, 10000)
     case 'name':
       return 'Test Name - ' + random.integer()
+    case 'createdTime':
+      return random.randomDate()
+    case 'updatedTime':
+      return random.randomDate()
+    case 'expected_close_date':
+      return random.randomDate()
     case 'companyName':
       return 'Test Company - ' + random.integer()
     default:
@@ -126,11 +133,7 @@ describe('UDM', () => {
     const basicFieldValues = generateRandomValues(
       collectionProperties.unifiedFields,
     )
-    const udmFieldsDescription =
-      UNIFIED_DATA_MODELS[collection].fieldsSchema.properties
-    const fieldsWithReference: string[] = Object.keys(
-      udmFieldsDescription,
-    ).filter((field) => udmFieldsDescription[field].referenceUdm)
+    const fieldsWithReference: string[] = extractReferences(collection)
 
     describe(`${collection}`, () => {
       it(`should have ${collection} UDM`, async () => {
@@ -189,3 +192,10 @@ describe('UDM', () => {
     })
   }
 })
+function extractReferences(collection: string): string[] {
+  const udmFieldsDescription =
+    UNIFIED_DATA_MODELS[collection].fieldsSchema.properties
+  return Object.keys(udmFieldsDescription).filter(
+    (field) => udmFieldsDescription[field].referenceUdm,
+  )
+}
