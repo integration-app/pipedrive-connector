@@ -82,9 +82,9 @@ function fillWithValue(field: string) {
     case 'expected_close_date':
       return random.randomDate()
     case 'companyName':
-      return 'Test Company - ' + random.integer()
+      return 'Test Company - ' + random.id()
     default:
-      return 'Test Default - ' + random.string(4)
+      return 'Test Default - ' + random.id()
   }
 }
 
