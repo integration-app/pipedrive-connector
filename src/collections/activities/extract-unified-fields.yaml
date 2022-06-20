@@ -1,17 +1,25 @@
-description:
-  $var: $.public_description
 title:
   $var: $.subject
+description:
+  $var: $.public_description
 type:
   $var: $.type
-location:
-  $var: $.location
 durationSeconds:
   $var: $.duration # it's not in seconds here, but "10:01"
+location:
+  $var: $.location
+participants:
+  $iterate:
+    locator: $.participants
+    items:
+      userId:
+        $var: $.participants.$current.user_id
+      contactId:
+        $var: $.participants.$current.person_id
 contactId:
   $var: $.person_id
 companyId:
-  $var: $.org_id
+  $var: $.company_id
 dealId:
   $var: $.deal_id
 leadId:
@@ -28,11 +36,3 @@ updatedBy:
   $var: $.update_user_id
 updatedTime:
   $var: $.update_time
-participants:
-  $iterate:
-    locator: $.participants
-    items:
-      userId:
-        $var: $.participants.$current.user_id
-      contactId:
-        $var: $.participants.$current.person_id
