@@ -2,8 +2,12 @@ description:
   $var: $.public_description
 title:
   $var: $.subject
+type:
+  $var: $.type
+location:
+  $var: $.location
 durationSeconds:
-  $var: $.duration
+  $var: $.duration # it's not in seconds here, but "10:01"
 contactId:
   $var: $.person_id
 companyId:
@@ -12,5 +16,23 @@ dealId:
   $var: $.deal_id
 leadId:
   $var: $.lead_id
-userId:
+ownerId:
   $var: $.user_id
+dueTime:
+  $var: $.due_date # we should add the due_time here as well to make it date-time
+createdBy:
+  $var: $.created_by_user_id
+createdTime:
+  $var: $.add_time
+updatedBy:
+  $var: $.update_user_id
+updatedTime:
+  $var: $.update_time
+participants:
+  $iterate:
+    locator: $.participants
+    items:
+      userId:
+        $var: $.participants.$current.user_id
+      contactId:
+        $var: $.participants.$current.person_id
