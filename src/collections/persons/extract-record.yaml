@@ -83,6 +83,8 @@ fields:
     $var: $.active_flag
   update_time:
     $var: $.update_time
+  added_by_user_id:
+    $var: $.added_by_user_id
   add_time:
     $var: $.add_time
   visible_to:

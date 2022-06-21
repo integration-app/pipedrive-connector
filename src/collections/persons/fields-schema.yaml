@@ -92,6 +92,9 @@ properties:
   update_time:
     type: string
     format: date-time
+  added_by_user_id:
+    type: integer
+    referenceCollectionUri: /data/users
   add_time:
     type: string
     format: date-time
