@@ -2,6 +2,8 @@ id:
   $var: $.id
 name:
   $var: $.title
+url:
+  $concat: ['https://app.pipedrive.com/leads/inbox/', $var: $.id]
 fields:
   id:
     $var: $.id

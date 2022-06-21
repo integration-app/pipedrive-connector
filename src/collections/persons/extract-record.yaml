@@ -2,6 +2,8 @@ id:
   $var: $.id
 name:
   $var: $.name
+url:
+  $concat: ['https://app.pipedrive.com/person/', $var: $.id]
 fields:
   id:
     $var: $.id
