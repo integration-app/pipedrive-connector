@@ -1,4 +1,4 @@
-company_id:
+org_id:
   $var: $.companyId
 user_id:
   $var: $.ownerId

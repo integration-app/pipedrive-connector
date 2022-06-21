@@ -19,7 +19,7 @@ participants:
 contactId:
   $var: $.person_id
 companyId:
-  $var: $.company_id
+  $var: $.org_id
 dealId:
   $var: $.deal_id
 leadId:
