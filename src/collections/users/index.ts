@@ -1,10 +1,11 @@
+import { DataCollectionHandler } from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../../api/records'
 import { objectCollectionHandler } from '../common'
 
 const FIELDS = ['name', 'email']
 
-const users = {
+const users: DataCollectionHandler = {
   ...objectCollectionHandler({
     directory: __dirname,
     path: 'users',
