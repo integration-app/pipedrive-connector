@@ -1,4 +1,22 @@
+owner_id:
+  $var: $.ownerId
 name:
   $var: $.name
-owner_id:
-  $var: $.userId
+add_time:
+  $var: $.createdTime
+update_time:
+  $var: $.updatedTime
+last_activity_date:
+  $var: $.lastActivityTime
+address:
+  $var: $.address.full
+address_locality:
+  $var: $.address.city
+address_route:
+  $var: $.address.street
+address_country:
+  $var: $.address.country
+address_postal_code:
+  $var: $.address.zip
+address_admin_area_level_1:
+  $var: $.address.state

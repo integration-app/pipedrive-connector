@@ -1,4 +1,23 @@
 name:
   $var: $.name
-userId:
+ownerId:
   $var: $.owner_id
+address:
+  full:
+    $var: $.address
+  street:
+    $var: $.address_components.address_route
+  country:
+    $var: $.address_components.address_country
+  zip:
+    $var: $.address_components.address_postal_code
+  city:
+    $var: $.address_components.address_locality
+  state:
+    $var: $.address_components.address_admin_area_level_1
+createdTime:
+  $var: $.add_time
+updatedTime:
+  $var: $.update_time
+lastActivityTime:
+  $var: $.last_activity_date

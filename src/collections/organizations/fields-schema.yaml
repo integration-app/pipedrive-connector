@@ -108,8 +108,6 @@ properties:
         type: string
       address_postal_code:
         type: string
-      address_formatted_address:
-        type: string
   owner_name:
     type: string
   cc_email:
