@@ -67,6 +67,7 @@ properties:
     type: boolean
   update_time:
     type: string
+    format: date-time
   update_user_id:
     type: integer
     referenceCollectionUri: /data/users
@@ -84,6 +85,7 @@ properties:
     type: string
   created_by_user_id:
     type: integer
+    referenceCollectionUri: /data/users
   location_subpremise:
     type: string
   location_street_number:

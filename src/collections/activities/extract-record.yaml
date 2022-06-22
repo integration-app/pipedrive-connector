@@ -1,7 +1,9 @@
 id:
   $var: $.id
 name:
-  $var: $.name
+  $var: $.subject
+url:
+  $concat: ['https://app.pipedrive.com/activities/list/user/everyone?selected=', $var: $.id]
 fields:
   id:
     $var: $.id
@@ -102,26 +104,18 @@ fields:
   location_formatted_address:
     $var: $.location_formatted_address
   attendees:
-    $iterate:
-      locator: $.attendees
-      items:
-        $var: $.attendees.$current.value
+    $var: $.attendees
   participants:
-    $iterate:
-      locator: $.participants
-      items:
-        $var: $.participants.$current.value
+    $var: $.participants
   org_name:
+    $var: $.org_name
   person_name:
+    $var: $.person_name
   deal_title:
+    $var: $.deal_title
   owner_name:
     $var: $.owner_name
   assigned_to_user_id:
     $var: $.assigned_to_user_id
   file:
-    id:
-      $var: $.file.id
-    clean_name:
-      $var: $.file.clean_name
-    url:
-      $var: $.file.url
+    $var: $.file

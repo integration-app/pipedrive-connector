@@ -1,4 +1,18 @@
 name:
-  $var: $.name
+  $var: $.fullName
 email:
   $var: $.email
+phone:
+  $var: $.phone
+timezone_name:
+  $var: $.timezone
+active_flag:
+  $var: $.isActive
+role_id:
+  $var: $.roleId
+created:
+  $var: $.createdTime
+modified:
+  $var: $.updatedTime
+icon_url:
+  $var: $.imageUrl

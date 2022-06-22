@@ -1,7 +1,9 @@
 id:
   $var: $.id
 name:
-  $var: $.name
+  $var: $.title
+url:
+  $concat: ['https://app.pipedrive.com/deal/', $var: $.id]
 fields:
   id:
     $var: $.id

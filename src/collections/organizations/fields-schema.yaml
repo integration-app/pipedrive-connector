@@ -63,8 +63,10 @@ properties:
     type: string
   update_time:
     type: string
+    format: date-time
   add_time:
     type: string
+    format: date-time
   visible_to:
     type: string
   next_activity_date:
@@ -107,8 +109,6 @@ properties:
       address_country:
         type: string
       address_postal_code:
-        type: string
-      address_formatted_address:
         type: string
   owner_name:
     type: string
