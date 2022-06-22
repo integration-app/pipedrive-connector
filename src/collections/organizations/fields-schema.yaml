@@ -63,8 +63,10 @@ properties:
     type: string
   update_time:
     type: string
+    format: date-time
   add_time:
     type: string
+    format: date-time
   visible_to:
     type: string
   next_activity_date:
