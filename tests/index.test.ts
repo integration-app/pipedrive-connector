@@ -14,17 +14,17 @@ const SUPPORTED_FEATURES = {
       update: true,
       events: false,
     },
-    leads: {
-      unifiedFields: ['name', 'companyId', 'userId'],
-      collectionName: 'leads',
-      updatableFields: ['title', 'expected_close_date'],
-      create: true,
-      find: true,
-      update: false,
-      events: false,
-    },
+    // leads: {
+    //   unifiedFields: ['name', 'companyId', 'ownerId'],
+    //   collectionName: 'leads',
+    //   updatableFields: ['title', 'expected_close_date'],
+    //   create: true,
+    //   find: true,
+    //   update: false,
+    //   events: false,
+    // },
     companies: {
-      unifiedFields: ['name', 'userId'],
+      unifiedFields: ['name', 'ownerId'],
       collectionName: 'organizations',
       updatableFields: ['name'],
       find: true,
@@ -37,10 +37,9 @@ const SUPPORTED_FEATURES = {
         'description',
         'title',
         'dealId',
-        'leadId',
         'contactId',
         'companyId',
-        'userId',
+        'ownerId',
       ],
       collectionName: 'activities',
       updatableFields: ['subject'],
@@ -58,6 +57,15 @@ const SUPPORTED_FEATURES = {
       update: true,
       events: false,
     },
+    // users: {
+    //   unifiedFields: ['fullName', 'email', 'isActive'],
+    //   collectionName: 'users',
+    //   updatableFields: ['name', 'email'],
+    //   find: true,
+    //   create: true,
+    //   update: true,
+    //   events: false,
+    // },
   },
 }
 // generate random data based on types (from UNIFIED_DATA_MODELS in sdk)
@@ -73,14 +81,12 @@ function fillWithValue(field: string) {
       return random.integer(0, 1000000)
     case 'value':
       return random.integer(0, 10000)
-    case 'name':
-      return 'Test Name - ' + random.integer()
-    case 'createdTime':
-      return random.randomDate()
-    case 'updatedTime':
-      return random.randomDate()
     case 'expected_close_date':
       return random.randomDate()
+    case 'isActive':
+      return false
+    case 'name':
+      return 'Test Name - ' + random.integer()
     case 'companyName':
       return 'Test Company - ' + random.id()
     default:
@@ -147,6 +153,7 @@ describe('UDM', () => {
         )
         const collectionUri = spec.data[collection].uri
         const unifiedFields = { ...basicFieldValues, ...references }
+        console.log(`unifiedFields: ${JSON.stringify(unifiedFields)}`)
 
         const fieldsResponse = await makeRequest(
           `${collectionUri}/parse-unified-fields`,
@@ -156,6 +163,7 @@ describe('UDM', () => {
           },
         )
         const fields = fieldsResponse.fields
+        console.log(`fields: ${JSON.stringify(fields)}`)
 
         let newRecordId = null
         if (collectionProperties.create) {
@@ -186,10 +194,22 @@ describe('UDM', () => {
             id: newRecordId,
             fields: fieldsToUpdate,
           })
-          const res = updatedRecord.logs[0].response.data.data
-          for (const field in fieldsToUpdate) {
-            expect(res[field]).toEqual(fieldsToUpdate[field])
-          }
+          console.log(`Updated Record: ${JSON.stringify(updatedRecord)}`)
+          const findUpdatedRecord = await makeRequest(
+            `${collectionUri}/find-by-id`,
+            {
+              id: updatedRecord.id,
+              udm: collection,
+            },
+          )
+          const parsedUpdatedRecord = await makeRequest(
+            `${collectionUri}/parse-unified-fields`,
+            {
+              udm: collection,
+              unifiedFields: findUpdatedRecord.record.unifiedFields,
+            },
+          )
+          expect(parsedUpdatedRecord.fields).toMatchObject(fieldsToUpdate)
         }
       })
     })
@@ -198,7 +218,14 @@ describe('UDM', () => {
 function extractReferences(collection: string): string[] {
   const udmFieldsDescription =
     UNIFIED_DATA_MODELS[collection].fieldsSchema.properties
-  return Object.keys(udmFieldsDescription).filter(
-    (field) => udmFieldsDescription[field].referenceUdm,
+  const fieldsWithReference = Object.keys(udmFieldsDescription).filter(
+    (field) => {
+      return (
+        udmFieldsDescription[field].referenceUdm &&
+        field !== 'createdBy' &&
+        field !== 'updatedBy'
+      )
+    },
   )
+  return fieldsWithReference
 }
