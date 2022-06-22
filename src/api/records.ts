@@ -107,13 +107,10 @@ export async function updateRecord({
   id,
   fields,
 }): Promise<DataCollectionUpdateResponse> {
-  let method = apiClient.put
-  if (path === 'leads') {
-    // Leads, unlike other objects, require `PATCH` request instead of PUT
-    // https://developers.pipedrive.com/docs/api/v1/Leads#updateLead
-    method = apiClient.patch
-  }
-  const response = await method(`${path}/${id}`, fields)
+  // Leads, unlike other objects, require `PATCH` request instead of PUT
+  // https://developers.pipedrive.com/docs/api/v1/Leads#updateLead
+  const method = path === 'leads' ? 'patch' : 'put'
+  const response = await apiClient[method](`${path}/${id}`, fields)
   return {
     id: response.data.id.toString(),
   }
