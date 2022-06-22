@@ -101,7 +101,7 @@ function generateRandomValues(unifiedFields: string[]) {
   }, {})
 }
 
-const realReferences = async (
+const dereference = async (
   udm: string,
   collection: string,
   fieldsToFind: string[],
@@ -146,7 +146,7 @@ describe('UDM', () => {
         expect(spec.data[collection]).toBeDefined()
       })
       it(`should perform operations on ${collection}`, async () => {
-        const references = await realReferences(
+        const references = await dereference(
           collection,
           collectionProperties.collectionName,
           fieldsWithReference,
