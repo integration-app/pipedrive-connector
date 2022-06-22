@@ -1,5 +1,5 @@
-creator_user_id:
-  $var: $.createdBy
+title:
+  $var: $.name
 user_id:
   $var: $.ownerId
 person_id:
@@ -8,19 +8,23 @@ org_id:
   $var: $.companyId
 stage_id:
   $var: $.stage
-title:
-  $var: $.name
 value:
   $var: $.amount
-probability:
-  $var: $.probability
 currency:
   $var: $.currency
-add_time:
-  $var: $.createdTime
-update_time:
-  $var: $.updatedTime
+probability:
+  $var: $.probability
 renewal_type:
   $var: $.type
 status:
   $var: $.status
+close_time:
+  $var: $.closeTme
+creator_user_id:
+  $var: $.createdBy
+add_time:
+  $var: $.createdTime
+update_time:
+  $var: $.updatedTime
+last_activity_date:
+  $var: $.lastActivityTime

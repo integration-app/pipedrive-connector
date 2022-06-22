@@ -7,9 +7,11 @@ properties:
   owner_id:
     title: Owner
     type: integer
+    referenceCollectionUri: /data/users
   creator_id:
     title: Creator
     type: integer
+    referenceCollectionUri: /data/users
   label_ids:
     title: Label(s)
     type: array

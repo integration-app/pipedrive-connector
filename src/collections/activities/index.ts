@@ -26,6 +26,8 @@ const activities = objectCollectionHandler({
   updateFields: MODIFIABLE_FIELDS,
   eventObject: 'activity',
   udm: 'activities',
+  // extractUnifiedFields(fields) { // TODO: implement to merge attendees to participants
+  // },
 })
 
 export default activities

@@ -1,26 +1,30 @@
+name:
+  $var: title
 amount:
   $var: value
-probability:
-  $var: probability
 currency:
   $var: currency
 companyId:
   $var: org_id
 contactId:
   $var: person_id
+probability:
+  $var: probability
 stage:
   $var: stage_id
 status:
   $var: status
+type:
+  $var: renewal_type
 ownerId:
   $var: user_id
+closeTme:
+  $var: close_time
 createdTime:
   $var: add_time
 createdBy:
   $var: creator_user_id
 updatedTime:
   $var: update_time
-name:
-  $var: title
-type:
-  $var: renewal_type
+lastActivityTime:
+  $var: last_activity_date

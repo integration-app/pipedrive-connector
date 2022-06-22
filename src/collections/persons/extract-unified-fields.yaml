@@ -16,6 +16,8 @@ companyId:
   $var: org_id
 ownerId:
   $var: owner_id
+createdBy:
+  $var: added_by_user_id
 createdTime:
   $var: add_time
 updatedTime:
