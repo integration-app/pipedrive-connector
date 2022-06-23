@@ -1,0 +1,64 @@
+contacts:
+  key: 'persons'
+  actions:
+    - create
+    - find # find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'email'
+    - 'companyId'
+    - 'ownerId'
+  updatableFields:
+    - 'name'
+companies:
+  key: 'organizations'
+  actions:
+    - create
+    - find # find-by-id
+    - update
+  unifiedFields:
+    - 'name'
+    - 'ownerId'
+  updatableFields:
+    - 'name'
+# leads:
+#   key: 'leads'
+#   actions:
+#     - create
+#     - find # find-by-id
+#     - update
+#   unifiedFields:
+#     - 'name'
+#     - 'companyId'
+#     - 'ownerId'
+#   updatableFields:
+#     - 'title'
+#     - 'expected_close_date'
+deals:
+  key: 'deals'
+  actions:
+    - create
+    - find # find-by-id
+    - update
+  unifiedFields:
+    - 'name'
+    - 'companyId'
+    - 'ownerId'
+    - 'amount'
+  updatableFields:
+    - 'title'
+    - 'value'
+# users:
+#   key: 'users'
+#   actions:
+#     - create
+#     - find # find-by-id
+#     - update
+#   unifiedFields:
+#     - 'fullName'
+#     - 'email'
+#     - 'isActive'
+#   updatableFields:
+#     - 'name'
+#     - 'email'
