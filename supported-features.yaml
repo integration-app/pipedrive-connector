@@ -1,5 +1,4 @@
 contacts:
-  key: 'persons'
   actions:
     - create
     - find-by-id
@@ -14,7 +13,6 @@ contacts:
     - 'email'
     - 'companyId'
 companies:
-  key: 'organizations'
   actions:
     - create
     - find-by-id
@@ -26,7 +24,6 @@ companies:
     - 'name'
     - 'ownerId'
 leads:
-  key: 'leads'
   actions:
     - create
     - find-by-id
@@ -44,7 +41,6 @@ leads:
     - 'value'
     - 'currency'
 deals:
-  key: 'deals'
   actions:
     - create
     - find-by-id
@@ -58,7 +54,6 @@ deals:
     - 'companyId'
     - 'amount'
 # users:
-#   key: 'users'
 #   actions:
 #     - create
 #     - find-by-id

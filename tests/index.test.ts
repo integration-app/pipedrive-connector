@@ -11,7 +11,6 @@ describe('UDM', () => {
   })
   for (const collection in collections) {
     const collectionProperties = collections[collection]
-    const collectionKey = collectionProperties.key
     const collectionActions = collectionProperties.actions
     const udmFields = collectionProperties.unifiedFields
     let newRecordId = null
@@ -26,7 +25,6 @@ describe('UDM', () => {
           const fieldUpdates = await generateFieldUpdates(
             collection,
             collectionUri,
-            collectionKey,
             udmFields,
           )
           const createResponse = await makeRequest(`${collectionUri}/create`, {
@@ -60,7 +58,6 @@ describe('UDM', () => {
           const fieldsToUpdate = await generateFieldUpdates(
             collection,
             collectionUri,
-            collectionKey,
             collectionProperties.updatableFields,
           )
           const updatedRecord = await makeRequest(`${collectionUri}/update`, {

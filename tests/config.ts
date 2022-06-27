@@ -63,10 +63,10 @@ export function generateRandomValues(unifiedFields: string[]) {
 
 export const dereference = async (
   udm: string,
-  collection: string,
+  collectionUri: string,
   fieldsToFind: string[],
 ) => {
-  const res = await makeRequest(`/data/${collection}/find`, {
+  const res = await makeRequest(`${collectionUri}/find`, {
     udm: udm,
   })
   const data = res.records
@@ -102,11 +102,10 @@ export function extractReferences(udm: string): string[] {
 export const generateFieldUpdates = async (
   udm: string,
   collectionUri: string,
-  key: string,
   fieldsToFill: string[],
 ) => {
   const fieldsWithReference: string[] = extractReferences(udm)
-  const references = await dereference(udm, key, fieldsWithReference)
+  const references = await dereference(udm, collectionUri, fieldsWithReference)
   const basicFieldValues = generateRandomValues(fieldsToFill)
   const unifiedFields = { ...basicFieldValues, ...references }
 
