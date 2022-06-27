@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { getRecords } from '../../api/records'
 import { objectCollectionHandler } from '../common'
 
-const FIELDS = ['name', 'email']
+const FIELDS = ['name', 'email', 'active_flag']
 
 const users: DataCollectionHandler = {
   ...objectCollectionHandler({
@@ -13,7 +13,7 @@ const users: DataCollectionHandler = {
     createFields: FIELDS,
     requiredFields: FIELDS,
     updateFields: FIELDS,
-    lookupFields: FIELDS,
+    lookupFields: ['email', 'name'],
     eventObject: 'user',
     udm: 'users',
   }),
