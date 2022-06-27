@@ -2,7 +2,7 @@ contacts:
   key: 'persons'
   actions:
     - create
-    - find # find-by-id
+    - find-by-id
     - update
   unifiedFields:
     - 'fullName'
@@ -10,36 +10,44 @@ contacts:
     - 'companyId'
     - 'ownerId'
   updatableFields:
-    - 'name'
+    - 'fullName'
+    - 'email'
+    - 'companyId'
 companies:
   key: 'organizations'
   actions:
     - create
-    - find # find-by-id
+    - find-by-id
     - update
   unifiedFields:
     - 'name'
     - 'ownerId'
   updatableFields:
     - 'name'
-# leads:
-#   key: 'leads'
-#   actions:
-#     - create
-#     - find # find-by-id
-#     - update
-#   unifiedFields:
-#     - 'name'
-#     - 'companyId'
-#     - 'ownerId'
-#   updatableFields:
-#     - 'title'
-#     - 'expected_close_date'
+    - 'ownerId'
+leads:
+  key: 'leads'
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'companyId'
+    - 'ownerId'
+    # - 'contactId' missing from SDK
+    - 'value'
+    - 'currency'
+  updatableFields:
+    - 'fullName'
+    - 'companyId'
+    - 'value'
+    - 'currency'
 deals:
   key: 'deals'
   actions:
     - create
-    - find # find-by-id
+    - find-by-id
     - update
   unifiedFields:
     - 'name'
@@ -47,18 +55,19 @@ deals:
     - 'ownerId'
     - 'amount'
   updatableFields:
-    - 'title'
-    - 'value'
+    - 'companyId'
+    - 'amount'
 # users:
 #   key: 'users'
 #   actions:
 #     - create
-#     - find # find-by-id
+#     - find-by-id
 #     - update
 #   unifiedFields:
 #     - 'fullName'
 #     - 'email'
 #     - 'isActive'
 #   updatableFields:
-#     - 'name'
+#     - 'fullName'
 #     - 'email'
+#     - 'isActive'
