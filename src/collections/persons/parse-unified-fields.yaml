@@ -12,6 +12,9 @@ owner_id:
   $var: $.ownerId
 org_id:
   $var: $.companyId
+org:
+  name:
+    $var: $.companyName
 added_by_user_id:
   $var: $.createdBy
 add_time:
