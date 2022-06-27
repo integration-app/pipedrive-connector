@@ -14,29 +14,32 @@ describe('UDM', () => {
     const collectionKey = collectionProperties.key
     const collectionActions = collectionProperties.actions
     const udmFields = collectionProperties.unifiedFields
+    let newRecordId = null
 
     describe(`${collection}`, () => {
       it(`should have ${collection} UDM`, async () => {
         expect(spec.data[collection]).toBeDefined()
       })
-      it(`should perform operations on ${collection}`, async () => {
-        const collectionUri = spec.data[collection].uri
-        const fieldUpdates = await generateFieldUpdates(
-          collection,
-          collectionUri,
-          collectionKey,
-          udmFields,
-        )
-        let newRecordId = null
-        if (collectionActions.includes('create')) {
+      if (collectionActions.includes('create')) {
+        it(`should create ${collection}`, async () => {
+          const collectionUri = spec.data[collection].uri
+          const fieldUpdates = await generateFieldUpdates(
+            collection,
+            collectionUri,
+            collectionKey,
+            udmFields,
+          )
           const createResponse = await makeRequest(`${collectionUri}/create`, {
             fields: fieldUpdates.fields,
           })
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)
-        }
-        if (collectionActions.includes('find-by-id')) {
+        })
+      }
+      if (collectionActions.includes('find-by-id')) {
+        it(`should find created ${collection} by id`, async () => {
+          const collectionUri = spec.data[collection].uri
           const findByIdResponse = await makeRequest(
             `${collectionUri}/find-by-id`,
             {
@@ -44,11 +47,16 @@ describe('UDM', () => {
               udm: collection,
             },
           )
-          expect(findByIdResponse.record.unifiedFields).toMatchObject(
-            fieldUpdates.allFields,
-          )
-        }
-        if (collectionActions.includes('update')) {
+          expect(findByIdResponse.record.id.toString()).toBe(newRecordId)
+          // Figure out how to get fieldUpdates from the test above
+          // expect(findByIdResponse.record.unifiedFields).toMatchObject(
+          //   fieldUpdates.unifiedFields,
+          // )
+        })
+      }
+      if (collectionActions.includes('update')) {
+        it(`should update created ${collection}`, async () => {
+          const collectionUri = spec.data[collection].uri
           const fieldsToUpdate = await generateFieldUpdates(
             collection,
             collectionUri,
@@ -71,12 +79,11 @@ describe('UDM', () => {
               findUpdatedRecord.record.unifiedFields,
             )}`,
           )
-          console.log(`AllFields: ${JSON.stringify(fieldsToUpdate.allFields)}`)
           expect(findUpdatedRecord.record.unifiedFields).toMatchObject(
-            fieldsToUpdate.allFields,
+            fieldsToUpdate.unifiedFields,
           )
-        }
-      }, 80000)
+        })
+      }
     })
   }
 })
