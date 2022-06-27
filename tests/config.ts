@@ -41,18 +41,16 @@ function fillWithValue(field: string) {
       return random.mobile().toString()
     case 'amount':
       return random.integer(0, 1000000)
+    case 'currency':
+      return random.pickOne(['USD', 'EUR', 'GBP', 'CAD', 'AUD'])
     case 'value':
       return random.integer(0, 10000)
-    case 'expected_close_date':
-      return random.randomDate()
+    case 'closeTme':
+      return random.date()
     case 'isActive':
       return false
-    case 'name':
-      return 'Test Name - ' + random.integer()
-    case 'companyName':
-      return 'Test Company - ' + random.id()
     default:
-      return 'Test Default - ' + random.id()
+      return `Test ${field} - ` + random.id()
   }
 }
 
@@ -87,9 +85,8 @@ export const dereference = async (
   return references
 }
 
-export function extractReferences(collection: string): string[] {
-  const udmFieldsDescription =
-    UNIFIED_DATA_MODELS[collection].fieldsSchema.properties
+export function extractReferences(udm: string): string[] {
+  const udmFieldsDescription = UNIFIED_DATA_MODELS[udm].fieldsSchema.properties
   const fieldsWithReference = Object.keys(udmFieldsDescription).filter(
     (field) => {
       return (
@@ -100,4 +97,26 @@ export function extractReferences(collection: string): string[] {
     },
   )
   return fieldsWithReference
+}
+
+export const generateFieldUpdates = async (
+  udm: string,
+  collectionUri: string,
+  key: string,
+  unifiedFields: string[],
+) => {
+  const fieldsWithReference: string[] = extractReferences(udm)
+  const references = await dereference(udm, key, fieldsWithReference)
+  const basicFieldValues = generateRandomValues(unifiedFields)
+  const allFields = { ...basicFieldValues, ...references }
+
+  const fieldsResponse = await makeRequest(
+    `${collectionUri}/parse-unified-fields`,
+    {
+      udm,
+      unifiedFields: allFields,
+    },
+  )
+  const fields: any = fieldsResponse.fields
+  return { fields, allFields }
 }

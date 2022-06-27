@@ -1,61 +1,42 @@
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
-import {
-  dereference,
-  extractReferences,
-  generateRandomValues,
-  makeRequest,
-} from './config'
+import { generateFieldUpdates, makeRequest } from './config'
 
 describe('UDM', () => {
   let spec: any
-  const data = yaml.load(fs.readFileSync('./tests/supported-features.yaml'))
+  const collections = yaml.load(fs.readFileSync('supported-features.yaml'))
 
   beforeEach(async () => {
     spec = await makeRequest('/')
   })
-  for (const collection in data) {
-    const collectionProperties = data[collection]
+  for (const collection in collections) {
+    const collectionProperties = collections[collection]
+    const collectionKey = collectionProperties.key
     const collectionActions = collectionProperties.actions
-    const basicFieldValues = generateRandomValues(
-      collectionProperties.unifiedFields,
-    )
-    const fieldsWithReference: string[] = extractReferences(collection)
+    const udmFields = collectionProperties.unifiedFields
 
     describe(`${collection}`, () => {
       it(`should have ${collection} UDM`, async () => {
         expect(spec.data[collection]).toBeDefined()
       })
       it(`should perform operations on ${collection}`, async () => {
-        const references = await dereference(
-          collection,
-          collectionProperties.key,
-          fieldsWithReference,
-        )
         const collectionUri = spec.data[collection].uri
-        const unifiedFields = { ...basicFieldValues, ...references }
-        console.log(`unifiedFields: ${JSON.stringify(unifiedFields)}`)
-
-        const fieldsResponse = await makeRequest(
-          `${collectionUri}/parse-unified-fields`,
-          {
-            udm: collection,
-            unifiedFields: unifiedFields,
-          },
+        const fieldUpdates = await generateFieldUpdates(
+          collection,
+          collectionUri,
+          collectionKey,
+          udmFields,
         )
-        const fields = fieldsResponse.fields
-        console.log(`fields: ${JSON.stringify(fields)}`)
-
         let newRecordId = null
         if (collectionActions.includes('create')) {
           const createResponse = await makeRequest(`${collectionUri}/create`, {
-            fields,
+            fields: fieldUpdates.fields,
           })
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)
         }
-        if (collectionActions.includes('find')) {
+        if (collectionActions.includes('find-by-id')) {
           const findByIdResponse = await makeRequest(
             `${collectionUri}/find-by-id`,
             {
@@ -64,18 +45,20 @@ describe('UDM', () => {
             },
           )
           expect(findByIdResponse.record.unifiedFields).toMatchObject(
-            unifiedFields,
+            fieldUpdates.allFields,
           )
         }
         if (collectionActions.includes('update')) {
-          const fieldsToUpdate = generateRandomValues(
+          const fieldsToUpdate = await generateFieldUpdates(
+            collection,
+            collectionUri,
+            collectionKey,
             collectionProperties.updatableFields,
           )
           const updatedRecord = await makeRequest(`${collectionUri}/update`, {
             id: newRecordId,
-            fields: fieldsToUpdate,
+            fields: fieldsToUpdate.fields,
           })
-          console.log(`Updated Record: ${JSON.stringify(updatedRecord)}`)
           const findUpdatedRecord = await makeRequest(
             `${collectionUri}/find-by-id`,
             {
@@ -83,16 +66,17 @@ describe('UDM', () => {
               udm: collection,
             },
           )
-          const parsedUpdatedRecord = await makeRequest(
-            `${collectionUri}/parse-unified-fields`,
-            {
-              udm: collection,
-              unifiedFields: findUpdatedRecord.record.unifiedFields,
-            },
+          console.log(
+            `Record unifiedFields: ${JSON.stringify(
+              findUpdatedRecord.record.unifiedFields,
+            )}`,
           )
-          expect(parsedUpdatedRecord.fields).toMatchObject(fieldsToUpdate)
+          console.log(`AllFields: ${JSON.stringify(fieldsToUpdate.allFields)}`)
+          expect(findUpdatedRecord.record.unifiedFields).toMatchObject(
+            fieldsToUpdate.allFields,
+          )
         }
-      })
+      }, 80000)
     })
   }
 })
