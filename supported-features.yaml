@@ -1,0 +1,68 @@
+contacts:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'email'
+    - 'companyId'
+    - 'ownerId'
+  updatableFields:
+    - 'fullName'
+    - 'email'
+    - 'companyId'
+companies:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'name'
+    - 'ownerId'
+  updatableFields:
+    - 'name'
+    - 'ownerId'
+leads:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'companyId'
+    - 'ownerId'
+    # - 'contactId' missing from SDK
+    - 'value'
+    - 'currency'
+  updatableFields:
+    - 'fullName'
+    - 'companyId'
+    - 'value'
+    - 'currency'
+deals:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'name'
+    - 'companyId'
+    - 'ownerId'
+    - 'amount'
+  updatableFields:
+    - 'companyId'
+    - 'amount'
+    - 'name'
+    - 'ownerId'
+users:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'email'
+    - 'isActive'
+  updatableFields:
+    - 'isActive'
