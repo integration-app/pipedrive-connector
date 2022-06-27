@@ -53,16 +53,16 @@ deals:
   updatableFields:
     - 'companyId'
     - 'amount'
-# users:
-#   actions:
-#     - create
-#     - find-by-id
-#     - update
-#   unifiedFields:
-#     - 'fullName'
-#     - 'email'
-#     - 'isActive'
-#   updatableFields:
-#     - 'fullName'
-#     - 'email'
-#     - 'isActive'
+    - 'name'
+    - 'ownerId'
+users:
+  actions:
+    - create
+    - find-by-id
+    - update
+  unifiedFields:
+    - 'fullName'
+    - 'email'
+    - 'isActive'
+  updatableFields:
+    - 'isActive'

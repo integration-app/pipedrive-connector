@@ -71,11 +71,6 @@ describe('UDM', () => {
               udm: collection,
             },
           )
-          console.log(
-            `Record unifiedFields: ${JSON.stringify(
-              findUpdatedRecord.record.unifiedFields,
-            )}`,
-          )
           expect(findUpdatedRecord.record.unifiedFields).toMatchObject(
             fieldsToUpdate.unifiedFields,
           )

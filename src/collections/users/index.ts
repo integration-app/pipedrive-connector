@@ -12,7 +12,7 @@ const users: DataCollectionHandler = {
     name: 'Users',
     createFields: FIELDS,
     requiredFields: FIELDS,
-    updateFields: FIELDS,
+    updateFields: ['active_flag'],
     lookupFields: ['email', 'name'],
     eventObject: 'user',
     udm: 'users',
