@@ -31,7 +31,7 @@ export async function makeRequest(uri: string, payload?: any) {
   return response.body // catch throuw error if status != 200
 }
 
-function fillWithValue(field: string) {
+function generateValue(field: string) {
   switch (field) {
     case 'fullName':
       return random.name('Von')
@@ -56,7 +56,7 @@ function fillWithValue(field: string) {
 
 export function generateRandomValues(unifiedFields: string[]) {
   return unifiedFields.reduce((fields, field) => {
-    fields[field] = fillWithValue(field)
+    fields[field] = generateValue(field)
     return fields
   }, {})
 }
@@ -103,20 +103,20 @@ export const generateFieldUpdates = async (
   udm: string,
   collectionUri: string,
   key: string,
-  unifiedFields: string[],
+  fieldsToFill: string[],
 ) => {
   const fieldsWithReference: string[] = extractReferences(udm)
   const references = await dereference(udm, key, fieldsWithReference)
-  const basicFieldValues = generateRandomValues(unifiedFields)
-  const allFields = { ...basicFieldValues, ...references }
+  const basicFieldValues = generateRandomValues(fieldsToFill)
+  const unifiedFields = { ...basicFieldValues, ...references }
 
   const fieldsResponse = await makeRequest(
     `${collectionUri}/parse-unified-fields`,
     {
       udm,
-      unifiedFields: allFields,
+      unifiedFields: unifiedFields,
     },
   )
   const fields: any = fieldsResponse.fields
-  return { fields, allFields }
+  return { fields, unifiedFields }
 }
