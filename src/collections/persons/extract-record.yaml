@@ -26,6 +26,8 @@ fields:
   owner_id:
     $var: $.owner_id.id
   owner:
+    id:
+      $var: $.owner_id.id
     name:
       $var: $.owner_id.name
     email:
