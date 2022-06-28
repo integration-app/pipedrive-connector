@@ -1,5 +1,5 @@
 import {
-  DataDirectory,
+  DataDirectorySpec,
   DataDirectoryListResponse,
   DataLocationType,
 } from '@integration-app/sdk/connector-api'
@@ -41,7 +41,7 @@ export default {
   },
 }
 
-async function spec(): Promise<DataDirectory> {
+async function spec(): Promise<DataDirectorySpec> {
   return {
     type: DataLocationType.directory,
     name: 'All Data',

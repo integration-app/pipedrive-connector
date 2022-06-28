@@ -1,4 +1,7 @@
-import { DataCollectionHandler } from '@integration-app/connector-sdk'
+import {
+  ConnectorDataCollectionFindRequest,
+  DataCollectionHandler,
+} from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../../api/records'
 import { objectCollectionHandler } from '../common'
@@ -13,11 +16,11 @@ const users: DataCollectionHandler = {
     createFields: FIELDS,
     requiredFields: FIELDS,
     updateFields: ['active_flag'],
-    lookupFields: ['email', 'name'],
+    queryFields: ['email', 'name'],
     eventObject: 'user',
     udm: 'users',
   }),
-  lookup: lookupUsers,
+  find: findUsers,
 }
 
 export default users
@@ -27,26 +30,34 @@ export const USER_SCHEMA = Type.String({
   referenceCollectionUri: users.uri,
 })
 
-async function lookupUsers({ apiClient, fields }) {
-  if (fields.email) {
+async function findUsers(request: ConnectorDataCollectionFindRequest) {
+  if (request.query) {
+    return queryUsers({ ...request, query: request.query })
+  } else {
+    return getRecords({ ...request, path: 'users' })
+  }
+}
+
+async function queryUsers({ apiClient, query }) {
+  if (query.email) {
     return getRecords({
       path: 'users/find',
       apiClient,
       query: {
-        term: fields.email,
-        search_by: 'email',
+        term: query.email,
+        query_by: 'email',
       },
     })
-  } else if (fields.name) {
+  } else if (query.name) {
     return getRecords({
       path: 'users/find',
       apiClient,
       query: {
-        term: fields.name,
-        search_by: 'name',
+        term: query.name,
+        query_by: 'name',
       },
     })
   } else {
-    throw new Error('Lookup fields were not provided')
+    throw new Error('Query fields were not provided')
   }
 }

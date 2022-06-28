@@ -17,7 +17,7 @@ const leads = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
   requiredFields: ['title'], // actually, you also has to provide either organization_id or person_id
-  lookupFields: ['title'],
+  queryFields: ['title'],
   udm: 'leads',
 })
 

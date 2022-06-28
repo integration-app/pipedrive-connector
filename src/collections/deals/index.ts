@@ -23,7 +23,7 @@ const deals = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   requiredFields: ['title'],
   updateFields: MODIFIABLE_FIELDS,
-  lookupFields: ['title'],
+  queryFields: ['title'],
   eventObject: 'deal',
   udm: 'deals',
 })

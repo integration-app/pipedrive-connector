@@ -2,7 +2,6 @@ import {
   DataCollectionCreateResponse,
   DataCollectionFindByIdResponse,
   DataCollectionFindResponse,
-  DataCollectionLookupResponse,
   DataCollectionUpdateResponse,
   DataRecord,
 } from '@integration-app/sdk/connector-api'
@@ -11,7 +10,7 @@ import { MAX_LIMIT } from '.'
 export async function getRecords({
   apiClient,
   path,
-  query,
+  query = null,
   cursor = null,
   extractRecord = null,
 }): Promise<DataCollectionFindResponse> {
@@ -50,27 +49,27 @@ export async function findRecordById({
  * @param query - data matching the schema returned from makeSearchQuerySchema
  * @returns
  */
-export async function lookupRecords({
+export async function searchRecords({
   apiClient,
   path,
-  fields,
+  query,
   extractRecord = null,
-}): Promise<DataCollectionLookupResponse> {
-  const firstField = Object.entries(fields ?? [])[0]
+}): Promise<DataCollectionFindResponse> {
+  const firstField = Object.entries(query ?? [])[0]
   let field = firstField?.[0]
   const term = firstField?.[1]
 
   if (!field || !term) {
-    throw new Error('Lookup fields were not provided')
+    throw new Error('Query fields were not provided')
   }
 
-  if (field?.startsWith('lookup_')) {
-    field = field.replace('lookup_', '')
+  if (field?.startsWith('query_')) {
+    field = field.replace('query_', '')
   }
 
   const parameters = {
     term,
-    fields: field,
+    query: field,
   } as any
 
   const response = await apiClient.get(`${path}/search`, parameters)

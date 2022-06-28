@@ -8,7 +8,7 @@ import {
   createRecord,
   findRecordById,
   getRecords,
-  lookupRecords,
+  searchRecords,
   updateRecord,
 } from '../api/records'
 import {
@@ -17,6 +17,7 @@ import {
   handleSubscriptionWebhook,
   subscribeToCollection,
   unsubscribeFromCollection,
+  updateSubscription,
 } from '../api/subscriptions'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
@@ -34,7 +35,7 @@ export function objectCollectionHandler({
   createFields = null,
   requiredFields = null,
   updateFields = null,
-  lookupFields = null,
+  queryFields = null,
   eventObject = null,
 }: {
   directory?: string
@@ -45,13 +46,19 @@ export function objectCollectionHandler({
   extractRecord?: (record: any) => any
   parseUnifiedFields?: ParseUnifiedFieldsHandler
   extractUnifiedFields?: ExtractUnifiedFieldsHandler
-  lookupFields?: string[]
+  queryFields?: string[]
   createFields?: string[]
   requiredFields?: string[]
   updateFields?: string[]
   eventObject?: string
 }): DataCollectionHandler {
-  const find = (request) => getRecords({ ...request, path, extractRecord })
+  const find = (request) => {
+    if (request.query) {
+      return searchRecords({ ...request, path, extractRecord })
+    } else {
+      return getRecords({ ...request, path, extractRecord })
+    }
+  }
 
   if (!fieldsSchema && directory) {
     fieldsSchema = loadSchema(`${directory}/fields-schema.yaml`)
@@ -92,9 +99,9 @@ export function objectCollectionHandler({
         name,
         fieldsSchema,
       }
-      if (lookupFields) {
-        spec.lookup = {
-          fields: lookupFields,
+      if (queryFields) {
+        spec.find = {
+          queryFields,
         }
       }
       if (createFields) {
@@ -129,11 +136,6 @@ export function objectCollectionHandler({
     }
   }
 
-  if (lookupFields) {
-    handler.lookup = (request) =>
-      lookupRecords({ ...request, path, extractRecord })
-  }
-
   if (createFields) {
     handler.create = async (request) => createRecord({ ...request, path })
   }
@@ -146,10 +148,12 @@ export function objectCollectionHandler({
     handler.subscribe = (request) =>
       subscribeToCollection({ ...request, eventObject })
     handler.unsubscribe = unsubscribeFromCollection
+    handler.updateSubscription = updateSubscription
     handler.webhook = handleSubscriptionWebhook
   } else {
     handler.subscribe = (request) =>
       fullScanSubscribeHandler({ ...request, findHandler: find })
+    handler.updateSubscription = updateSubscription
     handler.unsubscribe = fullScanUnsubscribeHandler
   }
 
