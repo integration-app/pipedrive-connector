@@ -10,7 +10,7 @@ const FIELDS = ['name', 'email', 'active_flag']
 
 const users: DataCollectionHandler = {
   ...objectCollectionHandler({
-    directory: __dirname,
+    ymlDir: __dirname,
     path: 'users',
     name: 'Users',
     createFields: FIELDS,

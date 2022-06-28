@@ -118,7 +118,7 @@ export async function updateRecord({
 /**
  * Extract a record from an item from the API response.
  */
-export function defaultExtractRecord(item): DataRecord {
+export async function defaultExtractRecord(item): Promise<DataRecord> {
   return {
     id: item.id.toString(),
     name: item.name,

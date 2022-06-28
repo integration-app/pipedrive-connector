@@ -11,13 +11,13 @@ const MODIFIABLE_FIELDS = [
 ]
 
 const persons = objectCollectionHandler({
-  directory: __dirname,
+  ymlDir: __dirname,
   path: 'persons',
   name: 'Persons',
   createFields: MODIFIABLE_FIELDS,
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
-  queryFields: ['email', 'name', 'phone'],
+  queryFields: ['query_email', 'name', 'query_phone'],
   eventObject: 'person',
   udm: 'contacts',
 })

@@ -4,7 +4,7 @@ import { objectCollectionHandler } from '../common'
 const MODIFIABLE_FIELDS = ['name', 'owner_id']
 
 const organizations = objectCollectionHandler({
-  directory: __dirname,
+  ymlDir: __dirname,
   path: 'organizations',
   name: 'Organizations',
   createFields: MODIFIABLE_FIELDS,
