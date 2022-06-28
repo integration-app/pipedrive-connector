@@ -2,6 +2,7 @@ import {
   ConnectorDataCollectionSubscribeRequest,
   ConnectorDataCollectionUnsubscribeRequest,
   ConnectorSubscriptionWebhookRequest,
+  ConnectorDataCollectionUpdateSubscriptionRequest,
   fullScanEvents,
   fullScanSubscribe,
 } from '@integration-app/connector-sdk'
@@ -49,6 +50,23 @@ export async function subscribeToCollection({
   }
 }
 
+export async function updateSubscription({
+  subscriptionManager,
+  subscriptionId,
+  callbackUri,
+  events,
+}: ConnectorDataCollectionUpdateSubscriptionRequest) {
+  console.debug(`Updating subscription ${subscriptionId} to`, events)
+  const subscription = await subscriptionManager.getSubscription(subscriptionId)
+  subscription.data = {
+    ...subscription.data,
+    callbackUri,
+    events,
+  }
+  await subscriptionManager.saveSubscription(subscription)
+  return {}
+}
+
 export async function unsubscribeFromCollection({
   apiClient,
   subscriptionId,
@@ -72,6 +90,11 @@ export async function handleSubscriptionWebhook({
 
   const events = subscription.data.events
 
+  console.debug(
+    `Got an event of type ${eventType}. Subscribed to events: `,
+    events,
+  )
+
   switch (eventType) {
     case DataEventType.CREATED:
       if (!events.created) {
@@ -90,6 +113,8 @@ export async function handleSubscriptionWebhook({
       break
   }
 
+  console.debug('Sending event to callbackUri')
+
   const event: DataEvent = {
     type: eventType,
     record:
@@ -107,6 +132,7 @@ export async function handleSubscriptionWebhook({
     })
   } catch (error: any) {
     if (error.response?.status === 404) {
+      console.debug('Subscription not found. Unsubscribing from Pipedrive.')
       // Trigger callback is not recognized - let's disable the subscription
       await unsubscribeFromCollection({
         apiClient,

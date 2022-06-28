@@ -18,9 +18,9 @@ properties:
     type: array
     items:
       type: string
-  lookup_phone:
+  query_phone:
     type: string
-  lookup_email:
+  query_email:
     type: string
   owner_id:
     type: integer
