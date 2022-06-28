@@ -54,7 +54,7 @@ export function objectCollectionHandler({
   ) => Promise<Record<string, any>>
 }): DataCollectionHandler {
   let extractRecord = defaultExtractRecord
-  if (fs.existsSync(`${ymlDir}/extract-record.yaml`)) {
+  if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
     extractRecord = makeDataBuilder(`${ymlDir}/extract-record.yml`)
   }
 
