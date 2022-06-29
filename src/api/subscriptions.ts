@@ -16,7 +16,7 @@ import {
 import { BadRequestError } from '@integration-app/sdk/errors'
 import { defaultExtractRecord } from './records'
 import axios from 'axios'
-import { ConnectorDataCollectionEventsRequest } from '@integration-app/connector-sdk/dist/server'
+import { ConnectorDataCollectionEventsRequest } from '@integration-app/connector-sdk'
 
 const FULL_SCAN_INTERVAL = 12 * 3600 * 1000 // 12 hours
 
@@ -119,8 +119,8 @@ export async function handleSubscriptionWebhook({
     type: eventType,
     record:
       eventType === DataEventType.DELETED
-        ? defaultExtractRecord(body.previous)
-        : defaultExtractRecord(body.current),
+        ? await defaultExtractRecord(body.previous)
+        : await defaultExtractRecord(body.current),
   }
 
   const callbackUri = subscription.data.callbackUri

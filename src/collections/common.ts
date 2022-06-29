@@ -1,11 +1,12 @@
 import {
+  ConnectorRequestData,
   DataCollectionHandler,
-  ExtractUnifiedFieldsHandler,
-  ParseUnifiedFieldsHandler,
+  makeDataBuilder,
 } from '@integration-app/connector-sdk'
-import { DataLocationType } from '@integration-app/sdk/connector-api'
+import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
 import {
   createRecord,
+  defaultExtractRecord,
   findRecordById,
   getRecords,
   searchRecords,
@@ -19,39 +20,44 @@ import {
   unsubscribeFromCollection,
   updateSubscription,
 } from '../api/subscriptions'
-import * as yaml from 'js-yaml'
 import * as fs from 'fs'
-import { buildData } from '@integration-app/sdk/data-builder'
+import {
+  ConnectorDataCollectionExtractUnifiedFieldsRequest,
+  makeCollectionHandler,
+} from '@integration-app/connector-sdk'
 
 export function objectCollectionHandler({
-  directory = null,
+  ymlDir = null,
   path,
   name,
-  fieldsSchema = null,
   udm = null,
-  extractRecord = null,
-  parseUnifiedFields = null,
-  extractUnifiedFields = null,
   createFields = null,
   requiredFields = null,
   updateFields = null,
   queryFields = null,
   eventObject = null,
+  extendExtractUnifiedFields = null,
 }: {
-  directory?: string
+  ymlDir?: string
   path: string
   name: string
   fieldsSchema?: any
   udm?: string
-  extractRecord?: (record: any) => any
-  parseUnifiedFields?: ParseUnifiedFieldsHandler
-  extractUnifiedFields?: ExtractUnifiedFieldsHandler
   queryFields?: string[]
   createFields?: string[]
   requiredFields?: string[]
   updateFields?: string[]
   eventObject?: string
+  extendExtractUnifiedFields?: (
+    request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
+    unifiedFields: Record<string, any>,
+  ) => Promise<Record<string, any>>
 }): DataCollectionHandler {
+  let extractRecord = defaultExtractRecord
+  if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
+    extractRecord = makeDataBuilder(`${ymlDir}/extract-record.yml`)
+  }
+
   const find = (request) => {
     if (request.query) {
       return searchRecords({ ...request, path, extractRecord })
@@ -60,44 +66,17 @@ export function objectCollectionHandler({
     }
   }
 
-  if (!fieldsSchema && directory) {
-    fieldsSchema = loadSchema(`${directory}/fields-schema.yaml`)
-    if (!fieldsSchema) {
-      throw new Error('Fields schema is required')
-    }
-  }
-  if (!extractUnifiedFields && directory) {
-    const dataBuilder = dataBuilderFromYaml(
-      `${directory}/extract-unified-fields.yaml`,
-    )
-    extractUnifiedFields = async ({ fields }) => await dataBuilder(fields)
-  }
-
-  if (!parseUnifiedFields && directory) {
-    const dataBuilder = dataBuilderFromYaml(
-      `${directory}/parse-unified-fields.yaml`,
-    )
-    parseUnifiedFields = async ({ unifiedFields }) => ({
-      fields: await dataBuilder(unifiedFields),
-    })
-  }
-
-  if (
-    !extractRecord &&
-    directory &&
-    fs.existsSync(`${directory}/extract-record.yaml`)
-  ) {
-    extractRecord = dataBuilderFromYaml(`${directory}/extract-record.yaml`)
-  }
-
-  const handler: DataCollectionHandler = {
-    uri: `/data/${path}`,
-
-    spec: () => {
-      const spec: any = {
-        type: DataLocationType.collection,
-        name,
-        fieldsSchema,
+  const handler = makeCollectionHandler({
+    ymlDir,
+    path,
+    name,
+    udm,
+    extendSpec: (
+      _request: ConnectorRequestData,
+      specFromYml: any,
+    ): Promise<DataCollectionSpec> => {
+      const spec = {
+        ...specFromYml,
       }
       if (queryFields) {
         spec.find = {
@@ -117,24 +96,10 @@ export function objectCollectionHandler({
       }
       return spec
     },
-
     find,
-
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
-  }
-
-  if (udm) {
-    if (parseUnifiedFields) {
-      handler.parseUnifiedFields = {
-        [udm]: parseUnifiedFields,
-      }
-    }
-    if (extractUnifiedFields) {
-      handler.extractUnifiedFields = {
-        [udm]: extractUnifiedFields,
-      }
-    }
-  }
+    extendExtractUnifiedFields,
+  })
 
   if (createFields) {
     handler.create = async (request) => createRecord({ ...request, path })
@@ -158,21 +123,4 @@ export function objectCollectionHandler({
   }
 
   return handler
-}
-
-function loadSchema(path) {
-  const schema = loadYaml(path)
-  // ToDo: validate schema
-  return schema
-}
-
-function dataBuilderFromYaml(path): (data: any) => Promise<any> {
-  const recipe = loadYaml(path)
-  return async (data) => {
-    return buildData(recipe, data)
-  }
-}
-
-function loadYaml(path) {
-  return yaml.load(fs.readFileSync(path))
 }
