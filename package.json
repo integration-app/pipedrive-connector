@@ -4,7 +4,7 @@
     "build": "npm run clean && npm run build:compile && npm run build:copy",
     "clean": "rimraf dist",
     "build:compile": "tsc --project tsconfig.build.json",
-    "build:copy": "copy src/**/*.yaml dist/",
+    "build:copy": "copy src/**/*.y*ml dist/",
     "start": "NODE_ENV=production node dist/index.js",
     "test": "jest"
   },
