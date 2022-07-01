@@ -79,11 +79,7 @@ export async function unsubscribeFromCollection({
 }
 
 export async function handleSubscriptionWebhook({
-  apiClient,
-  subscriptionManager,
   subscription,
-  credentials,
-  parameters,
   body,
 }: ConnectorSubscriptionWebhookRequest) {
   const eventType = getDataEventType(body)
@@ -125,27 +121,10 @@ export async function handleSubscriptionWebhook({
 
   const callbackUri = subscription.data.callbackUri
 
-  try {
-    await axios.post(callbackUri, {
-      subscriptionId: subscription.id,
-      events: [event],
-    })
-  } catch (error: any) {
-    if (error.response?.status === 404) {
-      console.debug('Subscription not found. Unsubscribing from Pipedrive.')
-      // Trigger callback is not recognized - let's disable the subscription
-      await unsubscribeFromCollection({
-        apiClient,
-        subscriptionId: subscription.id,
-        subscriptionManager,
-        credentials,
-        parameters,
-      })
-      await subscriptionManager.deleteSubscription(subscription.id)
-    } else {
-      throw error
-    }
-  }
+  await axios.post(callbackUri, {
+    subscriptionId: subscription.id,
+    events: [event],
+  })
 }
 
 function getDataEventType(pipedriveEventBody) {
