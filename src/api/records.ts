@@ -3,8 +3,8 @@ import {
   DataCollectionFindByIdResponse,
   DataCollectionFindResponse,
   DataCollectionUpdateResponse,
-  DataRecord,
 } from '@integration-app/sdk/connector-api'
+import { DataRecord } from '@integration-app/sdk/data-collections'
 import { MAX_LIMIT } from '.'
 
 export async function getRecords({
