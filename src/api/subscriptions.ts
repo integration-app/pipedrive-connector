@@ -10,13 +10,15 @@ import {
   DataCollectionEventsResponse,
   DataCollectionSubscribeResponse,
   DataCollectionUnsubscribeResponse,
-  DataEvent,
-  DataEventType,
 } from '@integration-app/sdk/connector-api'
 import { BadRequestError } from '@integration-app/sdk/errors'
 import { defaultExtractRecord } from './records'
 import axios from 'axios'
 import { ConnectorDataCollectionEventsRequest } from '@integration-app/connector-sdk'
+import {
+  DataCollectionEvent,
+  DataCollectionEventType,
+} from '@integration-app/sdk/data-collections'
 
 const FULL_SCAN_INTERVAL = 12 * 3600 * 1000 // 12 hours
 
@@ -79,14 +81,10 @@ export async function unsubscribeFromCollection({
 }
 
 export async function handleSubscriptionWebhook({
-  apiClient,
-  subscriptionManager,
   subscription,
-  credentials,
-  parameters,
   body,
 }: ConnectorSubscriptionWebhookRequest) {
-  const eventType = getDataEventType(body)
+  const eventType = getDataCollectionEventType(body)
 
   const events = subscription.data.events
 
@@ -96,17 +94,17 @@ export async function handleSubscriptionWebhook({
   )
 
   switch (eventType) {
-    case DataEventType.CREATED:
+    case DataCollectionEventType.CREATED:
       if (!events.created) {
         return
       }
       break
-    case DataEventType.UPDATED:
+    case DataCollectionEventType.UPDATED:
       if (!events.updated) {
         return
       }
       break
-    case DataEventType.DELETED:
+    case DataCollectionEventType.DELETED:
       if (!events.deleted) {
         return
       }
@@ -115,49 +113,32 @@ export async function handleSubscriptionWebhook({
 
   console.debug('Sending event to callbackUri')
 
-  const event: DataEvent = {
+  const event: DataCollectionEvent = {
     type: eventType,
     record:
-      eventType === DataEventType.DELETED
+      eventType === DataCollectionEventType.DELETED
         ? await defaultExtractRecord(body.previous)
         : await defaultExtractRecord(body.current),
   }
 
   const callbackUri = subscription.data.callbackUri
 
-  try {
-    await axios.post(callbackUri, {
-      subscriptionId: subscription.id,
-      events: [event],
-    })
-  } catch (error: any) {
-    if (error.response?.status === 404) {
-      console.debug('Subscription not found. Unsubscribing from Pipedrive.')
-      // Trigger callback is not recognized - let's disable the subscription
-      await unsubscribeFromCollection({
-        apiClient,
-        subscriptionId: subscription.id,
-        subscriptionManager,
-        credentials,
-        parameters,
-      })
-      await subscriptionManager.deleteSubscription(subscription.id)
-    } else {
-      throw error
-    }
-  }
+  await axios.post(callbackUri, {
+    subscriptionId: subscription.id,
+    events: [event],
+  })
 }
 
-function getDataEventType(pipedriveEventBody) {
+function getDataCollectionEventType(pipedriveEventBody) {
   switch (pipedriveEventBody.meta?.action) {
     case 'updated':
-      return DataEventType.UPDATED
+      return DataCollectionEventType.UPDATED
     case 'added':
-      return DataEventType.CREATED
+      return DataCollectionEventType.CREATED
     case 'deleted':
-      return DataEventType.DELETED
+      return DataCollectionEventType.DELETED
     case 'merged':
-      return DataEventType.DELETED
+      return DataCollectionEventType.DELETED
     default:
       throw new BadRequestError(
         `Unknown event type: ${pipedriveEventBody.meta?.action}`,
