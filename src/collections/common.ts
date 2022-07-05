@@ -13,12 +13,9 @@ import {
   updateRecord,
 } from '../api/records'
 import {
-  fullScanSubscribeHandler,
-  fullScanUnsubscribeHandler,
   handleSubscriptionWebhook,
   subscribeToCollection,
   unsubscribeFromCollection,
-  updateSubscription,
 } from '../api/subscriptions'
 import * as fs from 'fs'
 import {
@@ -113,13 +110,8 @@ export function objectCollectionHandler({
     handler.subscribe = (request) =>
       subscribeToCollection({ ...request, eventObject })
     handler.unsubscribe = unsubscribeFromCollection
-    handler.updateSubscription = updateSubscription
-    handler.webhook = handleSubscriptionWebhook
-  } else {
-    handler.subscribe = (request) =>
-      fullScanSubscribeHandler({ ...request, findHandler: find })
-    handler.updateSubscription = updateSubscription
-    handler.unsubscribe = fullScanUnsubscribeHandler
+    handler.webhook = (request) =>
+      handleSubscriptionWebhook({ ...request, extractRecord })
   }
 
   return handler

@@ -66,7 +66,6 @@ export const dereference = async (
   collectionUri: string,
   fieldsToFind: string[],
 ) => {
-  console.log('EXECUTING FIND', collectionUri, udm)
   const res = await makeRequest(`${collectionUri}/find`, {
     udm: udm,
   })
@@ -74,7 +73,6 @@ export const dereference = async (
   const references = {}
 
   for (const record of data) {
-    console.log('GOT RECORD', record)
     for (const field of fieldsToFind) {
       if (record.unifiedFields[field]) {
         references[field] = record.unifiedFields[field]

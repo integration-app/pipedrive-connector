@@ -19,5 +19,5 @@ export default organizations
 
 export const ORGANIZATION_SCHEMA = Type.Integer({
   title: 'Organization',
-  referenceCollectionUri: organizations.uri,
+  referenceCollectionUri: organizations.path,
 })

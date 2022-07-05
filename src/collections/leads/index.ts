@@ -25,5 +25,5 @@ export default leads
 
 export const LEAD_SCHEMA = Type.Integer({
   title: 'Lead',
-  referenceCollectionUri: leads.uri,
+  referenceCollectionUri: leads.path,
 })
