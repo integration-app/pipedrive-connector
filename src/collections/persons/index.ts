@@ -26,5 +26,5 @@ export default persons
 
 export const PERSON_SCHEMA = Type.Integer({
   title: 'Person',
-  referenceCollectionUri: persons.uri,
+  referenceCollectionUri: persons.path,
 })

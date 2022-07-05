@@ -53,25 +53,25 @@ export const server = new ConnectorServer({
   },
   data: {
     root: {
-      uri: rootDirectory.uri,
+      path: rootDirectory.path,
     },
     leads: {
-      uri: leads.uri,
+      path: leads.path,
     },
     contacts: {
-      uri: persons.uri,
+      path: persons.path,
     },
     companies: {
-      uri: organizations.uri,
+      path: organizations.path,
     },
     deals: {
-      uri: deals.uri,
+      path: deals.path,
     },
     activities: {
-      uri: activities.uri,
+      path: activities.path,
     },
     users: {
-      uri: users.uri,
+      path: users.path,
     },
   } as any,
 })

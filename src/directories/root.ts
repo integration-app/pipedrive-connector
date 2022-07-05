@@ -1,3 +1,4 @@
+import { DataDirectoryHandler } from '@integration-app/connector-sdk'
 import {
   DataDirectorySpec,
   DataDirectoryListResponse,
@@ -11,7 +12,7 @@ import persons from '../collections/persons'
 import users from '../collections/users'
 
 export default {
-  uri: 'data/root',
+  path: 'data/root',
 
   spec,
 
@@ -32,14 +33,14 @@ export default {
             : collection.spec
         return {
           type: DataLocationType.collection,
-          uri: collection.uri as string,
+          uri: collection.path as string,
           name: spec.name as string,
         }
       }),
     )
     return { locations }
   },
-}
+} as DataDirectoryHandler
 
 async function spec(): Promise<DataDirectorySpec> {
   return {

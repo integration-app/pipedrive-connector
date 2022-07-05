@@ -21,7 +21,7 @@ describe('UDM', () => {
       })
       if (collectionActions.includes('create')) {
         it(`should create ${collection}`, async () => {
-          const collectionUri = spec.data[collection].uri
+          const collectionUri = spec.data[collection].path
           const fieldUpdates = await generateFieldUpdates(
             collection,
             collectionUri,
@@ -37,7 +37,7 @@ describe('UDM', () => {
       }
       if (collectionActions.includes('find-by-id')) {
         it(`should find created ${collection} by id`, async () => {
-          const collectionUri = spec.data[collection].uri
+          const collectionUri = spec.data[collection].path
           const findByIdResponse = await makeRequest(
             `${collectionUri}/find-by-id`,
             {
@@ -54,7 +54,7 @@ describe('UDM', () => {
       }
       if (collectionActions.includes('update')) {
         it(`should update created ${collection}`, async () => {
-          const collectionUri = spec.data[collection].uri
+          const collectionUri = spec.data[collection].path
           const fieldsToUpdate = await generateFieldUpdates(
             collection,
             collectionUri,
