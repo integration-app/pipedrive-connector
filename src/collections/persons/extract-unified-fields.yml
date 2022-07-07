@@ -1,26 +1,30 @@
 fullName:
-  $var: name
+  $var: $.name
 firstName:
-  $var: first_name
+  $var: $.first_name
 lastName:
-  $var: last_name
-email:
-  $var: email[0]
-phone:
-  $var: phone[0]
+  $var: $.last_name
+emails:
+  $var: $.email
+phones:
+  $var: $.phone
+primaryEmail:
+  $var: $.primary_email
+primaryPhone:
+  $var: $.phone[0]
 stage:
-  $var: marketing_status
+  $var: $.marketing_status
 companyName:
-  $var: org.name
+  $var: $.org.name
 companyId:
-  $var: org_id
+  $var: $.org_id
 ownerId:
-  $var: owner_id
+  $var: $.owner_id
 createdBy:
-  $var: added_by_user_id
+  $var: $.added_by_user_id
 createdTime:
-  $var: add_time
+  $var: $.add_time
 updatedTime:
-  $var: update_time
+  $var: $.update_time
 lastActivityTime:
-  $var: last_activity_date
+  $var: $.last_activity_date

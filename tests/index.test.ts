@@ -47,10 +47,6 @@ describe('UDM', () => {
             },
           )
           expect(findByIdResponse.record.id.toString()).toBe(newRecordId)
-          // Figure out how to get fieldUpdates from the test above
-          // expect(findByIdResponse.record.unifiedFields).toMatchObject(
-          //   fieldUpdates.unifiedFields,
-          // )
         })
       }
       if (collectionActions.includes('update')) {
