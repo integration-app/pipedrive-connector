@@ -4,10 +4,14 @@ first_name:
   $var: $.firstName
 last_name:
   $var: $.lastName
+phones:
+  $var: $.phones
 phone:
-  - $var: $.phone
+  $var: $.primaryPhone
+emails:
+  $var: $.emails
 email:
-  - $var: $.email
+  $var: $.primaryEmail
 owner_id:
   $var: $.ownerId
 org_id:

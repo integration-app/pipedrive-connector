@@ -6,10 +6,7 @@ import * as supertest from 'supertest'
 import { server } from '../src/app'
 dotenv.config()
 
-const TEST_BASE_URI = env
-  .get('TEST_BASE_URI')
-  .default('http://endpoint:3000')
-  .asString()
+const BASE_URI = env.get('BASE_URI').default('http://endpoint:3000').asString()
 const TEST_ACCESS_TOKEN = env.get('TEST_ACCESS_TOKEN').asString()
 const TEST_ACCESS_TOKEN_JSON = env.get('TEST_ACCESS_TOKEN_JSON').asString()
 
@@ -24,20 +21,24 @@ export async function makeRequest(uri: string, payload?: any) {
       'Neither TEST_ACCESS_TOKEN nor TEST_ACCESS_TOKEN_JSON is set',
     )
   }
-  const response = await supertest(TEST_BASE_URI)
+  const response = await supertest(BASE_URI)
     .post(uri)
     .set('Authorization', `Bearer ${token}`)
     .send(payload)
-  return response.body // catch throuw error if status != 200
+  return response.body
 }
 
 function generateValue(field: string) {
   switch (field) {
     case 'fullName':
       return random.name('Von')
-    case 'email':
-      return random.email('test.org')
-    case 'phone':
+    case 'firstName':
+      return random.maleFirstName()
+    case 'lastName':
+      return random.lastName()
+    case 'primaryEmail':
+      return random.email('gmail.com')
+    case 'primaryPhone':
       return random.mobile().toString()
     case 'amount':
       return random.integer(0, 1000000)

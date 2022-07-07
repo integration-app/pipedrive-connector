@@ -6,7 +6,7 @@ firstName:
 lastName:
   $lastName:
     $var: $.name
-email:
+primaryEmail:
   $var: $.email
 phone:
   $var: $.phone

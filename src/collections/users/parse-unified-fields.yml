@@ -1,7 +1,7 @@
 name:
   $var: $.fullName
 email:
-  $var: $.email
+  $var: $.primaryEmail
 phone:
   $var: $.phone
 timezone_name:

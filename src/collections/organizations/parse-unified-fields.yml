@@ -9,14 +9,14 @@ update_time:
 last_activity_date:
   $var: $.lastActivityTime
 address:
-  $var: $.address.full
+  $var: $.primaryAddress.full
 address_locality:
-  $var: $.address.city
+  $var: $.primaryAddress.city
 address_route:
-  $var: $.address.street
+  $var: $.primaryAddress.street
 address_country:
-  $var: $.address.country
+  $var: $.primaryAddress.country
 address_postal_code:
-  $var: $.address.zip
+  $var: $.primaryAddress.zip
 address_admin_area_level_1:
-  $var: $.address.state
+  $var: $.primaryAddress.state

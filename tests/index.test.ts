@@ -30,6 +30,7 @@ describe('UDM', () => {
           const createResponse = await makeRequest(`${collectionUri}/create`, {
             fields: fieldUpdates.fields,
           })
+          console.log(createResponse)
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)
@@ -46,10 +47,6 @@ describe('UDM', () => {
             },
           )
           expect(findByIdResponse.record.id.toString()).toBe(newRecordId)
-          // Figure out how to get fieldUpdates from the test above
-          // expect(findByIdResponse.record.unifiedFields).toMatchObject(
-          //   fieldUpdates.unifiedFields,
-          // )
         })
       }
       if (collectionActions.includes('update')) {

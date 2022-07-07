@@ -5,12 +5,12 @@ contacts:
     - update
   unifiedFields:
     - 'fullName'
-    - 'email'
+    - 'primaryEmail'
     - 'companyId'
     - 'ownerId'
   updatableFields:
     - 'fullName'
-    - 'email'
+    - 'primaryEmail'
     - 'companyId'
 companies:
   actions:
@@ -32,7 +32,7 @@ leads:
     - 'fullName'
     - 'companyId'
     - 'ownerId'
-    # - 'contactId' missing from SDK
+    - 'contactId'
     - 'value'
     - 'currency'
   updatableFields:
@@ -62,7 +62,7 @@ users:
     - update
   unifiedFields:
     - 'fullName'
-    - 'email'
+    - 'primaryEmail'
     - 'isActive'
   updatableFields:
     - 'isActive'

@@ -2,7 +2,7 @@ name:
   $var: $.name
 ownerId:
   $var: $.owner_id
-address:
+primaryAddress:
   full:
     $var: $.address
   street:
