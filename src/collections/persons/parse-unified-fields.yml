@@ -8,8 +8,6 @@ phone:
   $var: $.phones
 email:
   $var: $.emails
-primary_email:
-  $var: $.primaryEmail
 owner_id:
   $var: $.ownerId
 org_id:

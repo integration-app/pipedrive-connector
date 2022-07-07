@@ -5,12 +5,10 @@ contacts:
     - update
   unifiedFields:
     - 'fullName'
-    - 'primaryEmail'
     - 'companyId'
     - 'ownerId'
   updatableFields:
     - 'fullName'
-    - 'primaryEmail'
     - 'companyId'
 companies:
   actions:

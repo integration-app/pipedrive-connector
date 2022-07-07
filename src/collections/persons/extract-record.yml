@@ -18,8 +18,6 @@ fields:
       locator: $.phone
       items:
         $var: $.phone.$current.value
-  primary_email:
-    $var: $.primary_email
   email:
     $iterate:
       locator: $.email

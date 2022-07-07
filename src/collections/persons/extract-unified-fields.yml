@@ -9,7 +9,7 @@ emails:
 phones:
   $var: $.phone
 primaryEmail:
-  $var: $.primary_email
+  $var: $.email[0]
 primaryPhone:
   $var: $.phone[0]
 stage:

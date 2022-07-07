@@ -13,9 +13,6 @@ properties:
     type: array
     items:
       type: string
-  primary_email:
-    title: Primary email
-    type: string
   email:
     title: Email(s)
     type: array
