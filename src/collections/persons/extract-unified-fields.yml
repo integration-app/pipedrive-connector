@@ -5,13 +5,13 @@ firstName:
 lastName:
   $var: $.last_name
 emails:
-  $var: $.email
+  $var: $.emails
 phones:
-  $var: $.phone
+  $var: $.phones
 primaryEmail:
-  $var: $.email[0]
+  $var: $.email
 primaryPhone:
-  $var: $.phone[0]
+  $var: $.phone
 stage:
   $var: $.marketing_status
 companyName:

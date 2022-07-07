@@ -9,15 +9,19 @@ properties:
   last_name:
     type: string
   phone:
+    type: string
+  phones:
     title: Phone(s)
     type: array
     items:
       type: string
-  email:
+  emails:
     title: Email(s)
     type: array
     items:
       type: string
+  email:
+    type: string
   query_phone:
     type: string
   query_email:
