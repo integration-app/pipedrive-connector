@@ -30,6 +30,7 @@ describe('UDM', () => {
           const createResponse = await makeRequest(`${collectionUri}/create`, {
             fields: fieldUpdates.fields,
           })
+          console.log(createResponse)
           expect(createResponse.id).toBeDefined()
           newRecordId = createResponse.id
           console.log(`Created ${collection} with id: ${newRecordId}`)

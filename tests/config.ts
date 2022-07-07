@@ -36,7 +36,11 @@ function generateValue(field: string) {
     case 'fullName':
       return random.name('Von')
     case 'email':
-      return random.email('test.org')
+      return random.email('gmail.com')
+    case 'primaryEmail':
+      return random.email('gmail.com')
+    case 'primaryPhone':
+      return random.phone()
     case 'phone':
       return random.mobile().toString()
     case 'amount':
