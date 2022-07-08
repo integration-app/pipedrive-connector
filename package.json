@@ -11,7 +11,7 @@
   "jest": {
     "verbose": true,
     "forceExit": true,
-    "testTimeout": 10000,
+    "testTimeout": 600000,
     "moduleFileExtensions": [
       "ts",
       "json",
