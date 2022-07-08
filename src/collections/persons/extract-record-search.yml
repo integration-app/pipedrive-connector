@@ -1,0 +1,27 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  id:
+    $var: $.id
+  name:
+    $var: $.name
+  phones:
+    $var: $.phones
+  phone:
+    $var: $.phones[0]
+  emails:
+    $var: $.emails
+  email:
+    $var: $.emails[0]
+  owner:
+    $var: $.owner.id
+  owner_id:
+    $var: $.owner.id
+  org_id:
+    $var: $.organization.id
+  org:
+    $var: $.org
+  visible_to:
+    $var: $.visible_to
