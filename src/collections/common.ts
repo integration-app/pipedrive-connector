@@ -54,10 +54,18 @@ export function objectCollectionHandler({
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
     extractRecord = makeDataBuilder(`${ymlDir}/extract-record.yml`)
   }
+  let extractRecordSearch = extractRecord
+  if (fs.existsSync(`${ymlDir}/extract-record-search.yml`)) {
+    extractRecordSearch = makeDataBuilder(`${ymlDir}/extract-record-search.yml`)
+  }
 
   const find = (request) => {
     if (request.query) {
-      return searchRecords({ ...request, path, extractRecord })
+      return searchRecords({
+        ...request,
+        path,
+        extractRecord: extractRecordSearch,
+      })
     } else {
       return getRecords({ ...request, path, extractRecord })
     }

@@ -17,7 +17,7 @@ const persons = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
-  queryFields: ['query_email', 'name', 'query_phone'],
+  queryFields: ['email', 'name', 'phone'],
   eventObject: 'person',
   udm: 'contacts',
 })

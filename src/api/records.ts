@@ -56,15 +56,11 @@ export async function searchRecords({
   extractRecord = null,
 }): Promise<DataCollectionFindResponse> {
   const firstField = Object.entries(query ?? [])[0]
-  let field = firstField?.[0]
+  const field = firstField?.[0]
   const term = firstField?.[1]
 
   if (!field || !term) {
     throw new Error('Query fields were not provided')
-  }
-
-  if (field?.startsWith('query_')) {
-    field = field.replace('query_', '')
   }
 
   const parameters = {
@@ -80,13 +76,15 @@ export async function searchRecords({
     }
   }
 
-  return {
+  const result = {
     records: await Promise.all(
       response.data.items
         .map((searchItem) => searchItem.item)
         .map(extractRecord ?? defaultExtractRecord),
     ),
   }
+
+  return result
 }
 
 export async function createRecord({
