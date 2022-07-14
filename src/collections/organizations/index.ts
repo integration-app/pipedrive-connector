@@ -10,7 +10,7 @@ const organizations = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
   requiredFields: ['name'],
-  queryFields: ['name'],
+  queryFields: ['name', 'address'],
   eventObject: 'organization',
   udm: 'companies',
 })

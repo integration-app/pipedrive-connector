@@ -1,0 +1,17 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+url:
+  $concat: ['https://app.pipedrive.com/organization/', $var: $.id]
+fields:
+  id:
+    $var: $.id
+  name:
+    $var: $.name
+  owner_id:
+    $var: $.owner.id
+  address:
+    $var: $.address
+  visible_to:
+    $var: $.visible_to

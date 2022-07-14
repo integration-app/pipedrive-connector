@@ -1,0 +1,25 @@
+id:
+  $var: $.id
+name:
+  $var: $.title
+url:
+  $concat: ['https://app.pipedrive.com/leads/inbox/', $var: $.id]
+fields:
+  id:
+    $var: $.id
+  title:
+    $var: $.title
+  owner_id:
+    $var: $.owner.id
+  organization_id:
+    $var: $.organization.id
+  person_id:
+    $var: $.person.id
+  value:
+    $var: $.value
+  currency:
+    $var: $.currency
+  visible_to:
+    $var: $.visible_to
+  is_archived:
+    $var: $.is_archived
