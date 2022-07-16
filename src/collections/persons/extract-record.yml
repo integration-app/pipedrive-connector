@@ -15,18 +15,24 @@ fields:
     $var: $.last_name
   phone:
     $var: $.phone[0].value
+  email:
+    $var: $.email[0].value
   phones:
     $iterate:
       locator: $.phone
       items:
-        $var: $.phone.$current.value
+        value:
+          $var: $.phone.$current.value
+        type:
+          $var: $.phone.$current.label
   emails:
     $iterate:
       locator: $.email
       items:
-        $var: $.email.$current.value
-  email:
-    $var: $.email[0].value
+        value:
+          $var: $.email.$current.value
+        type:
+          $var: $.email.$current.label
   owner_id:
     $var: $.owner_id.id
   owner:

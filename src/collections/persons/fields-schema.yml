@@ -11,12 +11,10 @@ properties:
   phone:
     type: string
   phones:
-    title: Phone(s)
     type: array
     items:
       type: string
   emails:
-    title: Email(s)
     type: array
     items:
       type: string

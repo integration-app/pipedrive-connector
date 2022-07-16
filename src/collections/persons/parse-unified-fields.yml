@@ -6,10 +6,10 @@ last_name:
   $var: $.lastName
 phones:
   $var: $.phones
-phone:
-  $var: $.primaryPhone
 emails:
   $var: $.emails
+phone:
+  $var: $.primaryPhone
 email:
   $var: $.primaryEmail
 owner_id:
