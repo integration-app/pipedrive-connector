@@ -5,9 +5,21 @@ firstName:
 lastName:
   $var: $.last_name
 emails:
-  $var: $.emails
+  $iterate:
+    locator: $.emails
+    items:
+      value:
+        $var: $.emails.$current.value
+      type:
+        $var: $.emails.$current.label
 phones:
-  $var: $.phones
+  $iterate:
+    locator: $.phones
+    items:
+      value:
+        $var: $.phones.$current.value
+      type:
+        $var: $.phones.$current.label
 primaryEmail:
   $var: $.email
 primaryPhone:

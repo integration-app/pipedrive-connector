@@ -6,10 +6,32 @@ firstName:
 lastName:
   $lastName:
     $var: $.name
+emails:
+  $iterate:
+    locator: $.emails
+    items:
+      value:
+        $var: $.emails.$current.value
+      type:
+        $var: $.emails.$current.label
+phones:
+  $iterate:
+    locator: $.phones
+    items:
+      value:
+        $var: $.phones.$current.value
+      type:
+        $var: $.phones.$current.label
 primaryEmail:
-  $var: $.email
-phone:
-  $var: $.phone
+  value:
+    $var: $.emails[0].value
+  type:
+    $var: $.emails[0].label
+primaryPhone:
+  value:
+    $var: $.phones[0].value
+  type:
+    $var: $.phones[0].label
 timezone:
   $var: $.timezone_name
 isActive:
