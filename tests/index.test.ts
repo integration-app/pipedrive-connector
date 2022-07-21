@@ -5,5 +5,7 @@ import {
 
 describe('Connector Test', () => {
   basicFunctionalityTest()
-  unifiedFieldsTest()
+  unifiedFieldsTest({
+    events: false,
+  })
 })
