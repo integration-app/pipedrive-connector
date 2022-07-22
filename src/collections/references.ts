@@ -9,7 +9,7 @@ export const pipelines = objectCollectionHandler({
 
 export const PIPELINE_SCHEMA = Type.Integer({
   title: 'Pipeline',
-  referenceCollectionUri: pipelines.path,
+  referenceCollectionPath: pipelines.path,
 })
 
 export const stages = objectCollectionHandler({
@@ -20,7 +20,7 @@ export const stages = objectCollectionHandler({
 
 export const STAGES_SCHEMA = Type.Integer({
   title: 'Stage',
-  referenceCollectionUri: stages.path,
+  referenceCollectionPath: stages.path,
 })
 
 export const activityTypes = objectCollectionHandler({
@@ -31,7 +31,7 @@ export const activityTypes = objectCollectionHandler({
 
 export const ACTIVITY_TYPE_SCHEMA = Type.Integer({
   title: 'Type',
-  referenceCollectionUri: activityTypes.path,
+  referenceCollectionPath: activityTypes.path,
 })
 
 export const leadLabels = objectCollectionHandler({
@@ -42,5 +42,5 @@ export const leadLabels = objectCollectionHandler({
 
 export const LEAD_LABEL_SCHEMA = Type.Integer({
   title: 'Label',
-  referenceCollectionUri: leadLabels.path,
+  referenceCollectionPath: leadLabels.path,
 })

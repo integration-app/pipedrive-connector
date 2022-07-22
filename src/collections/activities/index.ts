@@ -66,5 +66,5 @@ export default activities
 
 export const ACTIVITY_SCHEMA = Type.Integer({
   title: 'Activity',
-  referenceCollectionUri: activities.path,
+  referenceCollectionPath: activities.path,
 })

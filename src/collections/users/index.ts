@@ -27,7 +27,7 @@ export default users
 
 export const USER_SCHEMA = Type.String({
   title: 'User',
-  referenceCollectionUri: users.path,
+  referenceCollectionPath: users.path,
 })
 
 async function findUsers(request: ConnectorDataCollectionFindRequest) {
