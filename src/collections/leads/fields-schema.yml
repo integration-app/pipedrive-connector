@@ -7,11 +7,11 @@ properties:
   owner_id:
     title: Owner
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   creator_id:
     title: Creator
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   label_ids:
     title: Label(s)
     type: array
@@ -31,11 +31,11 @@ properties:
   person_id:
     title: Person
     type: integer
-    referenceCollectionUri: /data/persons
+    referenceCollectionPath: /data/persons
   organization_id:
     title: Organization
     type: integer
-    referenceCollectionUri: /data/organizations
+    referenceCollectionPath: /data/organizations
   is_archived:
     type: boolean
   source_name:
@@ -45,7 +45,7 @@ properties:
   next_activity_id:
     title: Next Activity
     type: integer
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   add_time:
     type: string
     format: date-time

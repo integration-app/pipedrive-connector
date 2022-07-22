@@ -23,15 +23,9 @@ phones:
       type:
         $var: $.phones.$current.label
 primaryEmail:
-  value:
-    $var: $.emails[0].value
-  type:
-    $var: $.emails[0].label
+  $var: $.email
 primaryPhone:
-  value:
-    $var: $.phones[0].value
-  type:
-    $var: $.phones[0].label
+  $var: $.phone
 timezone:
   $var: $.timezone_name
 isActive:

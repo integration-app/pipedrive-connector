@@ -7,7 +7,7 @@ properties:
   owner_id:
     title: Owner
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   owner:
     type: object
     properties:
@@ -77,10 +77,10 @@ properties:
     format: time
   next_activity_id:
     type: integer
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_id:
     type: integer
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_date:
     type: string
     format: date
@@ -91,7 +91,7 @@ properties:
   address_components:
     title: Address
     type: object
-    properties:  # Pipedrive has address properties as separate fields
+    properties: # Pipedrive has address properties as separate fields
       address_subpremise:
         type: string
       address_street_number:

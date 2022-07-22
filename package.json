@@ -28,13 +28,14 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@integration-app/connector-sdk": "^0.6.17",
+    "@integration-app/connector-sdk": "^0.6.24",
     "@integration-app/sdk": "^0.14.14",
     "@sinclair/typebox": "^0.22.1",
     "axios": "^0.26.0",
     "dotenv": "^10.0.0",
     "js-convert-case": "^4.2.0",
     "js-yaml": "^4.1.0",
+    "ngrok": "^4.3.1",
     "split-human-name": "^2.0.12",
     "url-join": "^4.0.1",
     "yaml": "^2.1.1"
