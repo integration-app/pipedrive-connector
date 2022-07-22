@@ -6,10 +6,12 @@ properties:
     type: integer
   user_id:
     type: integer
+    referenceCollectionPath: /data/users
   done:
     type: boolean
   type:
     type: string
+    referenceCollectionPath: /data/activityTypes
   reference_type:
     type: string
   reference_id:
@@ -40,7 +42,7 @@ properties:
     format: date-time
   last_notification_user_id:
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   notification_language_id:
     type: integer
   subject:
@@ -53,16 +55,16 @@ properties:
     type: string
   org_id:
     type: integer
-    referenceCollectionUri: /data/organizations
+    referenceCollectionPath: /data/organizations
   person_id:
     type: integer
-    referenceCollectionUri: /data/persons
+    referenceCollectionPath: /data/persons
   deal_id:
     type: integer
-    referenceCollectionUri: /data/deals
+    referenceCollectionPath: /data/deals
   lead_id:
     type: integer
-    referenceCollectionUri: /data/leads
+    referenceCollectionPath: /data/leads
   active_flag:
     type: boolean
   update_time:
@@ -70,7 +72,7 @@ properties:
     format: date-time
   update_user_id:
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   gcal_event_id:
     type: string
   google_calendar_id:
@@ -85,7 +87,7 @@ properties:
     type: string
   created_by_user_id:
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   location_subpremise:
     type: string
   location_street_number:
@@ -150,7 +152,7 @@ properties:
     type: string
   assigned_to_user_id:
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   file:
     type: object
     properties:

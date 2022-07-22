@@ -32,5 +32,5 @@ export default deals
 
 export const DEAL_SCHEMA = Type.Integer({
   title: 'Deal',
-  referenceCollectionUri: deals.path,
+  referenceCollectionPath: deals.path,
 })

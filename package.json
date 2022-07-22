@@ -35,6 +35,7 @@
     "dotenv": "^10.0.0",
     "js-convert-case": "^4.2.0",
     "js-yaml": "^4.1.0",
+    "ngrok": "^4.3.1",
     "split-human-name": "^2.0.12",
     "url-join": "^4.0.1",
     "yaml": "^2.1.1"

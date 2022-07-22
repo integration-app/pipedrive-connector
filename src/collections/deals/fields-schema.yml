@@ -4,7 +4,7 @@ properties:
     type: integer
   creator_user_id:
     type: string
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   creator_user:
     type: object
     properties:
@@ -16,7 +16,7 @@ properties:
         type: string
   user_id:
     type: string
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   user:
     type: object
     properties:
@@ -28,7 +28,7 @@ properties:
         type: string
   person_id:
     type: string
-    referenceCollectionUri: /data/persons
+    referenceCollectionPath: /data/persons
   person:
     type: object
     properties:
@@ -60,7 +60,7 @@ properties:
         type: integer
   org_id:
     type: integer
-    referenceCollectionUri: /data/organizations
+    referenceCollectionPath: /data/organizations
   org:
     type: object
     properties:
@@ -103,10 +103,10 @@ properties:
     format: time
   next_activity_id:
     type: string
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_id:
     type: string
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_date:
     type: string
     format: date
@@ -119,7 +119,7 @@ properties:
     format: date-time
   pipeline_id:
     type: integer
-    referenceCollectionUri: /data/pipelines
+    referenceCollectionPath: /data/pipelines
   won_time:
     type: string
     format: date-time

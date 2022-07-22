@@ -27,7 +27,7 @@ properties:
   owner_id:
     type: integer
     title: Owner
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   owner:
     type: object
     properties:
@@ -39,7 +39,7 @@ properties:
         type: string
   org_id:
     type: integer
-    referenceCollectionUri: /data/organizations
+    referenceCollectionPath: /data/organizations
   org:
     type: object
     properties:
@@ -96,7 +96,7 @@ properties:
     format: date-time
   added_by_user_id:
     type: integer
-    referenceCollectionUri: /data/users
+    referenceCollectionPath: /data/users
   add_time:
     type: string
     format: date-time
@@ -112,10 +112,10 @@ properties:
     format: date-time
   next_activity_id:
     type: integer
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_id:
     type: integer
-    referenceCollectionUri: /data/activities
+    referenceCollectionPath: /data/activities
   last_activity_date:
     type: string
     format: date-time
