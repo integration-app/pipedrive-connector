@@ -74,6 +74,7 @@ properties:
         type: string
   stage_id:
     type: integer
+    referenceCollectionPath: /data/stages
   title:
     type: string
   value:
@@ -93,6 +94,7 @@ properties:
     type: boolean
   status:
     type: string
+    enum: ['open', 'won', 'lost']
   probability:
     type: number
   next_activity_date:
