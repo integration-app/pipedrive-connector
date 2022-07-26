@@ -22,8 +22,7 @@ import {
   ConnectorDataCollectionExtractUnifiedFieldsRequest,
   makeCollectionHandler,
 } from '@integration-app/connector-sdk'
-
-import { appendCustomFields, getCustomFields } from './custom-fields'
+import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
 
 export function objectCollectionHandler({
   ymlDir = null,
@@ -58,7 +57,7 @@ export function objectCollectionHandler({
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
     const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
     extractRecord = (data) => ({
-      ...data,
+      ...data, // To add all the custom fields to the result
       ...extractRecordBuilder(data),
     })
   }
@@ -68,15 +67,9 @@ export function objectCollectionHandler({
       `${ymlDir}/extract-record-search.yml`,
     )
     extractRecordSearch = (data) => ({
-      ...data,
+      ...data, // To add all the custom fields to the result
       ...extractRecordSearchBuilder(data),
     })
-  }
-
-  let extendFieldsSchema = null
-  if (customFieldsPath !== null) {
-    extendFieldsSchema = (request, fieldsSchema) =>
-      appendCustomFields(customFieldsPath, request, fieldsSchema)
   }
 
   const find = (request) => {
@@ -96,28 +89,32 @@ export function objectCollectionHandler({
     path,
     name,
     udm,
-    extendFieldsSchema,
     extendSpec: async (
-      _request: ConnectorRequestData,
+      request: ConnectorRequestData,
       specFromYml: any,
     ): Promise<DataCollectionSpec> => {
-      let customFieldsKeys = []
-      let customFieldsRequired = []
+      const spec = JSON.parse(JSON.stringify(specFromYml))
 
+      const customFieldsKeys = []
       if (customFieldsPath !== null) {
         const customFields = await getCustomFields(
           customFieldsPath,
-          _request.apiClient,
+          request.apiClient,
         )
-        customFieldsKeys = customFields.map(({ key }) => key)
-        customFieldsRequired = customFields
-          .filter(({ mandatory_flag }) => mandatory_flag === true)
-          .map(({ key }) => key)
+        for (const customField of customFields) {
+          if (!(customField.key in spec.fieldsSchema.properties)) {
+            console.log('Adding custom field', customField.key)
+            spec.fieldsSchema.properties[customField.key] = {
+              title: customField.name,
+              ...getCustomFieldSchema(customField),
+            }
+            customFieldsKeys.push(customField.key)
+          } else {
+            console.log(customField.key, 'is in schema')
+          }
+        }
       }
 
-      const spec = {
-        ...specFromYml,
-      }
       if (queryFields) {
         spec.find = {
           queryFields,
@@ -126,7 +123,7 @@ export function objectCollectionHandler({
       if (createFields) {
         spec.create = {
           fields: [...createFields, ...customFieldsKeys],
-          requiredFields: [...requiredFields, ...customFieldsRequired],
+          requiredFields: [...requiredFields],
         }
       }
       if (updateFields) {
