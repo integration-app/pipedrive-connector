@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ES2019",
-      "DOM"
-    ],
+    "lib": ["ES2019", "DOM"],
     "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -25,17 +22,8 @@
     "experimentalDecorators": true,
     "target": "es2019",
     "sourceMap": true,
-    "jsx": "react",
+    "jsx": "react"
   },
-  "include": [
-    ".eslintrc.js",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": [".eslintrc.js", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -19,6 +19,7 @@ const MODIFIABLE_FIELDS = [
 const deals = objectCollectionHandler({
   ymlDir: __dirname,
   path: 'deals',
+  customFieldsPath: 'dealFields',
   name: 'Deals',
   createFields: MODIFIABLE_FIELDS,
   requiredFields: ['title'],

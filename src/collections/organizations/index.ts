@@ -6,6 +6,7 @@ const MODIFIABLE_FIELDS = ['name', 'owner_id']
 const organizations = objectCollectionHandler({
   ymlDir: __dirname,
   path: 'organizations',
+  customFieldsPath: 'organizationFields',
   name: 'Organizations',
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
