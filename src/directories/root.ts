@@ -16,25 +16,39 @@ export default {
 
   spec,
 
-  list: async (request): Promise<DataDirectoryListResponse> => {
+  list: async (): Promise<DataDirectoryListResponse> => {
     const collections = [
-      organizations,
-      persons,
-      deals,
-      leads,
-      activities,
-      users,
+      {
+        name: 'Organizations',
+        path: organizations.path,
+      },
+      {
+        name: 'Persons',
+        path: persons.path,
+      },
+      {
+        name: 'Deals',
+        path: deals.path,
+      },
+      {
+        name: 'Leads',
+        path: leads.path,
+      },
+      {
+        name: 'Activities',
+        path: activities.path,
+      },
+      {
+        name: 'Users',
+        path: users.path,
+      },
     ]
     const locations = await Promise.all(
       collections.map(async (collection) => {
-        const spec =
-          typeof collection.spec === 'function'
-            ? await collection.spec(request)
-            : collection.spec
         return {
           type: DataLocationType.collection,
           uri: collection.path as string,
-          name: spec.name as string,
+          name: collection.name as string,
         }
       }),
     )
@@ -45,6 +59,6 @@ export default {
 async function spec(): Promise<DataDirectorySpec> {
   return {
     type: DataLocationType.directory,
-    name: 'All Data',
+    name: 'Pipedrive',
   }
 }
