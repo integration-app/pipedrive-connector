@@ -61,8 +61,8 @@ export function objectCollectionHandler({
       return {
         ...record,
         fields: {
-          ...record.fields,
           ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
         },
       }
     }
@@ -77,8 +77,8 @@ export function objectCollectionHandler({
       return {
         ...record,
         fields: {
-          ...record.fields,
           ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
         },
       }
     }
@@ -115,14 +115,11 @@ export function objectCollectionHandler({
         )
         for (const customField of customFields) {
           if (!(customField.key in spec.fieldsSchema.properties)) {
-            console.log('Adding custom field', customField.key)
             spec.fieldsSchema.properties[customField.key] = {
               title: customField.name,
               ...getCustomFieldSchema(customField),
             }
             customFieldsKeys.push(customField.key)
-          } else {
-            console.log(customField.key, 'is in schema')
           }
         }
       }
