@@ -132,7 +132,7 @@ export function objectCollectionHandler({
       if (createFields) {
         spec.create = {
           fields: [...createFields, ...customFieldsKeys],
-          requiredFields: [...requiredFields],
+          requiredFields,
         }
       }
       if (updateFields) {
