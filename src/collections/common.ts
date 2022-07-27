@@ -22,10 +22,12 @@ import {
   ConnectorDataCollectionExtractUnifiedFieldsRequest,
   makeCollectionHandler,
 } from '@integration-app/connector-sdk'
+import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
 
 export function objectCollectionHandler({
   ymlDir = null,
   path,
+  customFieldsPath = null,
   name,
   udm = null,
   createFields = null,
@@ -37,6 +39,7 @@ export function objectCollectionHandler({
 }: {
   ymlDir?: string
   path: string
+  customFieldsPath?: string
   name: string
   fieldsSchema?: any
   udm?: string
@@ -52,11 +55,33 @@ export function objectCollectionHandler({
 }): DataCollectionHandler {
   let extractRecord = defaultExtractRecord
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
-    extractRecord = makeDataBuilder(`${ymlDir}/extract-record.yml`)
+    const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
+    extractRecord = async (data) => {
+      const record = await extractRecordBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
+        },
+      }
+    }
   }
   let extractRecordSearch = extractRecord
   if (fs.existsSync(`${ymlDir}/extract-record-search.yml`)) {
-    extractRecordSearch = makeDataBuilder(`${ymlDir}/extract-record-search.yml`)
+    const extractRecordSearchBuilder = makeDataBuilder(
+      `${ymlDir}/extract-record-search.yml`,
+    )
+    extractRecordSearch = async (data) => {
+      const record = await extractRecordSearchBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
+        },
+      }
+    }
   }
 
   const find = (request) => {
@@ -76,13 +101,29 @@ export function objectCollectionHandler({
     path,
     name,
     udm,
-    extendSpec: (
-      _request: ConnectorRequestData,
+    extendSpec: async (
+      request: ConnectorRequestData,
       specFromYml: any,
     ): Promise<DataCollectionSpec> => {
-      const spec = {
-        ...specFromYml,
+      const spec = JSON.parse(JSON.stringify(specFromYml))
+
+      const customFieldsKeys = []
+      if (customFieldsPath !== null) {
+        const customFields = await getCustomFields(
+          customFieldsPath,
+          request.apiClient,
+        )
+        for (const customField of customFields) {
+          if (!(customField.key in spec.fieldsSchema.properties)) {
+            spec.fieldsSchema.properties[customField.key] = {
+              title: customField.name,
+              ...getCustomFieldSchema(customField),
+            }
+            customFieldsKeys.push(customField.key)
+          }
+        }
       }
+
       if (queryFields) {
         spec.find = {
           queryFields,
@@ -90,13 +131,13 @@ export function objectCollectionHandler({
       }
       if (createFields) {
         spec.create = {
-          fields: createFields,
-          requiredFields,
+          fields: [...createFields, ...customFieldsKeys],
+          requiredFields: [...requiredFields],
         }
       }
       if (updateFields) {
         spec.update = {
-          fields: updateFields,
+          fields: [...updateFields, ...customFieldsKeys],
         }
       }
       return spec

@@ -23,6 +23,7 @@ const MODIFIABLE_FIELDS = [
 const activities = objectCollectionHandler({
   ymlDir: __dirname,
   path: 'activities',
+  customFieldsPath: 'activityFields',
   name: 'Activities',
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,

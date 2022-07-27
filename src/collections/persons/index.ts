@@ -13,6 +13,7 @@ const MODIFIABLE_FIELDS = [
 const persons = objectCollectionHandler({
   ymlDir: __dirname,
   path: 'persons',
+  customFieldsPath: 'personFields',
   name: 'Persons',
   createFields: MODIFIABLE_FIELDS,
   requiredFields: ['name'],
