@@ -56,20 +56,32 @@ export function objectCollectionHandler({
   let extractRecord = defaultExtractRecord
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
     const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
-    extractRecord = (data) => ({
-      ...data, // To add all the custom fields to the result
-      ...extractRecordBuilder(data),
-    })
+    extractRecord = async (data) => {
+      const record = await extractRecordBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...record.fields,
+          ...data, // To add all the custom fields to the result
+        },
+      }
+    }
   }
   let extractRecordSearch = extractRecord
   if (fs.existsSync(`${ymlDir}/extract-record-search.yml`)) {
     const extractRecordSearchBuilder = makeDataBuilder(
       `${ymlDir}/extract-record-search.yml`,
     )
-    extractRecordSearch = (data) => ({
-      ...data, // To add all the custom fields to the result
-      ...extractRecordSearchBuilder(data),
-    })
+    extractRecordSearch = async (data) => {
+      const record = await extractRecordSearchBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...record.fields,
+          ...data, // To add all the custom fields to the result
+        },
+      }
+    }
   }
 
   const find = (request) => {
