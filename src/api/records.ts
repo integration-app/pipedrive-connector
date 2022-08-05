@@ -13,7 +13,7 @@ export async function getRecords({
   query = null,
   cursor = null,
   extractRecord = null,
-}): Promise<DataCollectionFindResponse> {
+}) {
   const limit = MAX_LIMIT
   const parameters = {
     ...(query ?? {}),
