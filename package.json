@@ -28,7 +28,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@integration-app/connector-sdk": "^0.7.0",
+    "@integration-app/connector-sdk": "^0.7.2",
     "@integration-app/sdk": "^0.15.23",
     "@sinclair/typebox": "^0.22.1",
     "axios": "^0.26.0",
