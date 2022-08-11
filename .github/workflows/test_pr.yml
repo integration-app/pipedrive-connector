@@ -27,7 +27,6 @@ jobs:
           envkey_USE_NGROK: 1
           envkey_BASE_URI: 'http://endpoint:3000'
           envkey_SECRET: 'asdfsadfasdflsadf28tu-9fasfasfhs3!##s'
-          envkey_ADMIN_ACCESS_TOKEN: 'admin'
           envkey_S3_BUCKET: iapp-connectors-dev
           envkey_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           envkey_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

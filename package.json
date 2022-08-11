@@ -8,25 +8,6 @@
     "start": "NODE_ENV=production node dist/index.js",
     "test": "npx ts-node tests/index.test"
   },
-  "jest": {
-    "verbose": true,
-    "forceExit": true,
-    "testTimeout": 600000,
-    "moduleFileExtensions": [
-      "ts",
-      "json",
-      "js"
-    ],
-    "roots": [
-      "src",
-      "tests"
-    ],
-    "testRegex": ".*\\.test\\.ts$",
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testEnvironment": "node"
-  },
   "dependencies": {
     "@integration-app/connector-sdk": "^0.7.6",
     "@integration-app/sdk": "^0.15.23",
@@ -41,7 +22,6 @@
     "yaml": "^2.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "copy": "^0.3.2",
     "env-var": "^7.1.1",
@@ -49,11 +29,9 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "generate-random-data": "^0.0.3",
-    "jest": "^27.3.1",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",
     "supertest": "^6.1.6",
-    "ts-jest": "^27.0.7",
     "typescript": "^4.5.2"
   }
 }
