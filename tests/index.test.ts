@@ -1,9 +1,14 @@
-import {
-  unifiedFieldsTest,
-  basicFunctionalityTest,
-} from '@integration-app/connector-sdk'
+import * as dotenv from 'dotenv'
 
-describe('Connector Test', () => {
-  basicFunctionalityTest()
-  unifiedFieldsTest({})
+dotenv.config()
+
+import { TestRunner } from '@integration-app/connector-sdk'
+
+const runner = new TestRunner({
+  baseUri: process.env.BASE_URI,
+  accessToken: process.env.TEST_ACCESS_TOKEN,
+})
+
+runner.runTests(async () => {
+  await runner.data.testAll()
 })

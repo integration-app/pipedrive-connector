@@ -21,8 +21,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es2019",
-    "sourceMap": true,
-    "jsx": "react"
+    "sourceMap": true
   },
   "include": [".eslintrc.js", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
   "exclude": ["node_modules", "dist"]
