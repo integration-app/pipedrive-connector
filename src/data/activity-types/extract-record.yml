@@ -1,0 +1,4 @@
+id:
+  $var: $.key_string
+name:
+  $var: $.name

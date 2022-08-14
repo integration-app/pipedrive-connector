@@ -15,8 +15,8 @@ properties:
       email:
         type: string
   user_id:
-    type: string
-    referenceCollectionPath: /data/users
+    type: integer
+    referenceCollectionPath: /data/users?active=1
   user:
     type: object
     properties:
@@ -27,7 +27,7 @@ properties:
       email:
         type: string
   person_id:
-    type: string
+    type: integer
     referenceCollectionPath: /data/persons
   person:
     type: object

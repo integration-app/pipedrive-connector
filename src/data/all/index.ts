@@ -4,43 +4,42 @@ import {
   DataDirectoryListResponse,
   DataLocationType,
 } from '@integration-app/sdk/connector-api'
-import activities from '../collections/activities'
-import deals from '../collections/deals'
-import leads from '../collections/leads'
-import organizations from '../collections/organizations'
-import persons from '../collections/persons'
-import users from '../collections/users'
 
-export default {
+export default new DataDirectoryHandler({
   path: 'data/root',
 
-  spec,
+  async spec(): Promise<DataDirectorySpec> {
+    return {
+      type: DataLocationType.directory,
+      name: 'Pipedrive',
+    }
+  },
 
   list: async (): Promise<DataDirectoryListResponse> => {
     const collections = [
       {
         name: 'Organizations',
-        path: organizations.path,
+        path: '/data/organizations',
       },
       {
         name: 'Persons',
-        path: persons.path,
+        path: '/data/persons',
       },
       {
         name: 'Deals',
-        path: deals.path,
+        path: '/data/deals',
       },
       {
         name: 'Leads',
-        path: leads.path,
+        path: '/data/leads',
       },
       {
         name: 'Activities',
-        path: activities.path,
+        path: '/data/activities',
       },
       {
         name: 'Users',
-        path: users.path,
+        path: '/data/users',
       },
     ]
     const locations = await Promise.all(
@@ -54,11 +53,4 @@ export default {
     )
     return { locations }
   },
-} as DataDirectoryHandler
-
-async function spec(): Promise<DataDirectorySpec> {
-  return {
-    type: DataLocationType.directory,
-    name: 'Pipedrive',
-  }
-}
+})

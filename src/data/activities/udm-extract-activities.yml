@@ -4,8 +4,6 @@ description:
   $var: $.public_description
 type:
   $var: $.type
-durationSeconds:
-  $var: $.duration # it's not in seconds here, but "10:01"
 location:
   $var: $.location
 participants:

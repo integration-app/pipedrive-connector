@@ -10,7 +10,7 @@
   "ignoreRoot": [
     ".git"
   ],
-  "ext": "ts,json",
+  "ext": "ts,json,yml",
   "events": {
     "start": "eslint . --ext ts"
   }

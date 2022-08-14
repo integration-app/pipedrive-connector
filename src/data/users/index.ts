@@ -8,20 +8,17 @@ import { objectCollectionHandler } from '../common'
 
 const FIELDS = ['name', 'email', 'active_flag']
 
-const users: DataCollectionHandler = {
+const users = new DataCollectionHandler({
   ...objectCollectionHandler({
     ymlDir: __dirname,
     path: 'users',
     name: 'Users',
-    createFields: FIELDS,
     requiredFields: FIELDS,
-    updateFields: ['active_flag'],
     queryFields: ['email', 'name'],
     eventObject: 'user',
-    udm: 'users',
   }),
   find: findUsers,
-}
+})
 
 export default users
 
@@ -34,7 +31,13 @@ async function findUsers(request: ConnectorDataCollectionFindRequest) {
   if (request.query) {
     return queryUsers({ ...request, query: request.query })
   } else {
-    return getRecords({ ...request, path: 'users' })
+    const result = await getRecords({ ...request, path: 'users' })
+    if (request.parameters.active) {
+      result.records = result.records.filter(
+        (record) => record.fields.active_flag,
+      )
+    }
+    return result
   }
 }
 

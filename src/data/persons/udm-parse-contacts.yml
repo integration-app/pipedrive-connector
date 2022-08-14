@@ -27,5 +27,3 @@ update_time:
   $var: $.updatedTime
 last_activity_date:
   $var: $.lastActivityTime
-marketing_status:
-  $var: $.stage

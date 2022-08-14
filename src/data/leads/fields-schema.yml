@@ -7,7 +7,7 @@ properties:
   owner_id:
     title: Owner
     type: integer
-    referenceCollectionPath: /data/users
+    referenceCollectionPath: /data/users?active=1
   creator_id:
     title: Creator
     type: integer
@@ -17,6 +17,7 @@ properties:
     type: array
     items:
       type: string
+      referenceCollectionPath: /data/lead-labels
   value:
     type: object
     properties:

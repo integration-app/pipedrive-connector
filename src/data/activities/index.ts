@@ -28,7 +28,6 @@ const activities = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
   eventObject: 'activity',
-  udm: 'activities',
   extendExtractUnifiedFields: async (
     request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
     unifiedFields,

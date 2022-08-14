@@ -6,8 +6,6 @@ type:
   $var: $.type
 location:
   $var: $.location
-duration:
-  $var: $.durationSeconds
 subject:
   $var: $.title
 public_description:
@@ -32,7 +30,5 @@ participants:
   $iterate:
     locator: $.participants
     items:
-      user_id:
-        $var: $.participants.$current.userId
       person_id:
         $var: $.participants.$current.contactId

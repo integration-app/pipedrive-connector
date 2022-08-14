@@ -1,5 +1,4 @@
 import {
-  ConnectorRequestData,
   DataCollectionHandler,
   makeDataBuilder,
 } from '@integration-app/connector-sdk'
@@ -23,13 +22,13 @@ import {
   makeCollectionHandler,
 } from '@integration-app/connector-sdk'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
+import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
 
 export function objectCollectionHandler({
   ymlDir = null,
   path,
   customFieldsPath = null,
   name,
-  udm = null,
   createFields = null,
   requiredFields = null,
   updateFields = null,
@@ -42,7 +41,6 @@ export function objectCollectionHandler({
   customFieldsPath?: string
   name: string
   fieldsSchema?: any
-  udm?: string
   queryFields?: string[]
   createFields?: string[]
   requiredFields?: string[]
@@ -97,55 +95,52 @@ export function objectCollectionHandler({
   }
 
   const handler = makeCollectionHandler({
-    ymlDir,
-    path,
     name,
-    udm,
-    extendSpec: async (
-      request: ConnectorRequestData,
-      specFromYml: any,
-    ): Promise<DataCollectionSpec> => {
-      const spec = JSON.parse(JSON.stringify(specFromYml))
-
-      const customFieldsKeys = []
-      if (customFieldsPath !== null) {
-        const customFields = await getCustomFields(
-          customFieldsPath,
-          request.apiClient,
-        )
-        for (const customField of customFields) {
-          if (!(customField.key in spec.fieldsSchema.properties)) {
-            spec.fieldsSchema.properties[customField.key] = {
-              title: customField.name,
-              ...getCustomFieldSchema(customField),
-            }
-            customFieldsKeys.push(customField.key)
-          }
-        }
-      }
-
-      if (queryFields) {
-        spec.find = {
-          queryFields,
-        }
-      }
-      if (createFields) {
-        spec.create = {
-          fields: [...createFields, ...customFieldsKeys],
-          requiredFields,
-        }
-      }
-      if (updateFields) {
-        spec.update = {
-          fields: [...updateFields, ...customFieldsKeys],
-        }
-      }
-      return spec
-    },
     find,
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
     extendExtractUnifiedFields,
   })
+
+  handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
+    const spec = JSON.parse(JSON.stringify(request.defaultSpec))
+
+    const editableCustomFieldKeys = []
+    if (customFieldsPath !== null) {
+      const customFields = await getCustomFields(
+        customFieldsPath,
+        request.apiClient,
+      )
+      for (const customField of customFields) {
+        if (!(customField.key in spec.fieldsSchema.properties)) {
+          spec.fieldsSchema.properties[customField.key] = {
+            title: customField.name,
+            ...getCustomFieldSchema(customField),
+          }
+          if (customField.edit_flag) {
+            editableCustomFieldKeys.push(customField.key)
+          }
+        }
+      }
+    }
+
+    if (queryFields) {
+      spec.find = {
+        queryFields,
+      }
+    }
+    if (createFields) {
+      spec.create = {
+        fields: [...createFields, ...editableCustomFieldKeys],
+        requiredFields,
+      }
+    }
+    if (updateFields) {
+      spec.update = {
+        fields: [...updateFields, ...editableCustomFieldKeys],
+      }
+    }
+    return spec
+  }
 
   if (createFields) {
     handler.create = async (request) => createRecord({ ...request, path })

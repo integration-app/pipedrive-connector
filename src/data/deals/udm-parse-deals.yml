@@ -19,7 +19,7 @@ renewal_type:
 status:
   $var: $.status
 close_time:
-  $var: $.closeTme
+  $var: $.closeTime
 creator_user_id:
   $var: $.createdBy
 add_time:
