@@ -17,6 +17,7 @@ properties:
     type: array
     items:
       type: string
+      referenceCollectionPath: /data/lead-labels
   value:
     type: object
     properties:

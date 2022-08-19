@@ -13,7 +13,6 @@ const organizations = objectCollectionHandler({
   requiredFields: ['name'],
   queryFields: ['name', 'address'],
   eventObject: 'organization',
-  udm: 'companies',
 })
 
 export default organizations

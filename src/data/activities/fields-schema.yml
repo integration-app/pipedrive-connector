@@ -11,7 +11,7 @@ properties:
     type: boolean
   type:
     type: string
-    referenceCollectionPath: /data/activityTypes
+    referenceCollectionPath: /data/activity-types
   reference_type:
     type: string
   reference_id:
@@ -63,7 +63,7 @@ properties:
     type: integer
     referenceCollectionPath: /data/deals
   lead_id:
-    type: integer
+    type: string
     referenceCollectionPath: /data/leads
   active_flag:
     type: boolean

@@ -8,20 +8,17 @@ import { objectCollectionHandler } from '../common'
 
 const FIELDS = ['name', 'email', 'active_flag']
 
-const users: DataCollectionHandler = {
+const users = new DataCollectionHandler({
   ...objectCollectionHandler({
     ymlDir: __dirname,
     path: 'users',
     name: 'Users',
-    createFields: FIELDS,
     requiredFields: FIELDS,
-    updateFields: ['active_flag'],
     queryFields: ['email', 'name'],
     eventObject: 'user',
-    udm: 'users',
   }),
   find: findUsers,
-}
+})
 
 export default users
 
@@ -34,7 +31,13 @@ async function findUsers(request: ConnectorDataCollectionFindRequest) {
   if (request.query) {
     return queryUsers({ ...request, query: request.query })
   } else {
-    return getRecords({ ...request, path: 'users' })
+    const result = await getRecords({ ...request, path: 'users' })
+    // Pipedrive doesn't work well with inactive users, so it's better to pretend they don't exist.
+    // For example, it doesn't allow searching inactive users, and doens't allow assigning them to many fields.
+    result.records = result.records.filter(
+      (record) => record.fields.active_flag,
+    )
+    return result
   }
 }
 
@@ -45,7 +48,7 @@ async function queryUsers({ apiClient, query }) {
       apiClient,
       query: {
         term: query.email,
-        query_by: 'email',
+        search_by_email: 1,
       },
     })
   } else if (query.name) {
@@ -54,7 +57,7 @@ async function queryUsers({ apiClient, query }) {
       apiClient,
       query: {
         term: query.name,
-        query_by: 'name',
+        search_by_email: 0,
       },
     })
   } else {

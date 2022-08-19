@@ -2,23 +2,11 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import { ConnectorServer, RestApiClient } from '@integration-app/connector-sdk'
-import persons from './collections/persons'
-import deals from './collections/deals'
-import activities from './collections/activities'
-import leads from './collections/leads'
-import organizations from './collections/organizations'
 import { ConnectionMode } from '@integration-app/sdk/integrations'
-import users from './collections/users'
-import rootDirectory from './directories/root'
 import { testConnection } from './api'
-import {
-  activityTypes,
-  leadLabels,
-  pipelines,
-  stages,
-} from './collections/references'
 
 export const server = new ConnectorServer({
+  rootDir: __dirname,
   baseUri: process.env.BASE_URI,
   connectionMode: ConnectionMode.IFRAME,
   name: 'Pipedrive',
@@ -53,38 +41,25 @@ export const server = new ConnectorServer({
   },
   data: {
     root: {
-      path: rootDirectory.path,
+      path: '/data/all',
     },
     leads: {
-      path: leads.path,
+      path: '/data/leads',
     },
     contacts: {
-      path: persons.path,
+      path: '/data/persons',
     },
     companies: {
-      path: organizations.path,
+      path: '/data/organizations',
     },
     deals: {
-      path: deals.path,
+      path: '/data/deals',
     },
     activities: {
-      path: activities.path,
+      path: '/data/activities',
     },
     users: {
-      path: users.path,
+      path: '/data/users',
     },
   } as any,
 })
-
-server.dataDirectory(rootDirectory)
-
-server.dataCollection(organizations)
-server.dataCollection(persons)
-server.dataCollection(deals)
-server.dataCollection(leads)
-server.dataCollection(activities)
-server.dataCollection(users)
-server.dataCollection(pipelines)
-server.dataCollection(stages)
-server.dataCollection(activityTypes)
-server.dataCollection(leadLabels)

@@ -45,7 +45,7 @@ export async function handleSubscriptionWebhook({
   subscription,
   body = null,
   extractRecord,
-}): Promise<DataCollectionEvent[]> {
+}) {
   const eventType = getDataCollectionEventType(body)
 
   const events = subscription.events
@@ -81,7 +81,7 @@ export async function handleSubscriptionWebhook({
         : await extractRecord(body.current),
   }
 
-  return [event]
+  return { events: [event] }
 }
 
 function getDataCollectionEventType(pipedriveEventBody) {

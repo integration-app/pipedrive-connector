@@ -18,7 +18,6 @@ const leads = objectCollectionHandler({
   updateFields: MODIFIABLE_FIELDS,
   requiredFields: ['title'], // actually, you also has to provide either organization_id or person_id
   queryFields: ['title'],
-  udm: 'leads',
 })
 
 export default leads

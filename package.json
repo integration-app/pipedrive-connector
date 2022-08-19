@@ -5,31 +5,12 @@
     "clean": "rimraf dist",
     "build:compile": "tsc --project tsconfig.build.json",
     "build:copy": "copy src/**/*.y*ml dist/",
-    "start": "NODE_ENV=production node dist/index.js",
-    "test": "jest"
-  },
-  "jest": {
-    "verbose": true,
-    "forceExit": true,
-    "testTimeout": 600000,
-    "moduleFileExtensions": [
-      "ts",
-      "json",
-      "js"
-    ],
-    "roots": [
-      "src",
-      "tests"
-    ],
-    "testRegex": ".*\\.test\\.ts$",
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testEnvironment": "node"
+    "start": "node dist/index.js",
+    "test": "ts-node tests/index.test"
   },
   "dependencies": {
-    "@integration-app/connector-sdk": "^0.6.26",
-    "@integration-app/sdk": "^0.15.4",
+    "@integration-app/connector-sdk": "^0.7.10",
+    "@integration-app/sdk": "^0.15.23",
     "@sinclair/typebox": "^0.22.1",
     "axios": "^0.26.0",
     "dotenv": "^10.0.0",
@@ -41,7 +22,6 @@
     "yaml": "^2.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "copy": "^0.3.2",
     "env-var": "^7.1.1",
@@ -49,11 +29,10 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "generate-random-data": "^0.0.3",
-    "jest": "^27.3.1",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",
     "supertest": "^6.1.6",
-    "ts-jest": "^27.0.7",
+    "ts-node": "^10.9.1",
     "typescript": "^4.5.2"
   }
 }

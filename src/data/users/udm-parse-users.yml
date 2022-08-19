@@ -3,7 +3,7 @@ name:
 email:
   $var: $.primaryEmail
 phone:
-  $var: $.phone
+  $var: $.primaryPhone
 timezone_name:
   $var: $.timezone
 active_flag:

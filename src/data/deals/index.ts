@@ -26,7 +26,6 @@ const deals = objectCollectionHandler({
   updateFields: MODIFIABLE_FIELDS,
   queryFields: ['title'],
   eventObject: 'deal',
-  udm: 'deals',
 })
 
 export default deals

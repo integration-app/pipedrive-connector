@@ -20,7 +20,6 @@ const persons = objectCollectionHandler({
   updateFields: MODIFIABLE_FIELDS,
   queryFields: ['email', 'name', 'phone'],
   eventObject: 'person',
-  udm: 'contacts',
 })
 
 export default persons
