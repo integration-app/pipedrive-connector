@@ -5,7 +5,7 @@
     "clean": "rimraf dist",
     "build:compile": "tsc --project tsconfig.build.json",
     "build:copy": "copy src/**/*.y*ml dist/",
-    "start": "NODE_ENV=production node dist/index.js",
+    "start": "node dist/index.js",
     "test": "ts-node tests/index.test"
   },
   "dependencies": {
