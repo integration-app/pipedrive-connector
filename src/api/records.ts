@@ -13,6 +13,7 @@ export async function getRecords({
   query = null,
   cursor = null,
   extractRecord = null,
+  activeOnly = false,
 }) {
   const limit = MAX_LIMIT
   const parameters = {
@@ -21,14 +22,22 @@ export async function getRecords({
     limit,
   }
   const response = await apiClient.get(path, parameters)
+
   const nextCursor =
     response.additional_data?.pagination?.next_start?.toString()
+
+  let records = response.data ?? []
+
+  if (activeOnly) {
+    records = records.filter((record) => record.active_flag)
+  }
+
+  records = await Promise.all(
+    response.data.map(extractRecord ?? defaultExtractRecord),
+  )
+
   return {
-    records: response.data
-      ? await Promise.all(
-          response.data.map(extractRecord ?? defaultExtractRecord),
-        )
-      : [],
+    records,
     cursor: nextCursor,
   }
 }
@@ -65,7 +74,8 @@ export async function searchRecords({
 
   const parameters = {
     term,
-    query: field,
+    fields: field,
+    exact_match: true,
   } as any
 
   const response = await apiClient.get(`${path}/search`, parameters)

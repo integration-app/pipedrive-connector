@@ -37,7 +37,7 @@ properties:
   owner_id:
     type: integer
     title: Owner
-    referenceCollectionPath: /data/users?active=1
+    referenceCollectionPath: /data/users
   owner:
     type: object
     properties:

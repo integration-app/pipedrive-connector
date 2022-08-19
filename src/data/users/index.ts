@@ -32,11 +32,11 @@ async function findUsers(request: ConnectorDataCollectionFindRequest) {
     return queryUsers({ ...request, query: request.query })
   } else {
     const result = await getRecords({ ...request, path: 'users' })
-    if (request.parameters.active) {
-      result.records = result.records.filter(
-        (record) => record.fields.active_flag,
-      )
-    }
+    // Pipedrive doesn't work well with inactive users, so it's better to pretend they don't exist.
+    // For example, it doesn't allow searching inactive users, and doens't allow assigning them to many fields.
+    result.records = result.records.filter(
+      (record) => record.fields.active_flag,
+    )
     return result
   }
 }
@@ -48,7 +48,7 @@ async function queryUsers({ apiClient, query }) {
       apiClient,
       query: {
         term: query.email,
-        query_by: 'email',
+        search_by_email: 1,
       },
     })
   } else if (query.name) {
@@ -57,7 +57,7 @@ async function queryUsers({ apiClient, query }) {
       apiClient,
       query: {
         term: query.name,
-        query_by: 'name',
+        search_by_email: 0,
       },
     })
   } else {

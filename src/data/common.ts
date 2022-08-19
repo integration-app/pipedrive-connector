@@ -34,6 +34,7 @@ export function objectCollectionHandler({
   updateFields = null,
   queryFields = null,
   eventObject = null,
+  activeOnly = false,
   extendExtractUnifiedFields = null,
 }: {
   ymlDir?: string
@@ -46,6 +47,7 @@ export function objectCollectionHandler({
   requiredFields?: string[]
   updateFields?: string[]
   eventObject?: string
+  activeOnly?: boolean
   extendExtractUnifiedFields?: (
     request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
     unifiedFields: Record<string, any>,
@@ -90,7 +92,7 @@ export function objectCollectionHandler({
         extractRecord: extractRecordSearch,
       })
     } else {
-      return getRecords({ ...request, path, extractRecord })
+      return getRecords({ ...request, path, extractRecord, activeOnly })
     }
   }
 

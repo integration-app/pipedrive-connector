@@ -5,4 +5,5 @@ export default objectCollectionHandler({
   name: 'Activity Types',
   path: 'activityTypes',
   fieldsSchema: null,
+  activeOnly: true,
 })

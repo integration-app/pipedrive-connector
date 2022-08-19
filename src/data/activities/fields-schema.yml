@@ -6,7 +6,7 @@ properties:
     type: integer
   user_id:
     type: integer
-    referenceCollectionPath: /data/users?active=1
+    referenceCollectionPath: /data/users
   done:
     type: boolean
   type:

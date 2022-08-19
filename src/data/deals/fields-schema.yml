@@ -16,7 +16,7 @@ properties:
         type: string
   user_id:
     type: integer
-    referenceCollectionPath: /data/users?active=1
+    referenceCollectionPath: /data/users
   user:
     type: object
     properties:
