@@ -104,7 +104,7 @@ export function objectCollectionHandler({
   })
 
   handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
-    const spec = JSON.parse(JSON.stringify(request.defaultSpec))
+    const spec = request.defaultSpec
 
     const editableCustomFieldKeys = []
     if (customFieldsPath !== null) {
@@ -141,6 +141,9 @@ export function objectCollectionHandler({
         fields: [...updateFields, ...editableCustomFieldKeys],
       }
     }
+
+    console.log('SPEC', spec, request.defaultSpec)
+
     return spec
   }
 
