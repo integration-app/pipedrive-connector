@@ -6,8 +6,6 @@ import {
 } from '@integration-app/sdk/connector-api'
 
 export default new DataDirectoryHandler({
-  path: 'data/root',
-
   async spec(): Promise<DataDirectorySpec> {
     return {
       type: DataLocationType.directory,

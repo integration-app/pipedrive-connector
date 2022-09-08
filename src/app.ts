@@ -41,7 +41,7 @@ export const server = new ConnectorServer({
   },
   data: {
     root: {
-      path: '/data/all',
+      path: '/data/root',
     },
     leads: {
       path: '/data/leads',
