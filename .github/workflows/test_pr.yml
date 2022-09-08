@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: data
-          path: /tmp/data-*
+          path: /tmp/*.yml
       - name: Show Docker Logs
         run: docker-compose logs
         if: failure()
