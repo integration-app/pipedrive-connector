@@ -33,7 +33,7 @@ export async function getRecords({
   }
 
   records = await Promise.all(
-    response.data.map(extractRecord ?? defaultExtractRecord),
+    records.map(extractRecord ?? defaultExtractRecord),
   )
 
   return {
