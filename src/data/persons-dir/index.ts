@@ -11,13 +11,13 @@ const handler = new DataDirectoryHandler({
     locations: [
       {
         type: DataLocationType.collection,
-        uri: '/data/persons',
+        path: '/data/persons',
         name: 'All Persons',
         isDefault: true,
       },
       {
         type: DataLocationType.directory,
-        uri: '/data/person-filters',
+        path: '/data/person-filters',
         name: 'Person Filters',
       },
     ],
