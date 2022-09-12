@@ -10,18 +10,20 @@ import { MAX_LIMIT } from '.'
 export async function getRecords({
   apiClient,
   path,
+  parameters = null,
   query = null,
   cursor = null,
   extractRecord = null,
   activeOnly = false,
 }) {
   const limit = MAX_LIMIT
-  const parameters = {
+  const params = {
     ...(query ?? {}),
     start: cursor ?? '0',
+    ...(parameters?.filter_id ? { filter_id: parameters.filter_id } : {}),
     limit,
   }
-  const response = await apiClient.get(path, parameters)
+  const response = await apiClient.get(path, params)
 
   const nextCursor =
     response.additional_data?.pagination?.next_start?.toString()

@@ -17,23 +17,23 @@ export default new DataDirectoryHandler({
     const collections = [
       {
         name: 'Organizations',
-        path: '/data/organizations',
+        path: '/data/organizations-dir',
       },
       {
         name: 'Persons',
-        path: '/data/persons',
+        path: '/data/persons-dir',
       },
       {
         name: 'Deals',
-        path: '/data/deals',
+        path: '/data/deals-dir',
       },
       {
         name: 'Leads',
-        path: '/data/leads',
+        path: '/data/leads-dir',
       },
       {
         name: 'Activities',
-        path: '/data/activities',
+        path: '/data/activities-dir',
       },
       {
         name: 'Users',

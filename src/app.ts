@@ -44,19 +44,19 @@ export const server = new ConnectorServer({
       path: '/data/root',
     },
     leads: {
-      path: '/data/leads',
+      path: '/data/leads-dir',
     },
     contacts: {
-      path: '/data/persons',
+      path: '/data/persons-dir',
     },
     companies: {
-      path: '/data/organizations',
+      path: '/data/organizations-dir',
     },
     deals: {
-      path: '/data/deals',
+      path: '/data/deals-dir',
     },
     activities: {
-      path: '/data/activities',
+      path: '/data/activities-dir',
     },
     users: {
       path: '/data/users',
