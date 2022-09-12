@@ -35,10 +35,11 @@ jobs:
       - name: Run Tests
         run: docker-compose run test
       - name: Save data dumps as artifacts
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: data
-          path: /tmp/*.yml
+          path: /tmp/*.yaml
       - name: Show Docker Logs
         run: docker-compose logs
         if: failure()
