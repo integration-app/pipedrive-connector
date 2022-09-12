@@ -11,7 +11,7 @@ const handler = new DataDirectoryHandler({
   list: async ({ apiClient }) => ({
     locations: (await getFilters(apiClient, 'activity')).map((filter) => ({
       type: DataLocationType.collection,
-      uri: '/data/activities?filter_id=' + filter.id,
+      path: '/data/activities?filter_id=' + filter.id,
       name: filter.name,
     })),
   }),
