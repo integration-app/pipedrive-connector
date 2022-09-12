@@ -13,6 +13,7 @@ const handler = new DataDirectoryHandler({
         type: DataLocationType.collection,
         uri: '/data/persons',
         name: 'All Persons',
+        isDefault: true,
       },
       {
         type: DataLocationType.directory,
