@@ -8,46 +8,48 @@ on:
     branches: [main]
 
 jobs:
-  build-push-docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: kciter/aws-ecr-action@v3
-        with:
-          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: ${{ secrets.AWS_REGION }}
-          repo: ${{ github.event.repository.name }}
-          tags: latest
-          create_repo: true
+  # build-push-docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: kciter/aws-ecr-action@v3
+  #       with:
+  #         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+  #         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         region: ${{ secrets.AWS_REGION }}
+  #         repo: ${{ github.event.repository.name }}
+  #         tags: latest
+  #         create_repo: true
 
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  #     - uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
 
-      - uses: aws-actions/amazon-ecr-login@v1
-        id: login-ecr
+  #     - uses: aws-actions/amazon-ecr-login@v1
+  #       id: login-ecr
 
-      - name: ⌛ Scan Image
-        env:
-          TRIVY_USERNAME: ${{ secrets.PAT_USERNAME }}
-          TRIVY_PASSWORD: ${{ secrets.PAT_TOKEN }}
-        uses: aquasecurity/trivy-action@0.2.2
-        with:
-          image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:latest
-          hide-progress: false
-          format: 'table'
-          exit-code: '0'
-          severity: 'CRITICAL'
+  #     - name: ⌛ Scan Image
+  #       env:
+  #         TRIVY_USERNAME: ${{ secrets.PAT_USERNAME }}
+  #         TRIVY_PASSWORD: ${{ secrets.PAT_TOKEN }}
+  #       uses: aquasecurity/trivy-action@0.2.2
+  #       with:
+  #         image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:latest
+  #         hide-progress: false
+  #         format: 'table'
+  #         exit-code: '0'
+  #         severity: 'CRITICAL'
 
   deploy:
     needs:
       - build-push-docker
     name: Deploy to  Prod
-    runs-on: public.ecr.aws/boreddevops/argocd-cli:latest
+    runs-on: ubuntu-latest
+    container:
+      image: public.ecr.aws/boreddevops/argocd-cli:latest
     permissions:
       packages: write
       contents: read
