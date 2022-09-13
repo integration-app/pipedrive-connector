@@ -52,6 +52,10 @@ jobs:
       packages: write
       contents: read
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: ArgoCD refresh
         id: argocd-refresh
