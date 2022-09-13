@@ -43,21 +43,21 @@ jobs:
           exit-code: '0'
           severity: 'CRITICAL'
 
-    deploy:
-      needs:
-        - build-push-docker
-      name: Deploy to  Prod
-      runs-on: public.ecr.aws/boreddevops/argocd-cli:latest
-      permissions:
-        packages: write
-        contents: read
+  deploy:
+    needs:
+      - build-push-docker
+    name: Deploy to  Prod
+    runs-on: public.ecr.aws/boreddevops/argocd-cli:latest
+    permissions:
+      packages: write
+      contents: read
 
-      steps:
-        - name: ArgoCD refresh
-          id: argocd-refresh
-          with:
-            ARGOCD_USER: ${{ secrets.ARGOCD_USER }}
-            ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
-          run: |
-            argocd login argocd.production.intapp.dev --grpc-web --username ${ARGOCD_USER} --password ${ARGOCD_PASSWORD}
-            argocd app get ${{ github.event.repository.name }} --refresh --grpc-web
+    steps:
+      - name: ArgoCD refresh
+        id: argocd-refresh
+        with:
+          ARGOCD_USER: ${{ secrets.ARGOCD_USER }}
+          ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
+        run: |
+          argocd login argocd.production.intapp.dev --grpc-web --username ${ARGOCD_USER} --password ${ARGOCD_PASSWORD}
+          argocd app get ${{ github.event.repository.name }} --refresh --grpc-web
