@@ -52,16 +52,8 @@ jobs:
       packages: write
       contents: read
 
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - name: ArgoCD refresh
-        id: argocd-refresh
-        with:
-          ARGOCD_USER: ${{ secrets.ARGOCD_USER }}
-          ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
         run: |
-          argocd login argocd.production.intapp.dev --grpc-web --username ${ARGOCD_USER} --password ${ARGOCD_PASSWORD}
+          argocd login argocd.production.intapp.dev --grpc-web --username ${{ secrets.ARGOCD_USER }} --password ${{ secrets.ARGOCD_PASSWORD }}
           argocd app get ${{ github.event.repository.name }} --refresh --grpc-web
