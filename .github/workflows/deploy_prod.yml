@@ -44,8 +44,8 @@ jobs:
   #         severity: 'CRITICAL'
 
   deploy:
-    needs:
-      - build-push-docker
+    # needs:
+    #   - build-push-docker
     name: Deploy to  Prod
     runs-on: ubuntu-latest
     container:
