@@ -44,7 +44,7 @@ jobs:
           severity: 'CRITICAL'
 
     deploy:
-      needs: needs:
+      needs:
         - build-push-docker
       name: Deploy to  Prod
       runs-on: public.ecr.aws/boreddevops/argocd-cli:latest
