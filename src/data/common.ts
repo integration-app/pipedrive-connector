@@ -142,8 +142,6 @@ export function objectCollectionHandler({
       }
     }
 
-    console.log('SPEC', spec, request.defaultSpec)
-
     return spec
   }
 
