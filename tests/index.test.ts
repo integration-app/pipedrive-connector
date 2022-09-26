@@ -13,6 +13,7 @@ const runner = new TestRunner({
     ],
   },
   queryDelay: 5000,
+  filter: process.argv[2],
 })
 
 runner.runTests(async () => {
