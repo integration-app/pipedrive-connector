@@ -37,23 +37,14 @@ jobs:
         with:
           image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:latest
           hide-progress: false
-          format: "table"
-          exit-code: "0"
-          severity: "CRITICAL"
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL'
 
-  deploy-infra:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  deploy:
     needs:
       - build-push-docker
-    steps:
-      - name: 🚀 Trigger App Deploy
-        uses: convictional/trigger-workflow-and-wait@v1.6.0
-        with:
-          owner: integration-app
-          repo: integration-infrastructure
-          github_user: ${{ secrets.PAT_USERNAME }}
-          github_token: ${{ secrets.PAT_TOKEN }}
-          workflow_file_name: deploy_prod.yml
-          client_payload: '{ "TRIGGERED_BY": "${{ github.repository }}" }'
-          wait_interval: 5
+    uses: integration-app/workflows/.github/workflows/deploy_app_to_prod.yml@main
+    with:
+      application: ${{ github.event.repository.name }}
+    secrets: inherit
