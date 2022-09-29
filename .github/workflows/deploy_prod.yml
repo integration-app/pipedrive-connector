@@ -47,5 +47,5 @@ jobs:
     #   - build-push-docker
     uses: integration-app/workflows/.github/workflows/deploy_app_to_prod.yml@main
     with:
-      application: ${{ github.repository }}
+      application: ${{ github.event.repository.name }}
     secrets: inherit
