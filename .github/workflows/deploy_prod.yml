@@ -45,8 +45,6 @@ jobs:
   deploy:
     needs:
       - build-push-docker
-    runs-on: ubuntu-latest
     uses: integration-app/helm/.github/workflows/deploy_app_to_prod.yml@main
-      with:
-        application: ${{ github.repository }}
-
+    with:
+      application: ${{ github.repository }}
