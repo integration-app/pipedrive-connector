@@ -8,6 +8,7 @@ import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-coll
 import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
 import * as fs from 'fs'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
+import { getFilterById } from '../api/filters'
 import {
   createRecord,
   defaultExtractRecord,
@@ -103,7 +104,10 @@ export function objectCollectionHandler({
 
   handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
     const spec = request.defaultSpec
-    spec.name = request.parameters?.filter_name ?? name
+    const filter = request.parameters?.filter_id
+      ? await getFilterById(request.apiClient, request.parameters.filter_id)
+      : null
+    spec.name = filter?.name ?? name
 
     const editableCustomFieldKeys = []
     if (customFieldsPath !== null) {
