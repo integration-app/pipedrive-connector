@@ -1,5 +1,5 @@
-import { DataLocationType } from '@integration-app/sdk/connector-api'
 import { DataDirectoryHandler } from '@integration-app/connector-sdk'
+import { DataLocationType } from '@integration-app/sdk/connector-api'
 import { getFilters } from '../../api/filters'
 
 const handler = new DataDirectoryHandler({

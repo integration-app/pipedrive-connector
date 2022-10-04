@@ -1,8 +1,14 @@
 import {
+  ConnectorDataCollectionExtractUnifiedFieldsRequest,
   DataCollectionHandler,
+  makeCollectionHandler,
   makeDataBuilder,
 } from '@integration-app/connector-sdk'
+import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
 import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
+import * as fs from 'fs'
+import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
+import { getFilterById } from '../api/filters'
 import {
   createRecord,
   defaultExtractRecord,
@@ -16,13 +22,6 @@ import {
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
-import * as fs from 'fs'
-import {
-  ConnectorDataCollectionExtractUnifiedFieldsRequest,
-  makeCollectionHandler,
-} from '@integration-app/connector-sdk'
-import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
-import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
 
 export function objectCollectionHandler({
   ymlDir = null,
@@ -105,6 +104,10 @@ export function objectCollectionHandler({
 
   handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
     const spec = request.defaultSpec
+    const filter = request.parameters?.filter_id
+      ? await getFilterById(request.apiClient, request.parameters.filter_id)
+      : null
+    spec.name = filter?.name ?? name
 
     const editableCustomFieldKeys = []
     if (customFieldsPath !== null) {
