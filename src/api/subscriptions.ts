@@ -1,51 +1,53 @@
 import {
-  ConnectorDataCollectionSubscribeRequest,
-  ConnectorDataCollectionUnsubscribeRequest,
+  WebhookUnsubscribeArgs,
+  HandleWebhookResponse,
 } from '@integration-app/connector-sdk'
-import { DataCollectionUnsubscribeResponse } from '@integration-app/sdk/connector-api'
 import { BadRequestError } from '@integration-app/sdk/errors'
 import {
   DataCollectionEvent,
   DataCollectionEventType,
 } from '@integration-app/sdk/data-collections'
+import { WebhookSubscribeArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
 
 export async function subscribeToCollection({
   apiClient,
   subscription,
-  subscriptionManager,
   eventObject,
-}: ConnectorDataCollectionSubscribeRequest & {
+  connectorWebhookUri,
+}: WebhookSubscribeArgs & {
   eventObject: string
 }) {
+  console.debug(
+    `[Subscription ${subscription.id}] Subscribing to object ${eventObject} with webhook ${connectorWebhookUri}`,
+  )
   const webhookResponse = await apiClient.post('webhooks', {
-    subscription_url: subscription.connectorWebhookUri,
+    subscription_url: connectorWebhookUri,
     event_action: '*',
     event_object: eventObject,
   })
 
-  await subscriptionManager.setSubscriptionState(subscription.id, {
+  return {
     webhookId: webhookResponse.data.id,
-  })
-
-  return {}
+  }
 }
 
 export async function unsubscribeFromCollection({
   apiClient,
   subscription,
-}: ConnectorDataCollectionUnsubscribeRequest): Promise<DataCollectionUnsubscribeResponse> {
-  console.debug('Unsubscribing from subscription', subscription)
+  subscriptionState,
+}: WebhookUnsubscribeArgs): Promise<void> {
+  console.debug(
+    `[Subscription ${subscription.id}] Unsubscribing from webhook ${subscriptionState.webhokId}`,
+  )
 
-  await apiClient.delete(`webhooks/${subscription.state.webhookId}`)
-
-  return {}
+  await apiClient.delete(`webhooks/${subscriptionState.webhookId}`)
 }
 
 export async function handleSubscriptionWebhook({
   subscription,
   body = null,
   extractRecord,
-}) {
+}): Promise<HandleWebhookResponse> {
   const eventType = getDataCollectionEventType(body)
 
   const events = subscription.events
