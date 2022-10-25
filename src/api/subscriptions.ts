@@ -37,7 +37,7 @@ export async function unsubscribeFromCollection({
   subscriptionState,
 }: WebhookUnsubscribeArgs): Promise<void> {
   console.debug(
-    `[Subscription ${subscription.id}] Unsubscribing from webhook ${subscriptionState.webhokId}`,
+    `[Subscription ${subscription.id}] Unsubscribing from webhook ${subscriptionState.webhookId}`,
   )
 
   await apiClient.delete(`webhooks/${subscriptionState.webhookId}`)
