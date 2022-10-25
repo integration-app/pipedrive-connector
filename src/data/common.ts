@@ -4,7 +4,10 @@ import {
   makeCollectionHandler,
   makeDataBuilder,
 } from '@integration-app/connector-sdk'
-import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import {
+  SpecArgs,
+  WebhookSubscriptionHandler,
+} from '@integration-app/connector-sdk/dist/handlers/data-collection'
 import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
 import * as fs from 'fs'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
@@ -157,11 +160,12 @@ export function objectCollectionHandler({
   }
 
   if (eventObject) {
-    handler.subscribe = (request) =>
-      subscribeToCollection({ ...request, eventObject })
-    handler.unsubscribe = unsubscribeFromCollection
-    handler.webhook = (request) =>
-      handleSubscriptionWebhook({ ...request, extractRecord })
+    handler.subscription = new WebhookSubscriptionHandler({
+      subscribe: (args) => subscribeToCollection({ ...args, eventObject }),
+      unsubscribe: unsubscribeFromCollection,
+      handleWebhook: (args) =>
+        handleSubscriptionWebhook({ ...args, extractRecord }),
+    })
   }
 
   return handler
