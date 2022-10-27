@@ -14,41 +14,33 @@ export default new DataDirectoryHandler({
   },
 
   list: async (): Promise<DataDirectoryListResponse> => {
-    const collections = [
-      {
-        name: 'Organizations',
-        path: '/data/organizations-dir',
-      },
-      {
-        name: 'Persons',
-        path: '/data/persons-dir',
-      },
-      {
-        name: 'Deals',
-        path: '/data/deals-dir',
-      },
-      {
-        name: 'Leads',
-        path: '/data/leads-dir',
-      },
-      {
-        name: 'Activities',
-        path: '/data/activities-dir',
-      },
-      {
-        name: 'Users',
-        path: '/data/users',
-      },
-    ]
-    const locations = await Promise.all(
-      collections.map(async (collection) => {
-        return {
-          type: DataLocationType.collection,
-          uri: collection.path as string,
-          name: collection.name as string,
-        }
-      }),
-    )
-    return { locations }
+    return {
+      locations: [
+        {
+          name: 'Organizations',
+          path: '/data/organizations-dir',
+        },
+        {
+          name: 'Persons',
+          path: '/data/persons-dir',
+        },
+        {
+          name: 'Deals',
+          path: '/data/deals-dir',
+        },
+        {
+          name: 'Leads',
+          path: '/data/leads-dir',
+        },
+        {
+          name: 'Activities',
+          path: '/data/activities-dir',
+        },
+        {
+          name: 'Users',
+          path: '/data/users',
+        },
+      ],
+    }
   },
 })
