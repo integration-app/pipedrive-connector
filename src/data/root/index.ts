@@ -1,7 +1,7 @@
 import { DataDirectoryHandler } from '@integration-app/connector-sdk'
 import {
-  DataDirectorySpec,
   DataDirectoryListResponse,
+  DataDirectorySpec,
   DataLocationType,
 } from '@integration-app/sdk/connector-api'
 
@@ -27,6 +27,10 @@ export default new DataDirectoryHandler({
         {
           name: 'Deals',
           path: '/data/deals-dir',
+        },
+        {
+          name: 'Products',
+          path: '/data/products',
         },
         {
           name: 'Leads',
