@@ -1,0 +1,53 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+url:
+  $concat: ['https://app.pipedrive.com/product/', $var: $.id]
+fields:
+  name:
+    $var: $.name
+  id:
+    $var: $.id
+  code:
+    $var: $.code
+  description:
+    $var: $.description
+  unit:
+    $var: $.unit
+  tax:
+    $var: $.tax
+  category:
+    $var: $.category
+  active_flag:
+    $var: $.active_flag
+  selectable:
+    $var: $.selectable
+  visible_to:
+    $var: $.visible_to
+  owner_id:
+    $var: $.owner_id.id
+  files_count:
+    $var: $.files_count
+  followers_count:
+    $var: $.followers_count
+  add_time:
+    $var: $.add_time
+  update_time:
+    $var: $.update_time
+  prices:
+    $iterate:
+      locator: $.prices
+      items:
+        id:
+          $var: $.prices.$current.id
+        product_id:
+          $var: $.prices.$current.product_id
+        price:
+          $var: $.prices.$current.price
+        currency:
+          $var: $.prices.$current.currency
+        cost:
+          $var: $.prices.$current.cost
+        overhead_cost:
+          $var: $.prices.$current.overhead_cost

@@ -1,0 +1,16 @@
+name:
+  $var: $.name
+code:
+  $var: $.code
+description:
+  $var: $.description
+category:
+  $var: $.type
+owner_id:
+  $var: $.ownerId
+active_flag:
+  $var: $.isActive
+add_time:
+  $var: $.createdTime
+update_time:
+  $var: $.updatedTime
