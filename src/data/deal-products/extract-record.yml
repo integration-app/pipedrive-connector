@@ -1,0 +1,43 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  name:
+    $var: $.name
+  quantity:
+    $var: $.quantity
+  deal_id:
+    $var: $.deal_id
+  product_id:
+    $var: $.product_id
+  order_nr:
+    $var: $.order_nr
+  product_variation_id:
+    $var: $.product_variation_id
+  item_price:
+    $var: $.item_price
+  discount_percentage:
+    $var: $.discount_percentage
+  duration:
+    $var: $.duration
+  duration_unit:
+    $var: $.duration_unit
+  sum_no_discount:
+    $var: $.sum_no_discount
+  sum:
+    $var: $.sum
+  currency:
+    $var: $.currency
+  enabled_flag:
+    $var: $.enabled_flag
+  add_time:
+    $var: $.add_time
+  last_edit:
+    $var: $.last_edit
+  active_flag:
+    $var: $.active_flag
+  tax:
+    $var: $.tax
+  comments:
+    $var: $.comments

@@ -1,0 +1,55 @@
+name: Deal Products
+fieldsSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    name:
+      type: string
+    quantity:
+      type: integer
+    deal_id:
+      type: integer
+      referenceCollectionPath: /data/deals
+    product_id:
+      type: integer
+      referenceCollectionPath: /data/products
+    order_nr:
+      type: integer
+    product_variation_id:
+      type: integer
+    item_price:
+      type: integer
+    discount_percentage:
+      type: integer
+    duration:
+      type: integer
+    duration_unit:
+      type: string
+    sum_no_discount:
+      type: integer
+    sum:
+      type: integer
+    currency:
+      type: string
+    enabled_flag:
+      type: boolean
+    add_time:
+      type: string
+      format: date-time
+    last_edit:
+      type: string
+      format: date-time
+    comments:
+      type: string
+    active_flag:
+      type: boolean
+    tax:
+      type: integer
+  create:
+    requiredFields: [product_id, quantity, item_price]
+    fields: [product_id, quantity, item_price, discount_percentage, duration, product_variation_id, comments, tags, enabled_flag]
+  update:
+    requiredFields: [product_id, quantity, item_price]
+    fields: [product_id, quantity, item_price, discount_percentage, duration, product_variation_id, comments, tags, enabled_flag]
+
