@@ -23,17 +23,21 @@ fieldsSchema:
     first_char:
       type: string
     visible_to:
-      type: string
+      type: integer
+      referenceCollectionPath: /data/users
     owner_id:
       type: integer
+      referenceCollectionPath: /data/users
     files_count:
       type: integer
     followers_count:
       type: integer
     add_time:
       type: string
+      format: date-time
     update_time:
       type: string
+      format: date-time
     prices:
       type: array
       items:

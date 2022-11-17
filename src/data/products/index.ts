@@ -1,16 +1,15 @@
 import { objectCollectionHandler } from '../common'
 
 const MODIFIABLE_FIELDS = [
-  'deal_id',
-  'product_id',
-  'item_price',
-  'quantity',
-  'discount_percentage',
-  'duration',
-  'product_variation_id',
-  'comments',
+  'name',
+  'code',
+  'unit',
   'tax',
-  'enabled_flag',
+  'active_flag',
+  'selectable',
+  'visible_to',
+  'owner_id',
+  'prices',
 ]
 
 const deals = objectCollectionHandler({
@@ -19,17 +18,8 @@ const deals = objectCollectionHandler({
   name: 'Products',
   customFieldsPath: 'productFields',
   createFields: MODIFIABLE_FIELDS,
-  requiredFields: ['deal_id', 'item_price', 'product_id', 'quantity'],
-  updateFields: [
-    'item_price',
-    'quantity',
-    'discount_percentage',
-    'duration',
-    'product_variation_id',
-    'comments',
-    'tax',
-    'enabled_flag',
-  ],
+  requiredFields: ['name'],
+  updateFields: MODIFIABLE_FIELDS,
   queryFields: ['code', 'name'],
   eventObject: 'product',
 })

@@ -17,6 +17,21 @@ const runner = new TestRunner({
   },
   queryDelay: 5000,
   filter: process.argv[2],
+  fieldValueGenerators: {
+    '/data/products': {
+      prices: () => [
+        {
+          id: 612646,
+          product_id: 807027,
+          price: 243329,
+          currency: 'USD',
+          cost: 926549,
+          overhead_cost: 154251,
+        },
+      ],
+      visible_to: () => 3,
+    },
+  },
 })
 
 runner.runTests(async () => {
