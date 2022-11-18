@@ -16,7 +16,6 @@ const runner = new TestRunner({
     '/data/activities': ['due_time', 'duration'], // Due time and duration are being converted to HH:MM (from HH:MM:ss) and it gets mismatched
   },
   queryDelay: 5000,
-  events: false,
   filter: process.argv[2],
   fieldValueGenerators: {
     '/data/products': {
