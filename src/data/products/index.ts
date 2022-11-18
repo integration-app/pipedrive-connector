@@ -1,7 +1,7 @@
 import { objectCollectionHandler } from '../common'
 
 const MODIFIABLE_FIELDS = [
-  'name',
+  // 'name',
   'code',
   'unit',
   'tax',
@@ -17,7 +17,7 @@ const deals = objectCollectionHandler({
   path: 'products',
   name: 'Products',
   customFieldsPath: 'productFields',
-  createFields: MODIFIABLE_FIELDS,
+  createFields: [...MODIFIABLE_FIELDS, 'name'],
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
   queryFields: ['code', 'name'],
