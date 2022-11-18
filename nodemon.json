@@ -1,16 +1,12 @@
 {
-  "delay": "0",
+  "delay": 0,
   "execMap": {
     "ts": "node -r ts-node/register"
   },
   "exec": "ts-node src/index.ts",
-  "watch": [
-    "**"
-  ],
-  "ignoreRoot": [
-    ".git"
-  ],
-  "ext": "ts,json,yml",
+  "watch": ["src/**", ".env"],
+  "ignoreRoot": [".git"],
+  "ext": "ts,json",
   "events": {
     "start": "eslint . --ext ts"
   }
