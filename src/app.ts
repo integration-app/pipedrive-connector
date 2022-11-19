@@ -64,5 +64,5 @@ export const server = new ConnectorServer({
     users: {
       path: '/data/users',
     },
-  } as any,
+  },
 })

@@ -9,7 +9,6 @@ const MODIFIABLE_FIELDS = [
   'selectable',
   'visible_to',
   'owner_id',
-  'prices',
 ]
 
 const deals = objectCollectionHandler({
