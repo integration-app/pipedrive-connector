@@ -19,7 +19,7 @@ const deals = objectCollectionHandler({
   createFields: [...MODIFIABLE_FIELDS, 'name'],
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
-  queryFields: ['code', 'name'],
+  queryFields: ['name'],
   eventObject: 'product',
 })
 

@@ -23,9 +23,14 @@ const runner = new TestRunner({
       skipFields: ['due_time', 'duration'], // Due time and duration are being converted to HH:MM (from HH:MM:ss) and it gets mismatched
     },
     '/data/products': {
+      skipFields: ['prices'],
       genFieldValues: {
+        name: () => 'TestProduct' + Math.random().toString(36).substring(7),
+        owner_id: () => 13497943,
         visible_to: () => 3,
-        code: () => '7',
+        code: () => 'ProductCode',
+        active_flag: () => true,
+        selectable: () => true,
       },
     },
   },
