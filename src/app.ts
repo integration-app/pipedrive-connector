@@ -55,11 +55,14 @@ export const server = new ConnectorServer({
     deals: {
       path: '/data/deals-dir',
     },
+    products: {
+      path: '/data/products',
+    },
     activities: {
       path: '/data/activities-dir',
     },
     users: {
       path: '/data/users',
     },
-  } as any,
+  },
 })

@@ -1,0 +1,16 @@
+name:
+  $var: $.name
+quantity:
+  $var: $.quantity
+deal_id:
+  $var: $.dealId
+product_id:
+  $var: $.productId
+item_price:
+  $var: $.price
+add_time:
+  $var: $.createdTime
+last_edit:
+  $var: $.updatedTime
+active_flag:
+  $var: $.isActive

@@ -1,0 +1,19 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+url:
+  $concat: ['https://app.pipedrive.com/product/', $var: $.id]
+fields:
+  id:
+    $var: $.id
+  type:
+    $var: $.type
+  name:
+    $var: $.name
+  code:
+    $var: $.code
+  visible_to:
+    $var: $.visible_to
+  owner_id:
+    $var: $.owner_id.id

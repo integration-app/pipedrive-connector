@@ -1,0 +1,59 @@
+name: Products
+fieldsSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    code:
+      type: string
+    description:
+      type: string
+    unit:
+      type: string
+    tax:
+      type: integer
+    category:
+      type: string # TODO: enum?
+    active_flag:
+      type: boolean
+    selectable:
+      type: boolean
+    first_char:
+      type: string
+    visible_to:
+      type: string
+      referenceRecords:
+        - id: 1
+          name: Owner & followers
+        - id: 3
+          name: Entire company
+    owner_id:
+      type: integer
+      referenceCollectionPath: /data/users
+    files_count:
+      type: integer
+    followers_count:
+      type: integer
+    add_time:
+      type: string
+      format: date-time
+    update_time:
+      type: string
+      format: date-time
+    prices:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          product_id:
+            type: integer
+          price:
+            type: integer
+          currency:
+            type: string
+          cost:
+            type: integer
+          overhead_cost:
+            type: integer
