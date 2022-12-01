@@ -8,7 +8,7 @@ location:
   $var: $.location
 subject:
   $var: $.title
-public_description:
+note:
   $var: $.description
 person_id:
   $var: $.contactId
