@@ -4,9 +4,12 @@
     "ts": "node -r ts-node/register"
   },
   "exec": "ts-node src/index.ts",
-  "watch": ["src/**", ".env"],
+  "watch": [
+    "src/**",
+    ".env"
+  ],
   "ignoreRoot": [".git"],
-  "ext": "ts,json",
+  "ext": "ts,json,yml",
   "events": {
     "start": "eslint . --ext ts"
   }

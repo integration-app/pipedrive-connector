@@ -43,9 +43,6 @@ export const server = new ConnectorServer({
     root: {
       path: '/data/root',
     },
-    leads: {
-      path: '/data/leads-dir',
-    },
     contacts: {
       path: '/data/persons-dir',
     },

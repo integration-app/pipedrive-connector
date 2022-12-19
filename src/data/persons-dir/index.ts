@@ -20,6 +20,17 @@ const handler = new DataDirectoryHandler({
         path: '/data/person-filters',
         name: 'Person Filters',
       },
+      {
+        type: DataLocationType.collection,
+        path: '/data/leads',
+        name: 'All Leads',
+        isDefault: true,
+      },
+      {
+        type: DataLocationType.directory,
+        path: '/data/lead-filters',
+        name: 'Lead Filters',
+      },
     ],
   }),
 })

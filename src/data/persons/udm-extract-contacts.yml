@@ -27,7 +27,7 @@ primaryPhone:
 stage:
   $var: $.marketing_status
 companyName:
-  $var: $.org.name
+  $var: $.org_id.name
 companyId:
   $var: $.org_id
 ownerId:

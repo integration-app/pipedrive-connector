@@ -4,14 +4,8 @@ ownerId:
   $var: $.owner_id
 companyId:
   $var: $.organization_id
-contactId:
-  $var: $.person_id
 source:
   $var: $.source_name
-value:
-  $var: $.value.amount
-currency:
-  $var: $.value.currency
 createdTime:
   $var: $.add_time
 createdBy:
