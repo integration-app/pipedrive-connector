@@ -9,16 +9,27 @@ const handler = new DataDirectoryHandler({
 
   list: async () => ({
     locations: [
+      // {
+      //   type: DataLocationType.collection,
+      //   path: '/data/persons',
+      //   name: 'All Persons',
+      //   isDefault: true,
+      // },
+      // {
+      //   type: DataLocationType.directory,
+      //   path: '/data/person-filters',
+      //   name: 'Person Filters',
+      // },
       {
         type: DataLocationType.collection,
-        path: '/data/persons',
-        name: 'All Persons',
+        path: '/data/leads',
+        name: 'All Leads',
         isDefault: true,
       },
       {
         type: DataLocationType.directory,
-        path: '/data/person-filters',
-        name: 'Person Filters',
+        path: '/data/lead-filters',
+        name: 'Lead Filters',
       },
     ],
   }),

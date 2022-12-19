@@ -1,0 +1,14 @@
+fullName:
+  $var: $.title
+ownerId:
+  $var: $.owner_id
+companyId:
+  $var: $.organization_id
+source:
+  $var: $.source_name
+createdTime:
+  $var: $.add_time
+createdBy:
+  $var: $.creator_id
+updatedTime:
+  $var: $.update_time
