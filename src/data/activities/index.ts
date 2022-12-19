@@ -1,7 +1,7 @@
 import { ConnectorDataCollectionExtractUnifiedFieldsRequest } from '@integration-app/connector-sdk'
+import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
 import { Type } from '@sinclair/typebox'
 import { objectCollectionHandler } from '../common'
-import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
 
 const MODIFIABLE_FIELDS = [
   'type',
@@ -58,8 +58,6 @@ const activities = objectCollectionHandler({
       participants,
     }
   },
-  // extractUnifiedFields(fields) { // TODO: implement to merge attendees to participants
-  // },
 })
 
 export default activities

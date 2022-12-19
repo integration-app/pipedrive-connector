@@ -1,0 +1,14 @@
+description:
+  $var: $.content
+contactId:
+  $var: $.person_id
+companyId:
+  $var: $.org_id
+dealId:
+  $var: $.deal_id
+leadId:
+  $var: $.lead_id
+ownerId:
+  $var: $.user_id
+createdTime:
+  $var: $.add_time

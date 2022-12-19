@@ -1,0 +1,25 @@
+type: object
+properties:
+  id:
+    type: integer
+  content:
+    type: string
+  user_id:
+    type: integer
+    referenceCollectionPath: /data/users
+  org_id:
+    type: integer
+    title: Organization Id
+    referenceCollectionPath: /data/organizations
+  person_id:
+    type: integer
+    referenceCollectionPath: /data/persons
+  deal_id:
+    type: integer
+    referenceCollectionPath: /data/deals
+  lead_id:
+    type: string
+    referenceCollectionPath: /data/leads
+  add_time:
+    type: string
+    format: date-time

@@ -1,0 +1,21 @@
+id:
+  $var: $.id
+name:
+  $var: $.content
+fields:
+  id:
+    $var: $.id
+  content:
+    $var: $.content
+  person_id:
+    $var: $.person_id
+  org_id:
+    $var: $.org_id
+  deal_id:
+    $var: $.deal_id
+  lead_id:
+    $var: $.lead_id
+  user_id:
+    $var: $.user_id
+  add_time:
+    $var: $.add_time

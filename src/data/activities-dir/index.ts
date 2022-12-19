@@ -20,6 +20,11 @@ const handler = new DataDirectoryHandler({
         path: '/data/activity-filters',
         name: 'Activity Filters',
       },
+      {
+        type: DataLocationType.collection,
+        path: '/data/notes',
+        name: 'Notes',
+      },
     ],
   }),
 })
