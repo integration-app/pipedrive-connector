@@ -17,6 +17,7 @@ const notes = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
   requiredFields: ['content', 'org_id'],
+  eventObject: 'note',
 })
 
 export default notes
