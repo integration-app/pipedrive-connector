@@ -1,5 +1,5 @@
-import { objectCollectionHandler } from '../common'
 import { Type } from '@sinclair/typebox'
+import { objectCollectionHandler } from '../common'
 
 const MODIFIABLE_FIELDS = [
   'name',

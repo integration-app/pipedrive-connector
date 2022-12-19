@@ -6,11 +6,10 @@
   "exec": "ts-node src/index.ts",
   "watch": [
     "src/**",
-    ".env",
-    "yml"
+    ".env"
   ],
   "ignoreRoot": [".git"],
-  "ext": "ts,json",
+  "ext": "ts,json,yml",
   "events": {
     "start": "eslint . --ext ts"
   }
