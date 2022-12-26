@@ -1,16 +1,14 @@
 import {
   WebhookUnsubscribeArgs,
   HandleWebhookResponse,
+  WebhookSubscribeArgs,
+  getLatestRecordsArgs,
 } from '@integration-app/connector-sdk'
 import { BadRequestError } from '@integration-app/sdk/errors'
 import {
   DataCollectionEvent,
   DataCollectionEventType,
 } from '@integration-app/sdk/data-collections'
-import {
-  getLatestRecordsArgs,
-  WebhookSubscribeArgs,
-} from '@integration-app/connector-sdk/dist/handlers/data-collection'
 import { defaultExtractRecord } from './records'
 
 export async function subscribeToCollection({
@@ -111,7 +109,7 @@ function getDataCollectionEventType(pipedriveEventBody) {
   }
 }
 
-const MAX_PULL_EVENTS = 100
+const MAX_PULL_EVENTS = 1000
 
 const EVENT_FIELD_MAPPING = {
   [DataCollectionEventType.CREATED]: 'add_time',
@@ -124,7 +122,7 @@ const DATE_FIELD_MAPPING = {
 }
 
 export async function getLatestRecords(
-  { apiClient, limit, extractRecord }: getLatestRecordsArgs,
+  { apiClient, limit, extractRecord, parameters }: getLatestRecordsArgs,
   path,
   activeOnly,
   event,
@@ -134,6 +132,7 @@ export async function getLatestRecords(
   const params = {
     sort: `${recordDatetimeField} DESC`,
     limit: limit ? limit : MAX_PULL_EVENTS,
+    ...(parameters?.filter_id ? { filter_id: parameters.filter_id } : {}),
   }
   const response = await apiClient.get(path, params)
 
