@@ -1,0 +1,29 @@
+name:
+  $var: $.fullName
+first_name:
+  $var: $.firstName
+last_name:
+  $var: $.lastName
+phones:
+  $var: $.phones
+emails:
+  $var: $.emails
+phone:
+  $var: $.primaryPhone
+email:
+  $var: $.primaryEmail
+owner_id:
+  $var: $.ownerId
+org_id:
+  $var: $.companyId
+org:
+  name:
+    $var: $.companyName
+added_by_user_id:
+  $var: $.createdBy
+add_time:
+  $var: $.createdTime
+update_time:
+  $var: $.updatedTime
+last_activity_date:
+  $var: $.lastActivityTime
