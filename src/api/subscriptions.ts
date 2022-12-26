@@ -7,7 +7,11 @@ import {
   DataCollectionEvent,
   DataCollectionEventType,
 } from '@integration-app/sdk/data-collections'
-import { WebhookSubscribeArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import {
+  getLatestRecordsArgs,
+  WebhookSubscribeArgs,
+} from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import { defaultExtractRecord } from './records'
 
 export async function subscribeToCollection({
   apiClient,
@@ -104,5 +108,47 @@ function getDataCollectionEventType(pipedriveEventBody) {
       throw new BadRequestError(
         `Unknown event type: ${pipedriveEventBody.meta?.action}`,
       )
+  }
+}
+
+const MAX_PULL_EVENTS = 100
+
+const EVENT_FIELD_MAPPING = {
+  [DataCollectionEventType.CREATED]: 'add_time',
+  [DataCollectionEventType.UPDATED]: 'update_time',
+}
+
+const DATE_FIELD_MAPPING = {
+  [DataCollectionEventType.CREATED]: 'createdTime',
+  [DataCollectionEventType.UPDATED]: 'updatedTime',
+}
+
+export async function getLatestRecords(
+  { apiClient, limit, extractRecord }: getLatestRecordsArgs,
+  path,
+  activeOnly,
+  event,
+) {
+  const recordDatetimeField = EVENT_FIELD_MAPPING[event]
+  const eventDatetimeField = DATE_FIELD_MAPPING[event]
+  const params = {
+    sort: `${recordDatetimeField} DESC`,
+    limit: limit ? limit : MAX_PULL_EVENTS,
+  }
+  const response = await apiClient.get(path, params)
+
+  let records = response.data ?? []
+  if (activeOnly) {
+    records = records.filter((record) => record.active_flag)
+  }
+  records = await Promise.all(
+    records.map(extractRecord ?? defaultExtractRecord),
+  )
+
+  return {
+    records: records.map((item) => ({
+      ...item,
+      [eventDatetimeField]: item.fields[recordDatetimeField],
+    })),
   }
 }

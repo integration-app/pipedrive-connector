@@ -18,6 +18,7 @@ const persons = objectCollectionHandler({
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
   queryFields: ['email', 'name', 'phone'],
+  pullSubscription: true,
 })
 
 export default persons
