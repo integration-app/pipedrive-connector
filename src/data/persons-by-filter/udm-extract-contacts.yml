@@ -1,0 +1,42 @@
+fullName:
+  $var: $.name
+firstName:
+  $var: $.first_name
+lastName:
+  $var: $.last_name
+emails:
+  $iterate:
+    locator: $.emails
+    items:
+      value:
+        $var: $.emails.$current.value
+      type:
+        $var: $.emails.$current.label
+phones:
+  $iterate:
+    locator: $.phones
+    items:
+      value:
+        $var: $.phones.$current.value
+      type:
+        $var: $.phones.$current.label
+primaryEmail:
+  $var: $.email
+primaryPhone:
+  $var: $.phone
+stage:
+  $var: $.marketing_status
+companyName:
+  $var: $.org.name
+companyId:
+  $var: $.org_id
+ownerId:
+  $var: $.owner_id
+createdBy:
+  $var: $.added_by_user_id
+createdTime:
+  $var: $.add_time
+updatedTime:
+  $var: $.update_time
+lastActivityTime:
+  $var: $.last_activity_date
