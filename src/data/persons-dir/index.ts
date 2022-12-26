@@ -7,18 +7,13 @@ const handler = new DataDirectoryHandler({
     name: 'Persons',
   }),
 
-  list: async () => ({
-    locations: [
+  list: async () => {
+    const locations = [
       {
         type: DataLocationType.collection,
         path: '/data/persons',
         name: 'All Persons',
         isDefault: true,
-      },
-      {
-        type: DataLocationType.directory,
-        path: '/data/person-filters',
-        name: 'Person Filters',
       },
       {
         type: DataLocationType.collection,
@@ -31,8 +26,21 @@ const handler = new DataDirectoryHandler({
         path: '/data/lead-filters',
         name: 'Lead Filters',
       },
-    ],
-  }),
+    ]
+
+    // todo: include filters dir in testing
+    // note: skipping filters collection in dev env
+    // until filters-aware tests are implemented
+    if (process.env.NODE_ENV !== 'development') {
+      locations.push({
+        type: DataLocationType.directory,
+        path: '/data/person-filters',
+        name: 'Person Filters',
+      })
+    }
+
+    return { locations }
+  },
 })
 
 export default handler
