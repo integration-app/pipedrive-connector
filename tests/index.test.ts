@@ -14,16 +14,18 @@ const runner = new TestRunner({
       skipFields: [
         'probability', // If we try to set probability in some pipelines, it will raise an error 'Deal probability is not enabled on this pipeline.'
         'lost_reason', // custom lost_reason is not returned in events for some reason - may be a bug on our side.
+        'update_time',
       ],
     },
     '/data/persons': {
-      skipFields: ['marketing_status'],
+      skipFields: ['marketing_status', 'update_time'],
     },
     '/data/activities': {
-      skipFields: ['due_time', 'duration'], // Due time and duration are being converted to HH:MM (from HH:MM:ss) and it gets mismatched
+      skipFields: ['due_time', 'duration', 'update_time'], // Due time and duration are being converted to HH:MM (from HH:MM:ss) and it gets mismatched
     },
     '/data/products': {
-      skipFields: ['prices'],
+      skipFields: ['prices', 'update_time'],
+      skipQueryFields: ['code'],
       genFieldValues: {
         name: () => 'TestProduct' + Math.random().toString(36).substring(7),
         owner_id: () => 13497943,

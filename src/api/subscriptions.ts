@@ -39,8 +39,12 @@ export async function unsubscribeFromCollection({
   console.debug(
     `[Subscription ${subscription.id}] Unsubscribing from webhook ${subscriptionState.webhookId}`,
   )
-
-  await apiClient.delete(`webhooks/${subscriptionState.webhookId}`)
+  try {
+    await apiClient.delete(`webhooks/${subscriptionState.webhookId}`)
+  } catch (err: any) {
+    if (err?.data?.data?.errors?.[0] === 'not found') return
+    throw err
+  }
 }
 
 export async function handleSubscriptionWebhook({
