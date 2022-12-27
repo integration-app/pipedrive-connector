@@ -169,7 +169,10 @@ export function objectCollectionHandler({
       [DataCollectionEventType.CREATED]: new PullSubscriptionHandler({
         getLatestRecords: async (args) =>
           getLatestRecords(
-            args,
+            {
+              ...args,
+              extractRecord,
+            },
             path,
             activeOnly,
             DataCollectionEventType.CREATED,
@@ -178,7 +181,10 @@ export function objectCollectionHandler({
       [DataCollectionEventType.UPDATED]: new PullSubscriptionHandler({
         getLatestRecords: async (args) =>
           getLatestRecords(
-            args,
+            {
+              ...args,
+              extractRecord,
+            },
             path,
             activeOnly,
             DataCollectionEventType.UPDATED,
