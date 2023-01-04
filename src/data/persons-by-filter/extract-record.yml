@@ -1,12 +1,12 @@
 id:
-  $var: $.id
+  $concat: [$var: $.id, '']
 name:
   $var: $.name
 url:
   $concat: ['https://app.pipedrive.com/person/', $var: $.id]
 fields:
   id:
-    $var: $.id
+    $concat: [$var: $.id, '']
   name:
     $var: $.name
   first_name:

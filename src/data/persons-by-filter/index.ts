@@ -1,4 +1,7 @@
 import { objectCollectionHandler } from '../common'
+import { DataCollectionEventType } from '@integration-app/sdk/data-collections'
+import { getLatestRecords } from '../../api/subscriptions'
+import { PullSubscriptionHandler } from '@integration-app/connector-sdk'
 
 const MODIFIABLE_FIELDS = [
   'name',
@@ -18,7 +21,17 @@ const persons = objectCollectionHandler({
   requiredFields: ['name'],
   updateFields: MODIFIABLE_FIELDS,
   queryFields: ['email', 'name', 'phone'],
-  pullSubscription: true,
+  subscription: {
+    [DataCollectionEventType.UPDATED]: new PullSubscriptionHandler({
+      getLatestRecords: async (args) =>
+        getLatestRecords(
+          args,
+          'persons',
+          false,
+          DataCollectionEventType.UPDATED,
+        ),
+    }),
+  },
 })
 
 export default persons
