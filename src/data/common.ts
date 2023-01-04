@@ -3,7 +3,6 @@ import {
   DataCollectionHandler,
   makeCollectionHandler,
   makeDataBuilder,
-  PullSubscriptionHandler,
 } from '@integration-app/connector-sdk'
 import {
   SpecArgs,
@@ -22,12 +21,10 @@ import {
   updateRecord,
 } from '../api/records'
 import {
-  getLatestRecords,
   handleSubscriptionWebhook,
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
-import { DataCollectionEventType } from '@integration-app/sdk/data-collections'
 
 export function objectCollectionHandler({
   ymlDir = null,
@@ -39,8 +36,8 @@ export function objectCollectionHandler({
   updateFields = null,
   queryFields = null,
   eventObject = null,
+  subscription = null,
   activeOnly = false,
-  pullSubscription = false,
   extendExtractUnifiedFields = null,
 }: {
   ymlDir?: string
@@ -54,7 +51,7 @@ export function objectCollectionHandler({
   updateFields?: string[]
   eventObject?: string
   activeOnly?: boolean
-  pullSubscription?: boolean
+  subscription?: any
   extendExtractUnifiedFields?: (
     request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
     unifiedFields: Record<string, any>,
@@ -164,33 +161,8 @@ export function objectCollectionHandler({
     handler.update = async (request) => updateRecord({ ...request, path })
   }
 
-  if (pullSubscription) {
-    handler.subscription = {
-      [DataCollectionEventType.CREATED]: new PullSubscriptionHandler({
-        getLatestRecords: async (args) =>
-          getLatestRecords(
-            {
-              ...args,
-              extractRecord,
-            },
-            path,
-            activeOnly,
-            DataCollectionEventType.CREATED,
-          ),
-      }),
-      [DataCollectionEventType.UPDATED]: new PullSubscriptionHandler({
-        getLatestRecords: async (args) =>
-          getLatestRecords(
-            {
-              ...args,
-              extractRecord,
-            },
-            path,
-            activeOnly,
-            DataCollectionEventType.UPDATED,
-          ),
-      }),
-    }
+  if (subscription) {
+    handler.subscription = subscription
   } else if (eventObject) {
     handler.subscription = new WebhookSubscriptionHandler({
       subscribe: (args) => subscribeToCollection({ ...args, eventObject }),
