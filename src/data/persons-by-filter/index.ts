@@ -1,7 +1,7 @@
 import { objectCollectionHandler } from '../common'
 import { DataCollectionEventType } from '@integration-app/sdk/data-collections'
-import { PullSubscriptionHandler } from '../../../../../core/connector-sdk-nodejs'
 import { getLatestRecords } from '../../api/subscriptions'
+import { PullSubscriptionHandler } from '@integration-app/connector-sdk'
 
 const MODIFIABLE_FIELDS = [
   'name',
