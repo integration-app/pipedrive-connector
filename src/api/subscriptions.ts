@@ -147,7 +147,12 @@ export async function getLatestRecords(
   return {
     records: records.map((item) => ({
       ...item,
-      [eventDatetimeField]: item.fields[recordDatetimeField],
+      [eventDatetimeField]: toDateTimeLiteral(item.fields[recordDatetimeField]),
     })),
   }
+}
+
+// converting pipedrive GMT datetime value to ISO 8601
+function toDateTimeLiteral(datetime: string) {
+  return new Date(datetime + ' GMT').toISOString()
 }
