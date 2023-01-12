@@ -58,6 +58,9 @@ export const server = new ConnectorServer({
     activities: {
       path: '/data/activities-dir',
     },
+    notes: {
+      path: '/data/notes',
+    },
     users: {
       path: '/data/users',
     },

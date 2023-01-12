@@ -21,6 +21,7 @@ export async function getRecords({
     ...(query ?? {}),
     start: cursor ?? '0',
     ...(parameters?.filter_id ? { filter_id: parameters.filter_id } : {}),
+    ...(parameters?.type ? { type: parameters?.type } : {}),
     limit,
   }
   const response = await apiClient.get(path, params)
