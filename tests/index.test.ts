@@ -8,6 +8,7 @@ const runner = new TestRunner({
   baseUri: process.env.BASE_URI,
   accessToken: process.env.TEST_ACCESS_TOKEN,
   queryDelay: 5000,
+  eventsWaitTimeout: 60000,
   filter: process.argv[2],
   collections: {
     '/data/deals': {
