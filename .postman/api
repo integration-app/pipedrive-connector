@@ -9,7 +9,7 @@ rootDirectory = postman/collections
 [relations.collections.metaData]
 
 [relations.apiDefinition]
-rootDirectory = postman/schemas
+rootDirectory = api
 
 [relations.apiDefinition.metaData]
 type = openapi:3
