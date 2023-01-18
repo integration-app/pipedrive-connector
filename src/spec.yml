@@ -1,0 +1,10 @@
+name: Pipedrive
+logoUri: public/logo.png
+parametersSchema:
+  type: object
+  properties:
+    clientId:
+      type: string
+    clientSecret:
+      type: string
+  required: []
