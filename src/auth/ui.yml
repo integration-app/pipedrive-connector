@@ -1,0 +1,8 @@
+description: Enter your Pipedrive API token into the field below.
+schema:
+  type: object
+  properties:
+    api_token:
+      type: string
+      title: Pipedrive API Token
+helpUri: https://support.pipedrive.com/en/article/how-can-i-find-my-personal-api-key

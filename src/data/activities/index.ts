@@ -1,5 +1,3 @@
-import { ConnectorDataCollectionExtractUnifiedFieldsRequest } from '@integration-app/connector-sdk'
-import { UnifiedActivityFields } from '@integration-app/sdk/udm/activities'
 import { Type } from '@sinclair/typebox'
 import { objectCollectionHandler } from '../common'
 
@@ -28,36 +26,6 @@ const activities = objectCollectionHandler({
   createFields: MODIFIABLE_FIELDS,
   updateFields: MODIFIABLE_FIELDS,
   eventObject: 'activity',
-  extendExtractUnifiedFields: async (
-    request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
-    unifiedFields,
-  ): Promise<UnifiedActivityFields> => {
-    const fields = request.fields
-    const participants = []
-    if (fields.attendees) {
-      participants.push(
-        ...fields.attendees
-          .filter((a) => a.user_id || a.person_id)
-          .map((a) => ({
-            userId: a.user_id,
-            contactId: a.person_id,
-          })),
-      )
-    }
-    if (fields.participants) {
-      participants.push(
-        ...fields.participants
-          .filter((a) => a.person_id)
-          .map((a) => ({
-            contactId: a.person_id,
-          })),
-      )
-    }
-    return {
-      ...(unifiedFields ?? {}),
-      participants,
-    }
-  },
 })
 
 export default activities

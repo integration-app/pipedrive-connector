@@ -8,3 +8,4 @@ parametersSchema:
     clientSecret:
       type: string
   required: []
+connectionMode: iframe

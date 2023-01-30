@@ -1,13 +1,9 @@
 import {
-  ConnectorDataCollectionExtractUnifiedFieldsRequest,
   DataCollectionHandler,
-  makeCollectionHandler,
+  DataCollectionSpecArgs,
   makeDataBuilder,
-} from '@integration-app/connector-sdk'
-import {
-  SpecArgs,
   WebhookSubscriptionHandler,
-} from '@integration-app/connector-sdk/dist/handlers/data-collection'
+} from '@integration-app/connector-sdk'
 import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
 import * as fs from 'fs'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
@@ -38,7 +34,6 @@ export function objectCollectionHandler({
   eventObject = null,
   subscription = null,
   activeOnly = false,
-  extendExtractUnifiedFields = null,
 }: {
   ymlDir?: string
   path: string
@@ -52,10 +47,6 @@ export function objectCollectionHandler({
   eventObject?: string
   activeOnly?: boolean
   subscription?: any
-  extendExtractUnifiedFields?: (
-    request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
-    unifiedFields: Record<string, any>,
-  ) => Promise<Record<string, any>>
 }): DataCollectionHandler {
   let extractRecord = defaultExtractRecord
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
@@ -100,15 +91,15 @@ export function objectCollectionHandler({
     }
   }
 
-  const handler = makeCollectionHandler({
-    name,
+  const handler = new DataCollectionHandler({
     find,
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
-    extendExtractUnifiedFields,
   })
 
-  handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
-    const spec = request.defaultSpec
+  handler.spec = async (
+    request: DataCollectionSpecArgs,
+  ): Promise<DataCollectionSpec> => {
+    const spec = request.spec
     const filter = request.parameters?.filter_id
       ? await getFilterById(request.apiClient, request.parameters.filter_id)
       : null

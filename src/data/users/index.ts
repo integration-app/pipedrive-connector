@@ -1,7 +1,4 @@
-import {
-  ConnectorDataCollectionFindRequest,
-  DataCollectionHandler,
-} from '@integration-app/connector-sdk'
+import { DataCollectionHandler, FindArgs } from '@integration-app/connector-sdk'
 import { Type } from '@sinclair/typebox'
 import { getRecords } from '../../api/records'
 import { objectCollectionHandler } from '../common'
@@ -27,7 +24,7 @@ export const USER_SCHEMA = Type.String({
   referenceCollectionPath: users.path,
 })
 
-async function findUsers(request: ConnectorDataCollectionFindRequest) {
+async function findUsers(request: FindArgs) {
   if (request.query) {
     return queryUsers({ ...request, query: request.query })
   } else {

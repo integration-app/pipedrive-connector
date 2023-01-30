@@ -1,8 +1,8 @@
 import {
-  ConnectorDataCollectionCreateRequest,
-  ConnectorDataCollectionFindRequest,
-  ConnectorDataCollectionUpdateRequest,
+  CreateArgs,
   DataCollectionHandler,
+  FindArgs,
+  UpdateArgs,
 } from '@integration-app/connector-sdk'
 import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
 import {
@@ -32,7 +32,7 @@ async function findDealProducts({
   parameters,
   cursor,
   extractRecord,
-}: ConnectorDataCollectionFindRequest): Promise<DataCollectionFindResponse> {
+}: FindArgs): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const params = {
     start: cursor ?? '0',
@@ -60,7 +60,7 @@ async function addDealtoProduct({
   apiClient,
   parameters,
   fields,
-}: ConnectorDataCollectionCreateRequest): Promise<DataCollectionCreateResponse> {
+}: CreateArgs): Promise<DataCollectionCreateResponse> {
   const response = await apiClient.post(
     `deals/${parameters.deal_id}/products`,
     fields,
@@ -76,7 +76,7 @@ async function updateDealProduct({
   parameters,
   id,
   fields,
-}: ConnectorDataCollectionUpdateRequest): Promise<DataCollectionUpdateResponse> {
+}: UpdateArgs): Promise<DataCollectionUpdateResponse> {
   const response = await apiClient.put(
     `deals/${parameters.deal_id}/products/${id}`,
     fields,

@@ -1,0 +1,14 @@
+name: _object
+type: collection
+parametersSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    customFieldsPath:
+      type: string
+    eventObject:
+      type: string
+    path:
+      type: string
+  required: []
