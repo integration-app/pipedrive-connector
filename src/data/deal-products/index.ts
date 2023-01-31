@@ -31,7 +31,7 @@ async function findDealProducts({
   apiClient,
   parameters,
   cursor,
-  extractRecord,
+  recordFromApi,
 }: FindArgs): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const params = {
@@ -48,7 +48,7 @@ async function findDealProducts({
 
   let records = response.data ?? []
 
-  records = await Promise.all(records.map(extractRecord))
+  records = await Promise.all(records.map(recordFromApi))
 
   return {
     records,

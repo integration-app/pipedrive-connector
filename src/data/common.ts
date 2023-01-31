@@ -1,21 +1,12 @@
 import {
   DataCollectionHandler,
   DataCollectionSpecArgs,
-  makeDataBuilder,
   WebhookSubscriptionHandler,
 } from '@integration-app/connector-sdk'
 import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
-import * as fs from 'fs'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
 import { getFilterById } from '../api/filters'
-import {
-  createRecord,
-  defaultExtractRecord,
-  findRecordById,
-  getRecords,
-  searchRecords,
-  updateRecord,
-} from '../api/records'
+import { createRecord, findRecordById, updateRecord } from '../api/records'
 import {
   handleSubscriptionWebhook,
   subscribeToCollection,
@@ -23,7 +14,7 @@ import {
 } from '../api/subscriptions'
 
 export function objectCollectionHandler({
-  ymlDir = null,
+  ymlDir,
   path,
   customFieldsPath = null,
   name,
@@ -33,7 +24,7 @@ export function objectCollectionHandler({
   queryFields = null,
   eventObject = null,
   subscription = null,
-  activeOnly = false,
+  activeOnly,
 }: {
   ymlDir?: string
   path: string
@@ -45,54 +36,13 @@ export function objectCollectionHandler({
   requiredFields?: string[]
   updateFields?: string[]
   eventObject?: string
-  activeOnly?: boolean
   subscription?: any
+  activeOnly?: boolean
 }): DataCollectionHandler {
-  let extractRecord = defaultExtractRecord
-  if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
-    const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
-    extractRecord = async (data) => {
-      const record = await extractRecordBuilder(data)
-      return {
-        ...record,
-        fields: {
-          ...data, // To add all the custom fields to the result
-          ...record.fields, // But parsed fields override these
-        },
-      }
-    }
-  }
-  let extractRecordSearch = extractRecord
-  if (fs.existsSync(`${ymlDir}/extract-record-search.yml`)) {
-    const extractRecordSearchBuilder = makeDataBuilder(
-      `${ymlDir}/extract-record-search.yml`,
-    )
-    extractRecordSearch = async (data) => {
-      const record = await extractRecordSearchBuilder(data)
-      return {
-        ...record,
-        fields: {
-          ...data, // To add all the custom fields to the result
-          ...record.fields, // But parsed fields override these
-        },
-      }
-    }
-  }
-
-  const find = (request) => {
-    if (request.query) {
-      return searchRecords({
-        ...request,
-        path,
-        extractRecord: extractRecordSearch,
-      })
-    } else {
-      return getRecords({ ...request, path, extractRecord, activeOnly })
-    }
-  }
-
+  ymlDir
+  activeOnly
+  const extractRecord = (record) => record
   const handler = new DataCollectionHandler({
-    find,
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
   })
 

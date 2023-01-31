@@ -4,11 +4,14 @@ import { DataCollectionCreateResponse } from '@integration-app/sdk/data-location
 export default async function create(
   args: CreateArgs,
 ): Promise<DataCollectionCreateResponse> {
-  const { apiClient, fields, fieldsToApi } = args
+  const { apiClient, fields, fieldsToApi, parameters } = args
 
-  const response = await apiClient.post('', await fieldsToApi(fields))
+  const response = await apiClient.post(
+    parameters.path,
+    await fieldsToApi(fields),
+  )
 
   return {
-    id: response.id,
+    id: response.data.id.toString(),
   }
 }

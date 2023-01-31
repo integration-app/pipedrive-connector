@@ -3,12 +3,10 @@ type: collection
 parametersSchema:
   type: object
   properties:
-    name:
+    path:
       type: string
     customFieldsPath:
       type: string
-    eventObject:
-      type: string
-    path:
-      type: string
+    activeOnly:
+      type: boolean
   required: []

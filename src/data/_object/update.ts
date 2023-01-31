@@ -4,11 +4,17 @@ import { DataCollectionUpdateResponse } from '@integration-app/sdk/data-location
 export default async function update(
   args: UpdateArgs,
 ): Promise<DataCollectionUpdateResponse> {
-  const { apiClient, id, fields, fieldsToApi } = args
+  const { apiClient, id, fields, fieldsToApi, parameters } = args
 
-  await apiClient.put(`object/${id}`, await fieldsToApi(fields))
+  // Leads, unlike other objects, require `PATCH` request instead of PUT
+  // https://developers.pipedrive.com/docs/api/v1/Leads#updateLead
+  const method = parameters.path === 'leads' ? 'patch' : 'put'
+  const response = await apiClient[method](
+    `${parameters.path}/${id}`,
+    await fieldsToApi(fields),
+  )
 
   return {
-    id,
+    id: response.data.id.toString(),
   }
 }

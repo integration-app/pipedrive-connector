@@ -4,10 +4,11 @@ import { DataCollectionFindByIdResponse } from '@integration-app/sdk'
 export default async function findById(
   args: FindByIdArgs,
 ): Promise<DataCollectionFindByIdResponse> {
-  const { apiClient, recordFromApi } = args
-  const response = await apiClient.get('')
+  const { apiClient, parameters, recordFromApi, id } = args
+
+  const response = await apiClient.get(`${parameters.path}/${id}`)
 
   return {
-    record: await recordFromApi(response.record),
+    record: await recordFromApi(response?.data),
   }
 }

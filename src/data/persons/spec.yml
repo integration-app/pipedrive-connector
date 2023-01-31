@@ -1,0 +1,31 @@
+type: collection
+name: All Persons
+extends:
+  path: _object-with-webhooks
+  parameters:
+    path: persons
+    customFieldsPath: personFields
+    eventObject: person
+find:
+  queryFields:
+    - email
+    - name
+    - phone
+create:
+  fields:
+    - name
+    - owner_id
+    - org_id
+    - email
+    - phone
+    - marketing_status
+  requiredFields:
+    - name
+update:
+  fields:
+    - name
+    - owner_id
+    - org_id
+    - email
+    - phone
+    - marketing_status

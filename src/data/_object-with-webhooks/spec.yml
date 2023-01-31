@@ -1,0 +1,19 @@
+name: _object-with-webhooks
+type: collection
+extends:
+  path: _object
+  parameters:
+    path:
+      $var: $.parameters.path
+    customFieldsPath:
+      $var: $.parameters.customFieldsPath
+parametersSchema:
+  type: object
+  properties:
+    eventObject:
+      type: string
+    path:
+      type: string
+    customFieldsPath:
+      type: string
+  required: []

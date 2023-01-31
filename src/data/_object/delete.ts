@@ -4,9 +4,9 @@ import { DataCollectionDeleteResponse } from '@integration-app/sdk/data-location
 export default async function del(
   args: DeleteArgs,
 ): Promise<DataCollectionDeleteResponse> {
-  const { apiClient, id } = args
+  const { apiClient, id, parameters } = args
 
-  await apiClient.delete(id)
+  await apiClient.delete(`${parameters.path}/${id}`)
 
   return {}
 }
