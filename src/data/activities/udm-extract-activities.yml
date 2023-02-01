@@ -6,14 +6,6 @@ type:
   $var: $.type
 location:
   $var: $.location
-participants:
-  $iterate:
-    locator: $.participants
-    items:
-      userId:
-        $var: $.participants.$current.user_id
-      contactId:
-        $var: $.participants.$current.person_id
 contactId:
   $var: $.person_id
 companyId:
