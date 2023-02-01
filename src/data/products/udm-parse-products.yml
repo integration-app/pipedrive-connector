@@ -6,8 +6,6 @@ description:
   $var: $.description
 category:
   $var: $.type
-owner_id:
-  $var: $.ownerId
 active_flag:
   $var: $.isActive
 add_time:

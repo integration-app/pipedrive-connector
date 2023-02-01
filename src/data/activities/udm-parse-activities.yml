@@ -26,9 +26,3 @@ update_user_id:
   $var: $.updatedBy
 update_time:
   $var: $.updatedTime
-participants:
-  $iterate:
-    locator: $.participants
-    items:
-      person_id:
-        $var: $.participants.$current.contactId

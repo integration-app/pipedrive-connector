@@ -18,8 +18,6 @@ type:
   $var: renewal_type
 ownerId:
   $var: user_id
-closeTme:
-  $var: close_time
 createdTime:
   $var: add_time
 createdBy:

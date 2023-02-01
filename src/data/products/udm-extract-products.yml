@@ -8,8 +8,6 @@ isActive:
   $var: $.active_flag
 type:
   $var: $.category
-ownerId:
-  $var: $.owner_id
 createdTime:
   $var: $.add_time
 updatedTime:

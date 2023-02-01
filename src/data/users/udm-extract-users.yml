@@ -6,22 +6,6 @@ firstName:
 lastName:
   $lastName:
     $var: $.name
-emails:
-  $iterate:
-    locator: $.emails
-    items:
-      value:
-        $var: $.emails.$current.value
-      type:
-        $var: $.emails.$current.label
-phones:
-  $iterate:
-    locator: $.phones
-    items:
-      value:
-        $var: $.phones.$current.value
-      type:
-        $var: $.phones.$current.label
 primaryEmail:
   $var: $.email
 primaryPhone:
