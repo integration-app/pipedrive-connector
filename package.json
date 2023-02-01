@@ -9,8 +9,8 @@
     "test": "ts-node tests/index.test"
   },
   "dependencies": {
-    "@integration-app/connector-sdk": "^0.7.55",
-    "@integration-app/sdk": "^0.16.22",
+    "@integration-app/connector-sdk": "0.7.55",
+    "@integration-app/sdk": "^0.16.28",
     "@sinclair/typebox": "^0.22.1",
     "axios": "^0.26.0",
     "dotenv": "^10.0.0",
