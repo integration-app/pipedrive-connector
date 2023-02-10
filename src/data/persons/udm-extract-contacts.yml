@@ -4,22 +4,6 @@ firstName:
   $var: $.first_name
 lastName:
   $var: $.last_name
-emails:
-  $iterate:
-    locator: $.emails
-    items:
-      value:
-        $var: $.emails.$current.value
-      type:
-        $var: $.emails.$current.label
-phones:
-  $iterate:
-    locator: $.phones
-    items:
-      value:
-        $var: $.phones.$current.value
-      type:
-        $var: $.phones.$current.label
 primaryEmail:
   $var: $.email
 primaryPhone:
@@ -27,7 +11,7 @@ primaryPhone:
 stage:
   $var: $.marketing_status
 companyName:
-  $var: $.org_id.name
+  $var: $.org.name
 companyId:
   $var: $.org_id
 ownerId:
