@@ -4,7 +4,7 @@
     "build": "npm run clean && npm run build:compile && npm run build:copy",
     "clean": "rimraf dist",
     "build:compile": "tsc --project tsconfig.build.json",
-    "build:copy": "copyfiles \"src/**/*.y*ml\" dist/ -V",
+    "build:copy": "copy \"src/**/*.y*ml\" dist/",
     "start": "node dist/index.js",
     "test": "ts-node tests/index.test"
   },
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.25.0",
-    "copyfiles": "^2.4.1",
+    "copy": "^0.3.2",
     "env-var": "^7.1.1",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
