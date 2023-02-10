@@ -1,0 +1,6 @@
+created:
+  method: full-scan
+updated:
+  method: full-scan
+deleted:
+  method: full-scan

@@ -2,7 +2,6 @@ import {
   WebhookUnsubscribeArgs,
   HandleWebhookResponse,
   WebhookSubscribeArgs,
-  getLatestRecordsArgs,
 } from '@integration-app/connector-sdk'
 import { BadRequestError } from '@integration-app/sdk/errors'
 import {
@@ -10,6 +9,11 @@ import {
   DataCollectionEventType,
 } from '@integration-app/sdk/data-collections'
 import { defaultExtractRecord } from './records'
+import { PullLatestRecordsArgs } from '@integration-app/connector-sdk'
+
+export interface SubscriptionState {
+  webhookId: string
+}
 
 export async function subscribeToCollection({
   apiClient,
@@ -18,7 +22,7 @@ export async function subscribeToCollection({
   connectorWebhookUri,
 }: WebhookSubscribeArgs & {
   eventObject: string
-}) {
+}): Promise<SubscriptionState> {
   console.debug(
     `[Subscription ${subscription.id}] Subscribing to object ${eventObject} with webhook ${connectorWebhookUri}`,
   )
@@ -38,11 +42,12 @@ export async function unsubscribeFromCollection({
   subscription,
   subscriptionState,
 }: WebhookUnsubscribeArgs): Promise<void> {
+  const state = subscriptionState as SubscriptionState
   console.debug(
-    `[Subscription ${subscription.id}] Unsubscribing from webhook ${subscriptionState.webhookId}`,
+    `[Subscription ${subscription.id}] Unsubscribing from webhook ${state.webhookId}`,
   )
   try {
-    await apiClient.delete(`webhooks/${subscriptionState.webhookId}`)
+    await apiClient.delete(`webhooks/${state.webhookId}`)
   } catch (err: any) {
     if (err?.data?.data?.errors?.[0] === 'not found') return
     throw err
@@ -122,7 +127,7 @@ const DATE_FIELD_MAPPING = {
 }
 
 export async function getLatestRecords(
-  { apiClient, limit, extractRecord, parameters }: getLatestRecordsArgs,
+  { apiClient, limit, recordFromApi, parameters }: PullLatestRecordsArgs,
   path,
   activeOnly,
   event,
@@ -141,7 +146,7 @@ export async function getLatestRecords(
     records = records.filter((record) => record.active_flag)
   }
   records = await Promise.all(
-    records.map(extractRecord ?? defaultExtractRecord),
+    records.map(recordFromApi ?? defaultExtractRecord),
   )
 
   return {

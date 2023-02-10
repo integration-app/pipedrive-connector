@@ -1,15 +1,10 @@
 import {
-  ConnectorDataCollectionExtractUnifiedFieldsRequest,
   DataCollectionHandler,
-  makeCollectionHandler,
+  DataCollectionSpecArgs,
   makeDataBuilder,
-} from '@integration-app/connector-sdk'
-import {
-  SpecArgs,
   WebhookSubscriptionHandler,
-} from '@integration-app/connector-sdk/dist/handlers/data-collection'
-import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
-import * as fs from 'fs'
+} from '@integration-app/connector-sdk'
+import { DataCollectionSpec } from '@integration-app/sdk'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
 import { getFilterById } from '../api/filters'
 import {
@@ -25,9 +20,10 @@ import {
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
+import * as fs from 'fs'
 
 export function objectCollectionHandler({
-  ymlDir = null,
+  ymlDir,
   path,
   customFieldsPath = null,
   name,
@@ -37,8 +33,7 @@ export function objectCollectionHandler({
   queryFields = null,
   eventObject = null,
   subscription = null,
-  activeOnly = false,
-  extendExtractUnifiedFields = null,
+  activeOnly,
 }: {
   ymlDir?: string
   path: string
@@ -50,14 +45,11 @@ export function objectCollectionHandler({
   requiredFields?: string[]
   updateFields?: string[]
   eventObject?: string
-  activeOnly?: boolean
   subscription?: any
-  extendExtractUnifiedFields?: (
-    request: ConnectorDataCollectionExtractUnifiedFieldsRequest,
-    unifiedFields: Record<string, any>,
-  ) => Promise<Record<string, any>>
+  activeOnly?: boolean
 }): DataCollectionHandler {
   let extractRecord = defaultExtractRecord
+
   if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
     const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
     extractRecord = async (data) => {
@@ -100,15 +92,15 @@ export function objectCollectionHandler({
     }
   }
 
-  const handler = makeCollectionHandler({
-    name,
+  const handler = new DataCollectionHandler({
     find,
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
-    extendExtractUnifiedFields,
   })
 
-  handler.spec = async (request: SpecArgs): Promise<DataCollectionSpec> => {
-    const spec = request.defaultSpec
+  handler.spec = async (
+    request: DataCollectionSpecArgs,
+  ): Promise<DataCollectionSpec> => {
+    const spec = request.spec
     const filter = request.parameters?.filter_id
       ? await getFilterById(request.apiClient, request.parameters.filter_id)
       : null

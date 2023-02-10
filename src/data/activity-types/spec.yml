@@ -1,0 +1,7 @@
+extends:
+  path: _reference_object
+  parameters:
+    path: activityTypes
+    activeOnly: true
+type: collection
+name: Activity Types

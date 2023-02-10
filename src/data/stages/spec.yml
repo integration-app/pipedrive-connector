@@ -1,0 +1,6 @@
+extends:
+  path: _reference_object
+  parameters:
+    path: stages
+type: collection
+name: Stages

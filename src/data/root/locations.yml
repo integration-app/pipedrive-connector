@@ -1,0 +1,14 @@
+- name: Organizations
+  path: /data/organizations-dir
+- name: Persons
+  path: /data/persons-dir
+- name: Deals
+  path: /data/deals-dir
+- name: Products
+  path: /data/products
+- name: Leads
+  path: /data/leads-dir
+- name: Activities
+  path: /data/activities-dir
+- name: Users
+  path: /data/users

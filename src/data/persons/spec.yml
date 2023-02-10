@@ -1,0 +1,174 @@
+type: collection
+name: All Persons
+extends:
+  path: _object-with-webhooks
+  parameters:
+    path: persons
+    customFieldsPath: personFields
+    eventObject: person
+fieldsSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    name:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    phone:
+      type: string
+    phones:
+      type: array
+      items:
+        type: object
+        properties:
+          value:
+            type: string
+          type:
+            type: string
+    emails:
+      type: array
+      items:
+        type: object
+        properties:
+          value:
+            type: string
+          type:
+            type: string
+    email:
+      type: string
+    query_phone:
+      type: string
+    query_email:
+      type: string
+    owner_id:
+      type: integer
+      title: Owner
+      referenceCollectionPath: /data/users
+    owner:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    org_id:
+      type: integer
+      title: Organization Id
+      referenceCollectionPath: /data/organizations
+    org:
+      type: object
+      properties:
+        name:
+          type: string
+        people_count:
+          type: integer
+        owner_id:
+          type: integer
+        address:
+          type: string
+        active_flag:
+          type: boolean
+        cc_email:
+          type: string
+    open_deals_count:
+      type: integer
+    related_open_deals_count:
+      type: integer
+    closed_deals_count:
+      type: integer
+    related_closed_deals_count:
+      type: integer
+    participant_open_deals_count:
+      type: integer
+    participant_closed_deals_count:
+      type: integer
+    email_messages_count:
+      type: integer
+    activities_count:
+      type: integer
+    done_activities_count:
+      type: integer
+    undone_activities_count:
+      type: integer
+    files_count:
+      type: integer
+    notes_count:
+      type: integer
+    followers_count:
+      type: integer
+    won_deals_count:
+      type: integer
+    related_won_deals_count:
+      type: integer
+    lost_deals_count:
+      type: integer
+    related_lost_deals_count:
+      type: integer
+    active_flag:
+      type: boolean
+    update_time:
+      type: string
+      format: date-time
+    added_by_user_id:
+      type: integer
+      referenceCollectionPath: /data/users
+    add_time:
+      type: string
+      format: date-time
+    visible_to:
+      type: string
+    marketing_status:
+      type: string
+    next_activity_date:
+      type: string
+      format: date-time
+    next_activity_time:
+      type: string
+      format: date-time
+    next_activity_id:
+      type: integer
+      referenceCollectionPath: /data/activities
+    last_activity_id:
+      type: integer
+      referenceCollectionPath: /data/activities
+    last_activity_date:
+      type: string
+      format: date-time
+    last_incoming_mail_time:
+      type: string
+      format: date-time
+    last_outgoing_mail_time:
+      type: string
+      format: date-time
+    label:
+      type: integer
+    cc_email:
+      type: string
+find:
+  queryFields:
+    - email
+    - name
+    - phone
+create:
+  fields:
+    - name
+    - owner_id
+    - org_id
+    - email
+    - phone
+    - marketing_status
+  requiredFields:
+    - name
+update:
+  fields:
+    - name
+    - owner_id
+    - org_id
+    - email
+    - phone
+    - marketing_status

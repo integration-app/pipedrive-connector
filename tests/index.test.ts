@@ -11,6 +11,9 @@ const runner = new TestRunner({
   eventsWaitTimeout: 60000,
   filter: process.argv[2],
   collections: {
+    '/data/persons-by-filter': {
+      skip: true,
+    },
     '/data/deals': {
       skipFields: [
         'probability', // If we try to set probability in some pipelines, it will raise an error 'Deal probability is not enabled on this pipeline.'

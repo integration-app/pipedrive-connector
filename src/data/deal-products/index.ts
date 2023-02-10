@@ -1,10 +1,10 @@
 import {
-  ConnectorDataCollectionCreateRequest,
-  ConnectorDataCollectionFindRequest,
-  ConnectorDataCollectionUpdateRequest,
+  CreateArgs,
   DataCollectionHandler,
+  FindArgs,
+  UpdateArgs,
 } from '@integration-app/connector-sdk'
-import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import { DataCollectionSpecArgs } from '@integration-app/connector-sdk'
 import {
   DataCollectionCreateResponse,
   DataCollectionFindResponse,
@@ -13,8 +13,8 @@ import {
 import { MAX_LIMIT } from '../../api'
 
 export default new DataCollectionHandler({
-  spec: async (args: SpecArgs) => {
-    return args.defaultSpec
+  spec: async (args: DataCollectionSpecArgs) => {
+    return args.spec
   },
   find: (request) => {
     return findDealProducts(request)
@@ -31,8 +31,8 @@ async function findDealProducts({
   apiClient,
   parameters,
   cursor,
-  extractRecord,
-}: ConnectorDataCollectionFindRequest): Promise<DataCollectionFindResponse> {
+  recordFromApi,
+}: FindArgs): Promise<DataCollectionFindResponse> {
   const limit = MAX_LIMIT
   const params = {
     start: cursor ?? '0',
@@ -48,7 +48,7 @@ async function findDealProducts({
 
   let records = response.data ?? []
 
-  records = await Promise.all(records.map(extractRecord))
+  records = await Promise.all(records.map(recordFromApi))
 
   return {
     records,
@@ -60,7 +60,7 @@ async function addDealtoProduct({
   apiClient,
   parameters,
   fields,
-}: ConnectorDataCollectionCreateRequest): Promise<DataCollectionCreateResponse> {
+}: CreateArgs): Promise<DataCollectionCreateResponse> {
   const response = await apiClient.post(
     `deals/${parameters.deal_id}/products`,
     fields,
@@ -76,7 +76,7 @@ async function updateDealProduct({
   parameters,
   id,
   fields,
-}: ConnectorDataCollectionUpdateRequest): Promise<DataCollectionUpdateResponse> {
+}: UpdateArgs): Promise<DataCollectionUpdateResponse> {
   const response = await apiClient.put(
     `deals/${parameters.deal_id}/products/${id}`,
     fields,

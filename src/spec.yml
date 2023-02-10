@@ -1,0 +1,7 @@
+name: Pipedrive
+logoUri: public/logo.png
+parametersSchema:
+  type: object
+  properties: {}
+  required: []
+connectionMode: iframe

@@ -1,0 +1,7 @@
+- path: /data/deals
+  name: All Deals
+  type: collection
+  isDefault: true
+- path: /data/deal-filters
+  name: Deals by Filter
+  type: directory

@@ -1,0 +1,12 @@
+name: _object
+type: collection
+parametersSchema:
+  type: object
+  properties:
+    path:
+      type: string
+    customFieldsPath:
+      type: string
+    activeOnly:
+      type: boolean
+  required: []

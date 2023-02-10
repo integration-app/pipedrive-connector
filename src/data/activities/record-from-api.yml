@@ -1,0 +1,12 @@
+id:
+  $var: $.id
+name:
+  $var: $.subject
+url:
+  $concat:
+    [
+      'https://app.pipedrive.com/activities/list/user/everyone?selected=',
+      $var: $.id,
+    ]
+fields:
+  $var: $
