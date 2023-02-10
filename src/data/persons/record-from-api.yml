@@ -14,27 +14,79 @@ fields:
   last_name:
     $var: $.last_name
   phone:
-    $var: $.phone[0].value
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.phone[0].value
+            isNotEmpty: true
+          value:
+            $var: $.phone[0].value
+        - filter:
+            $eval:
+              $var: $.phone[0]
+            isNotEmpty: true
+          value:
+            $var: $.phone[0]
+      default:
+        $var: $.phones[0]
   email:
-    $var: $.email[0].value
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.email[0].value
+            isNotEmpty: true
+          value:
+            $var: $.email[0].value
+        - filter:
+            $eval:
+              $var: $.email[0]
+            isNotEmpty: true
+          value:
+            $var: $.email[0]
+      default:
+        $var: $.emails[0]
   phones:
     $iterate:
-      locator: $.phone
-      items:
+      source:
+        $var: phone
+      item:
         value:
-          $var: $.phone.$current.value
+          $var: item.value
         type:
-          $var: $.phone.$current.label
+          $var: item.label
   emails:
     $iterate:
-      locator: $.email
-      items:
+      source:
+        $var: email
+      item:
         value:
-          $var: $.email.$current.value
+          $var: item.value
         type:
-          $var: $.email.$current.label
+          $var: item.label
   owner_id:
-    $var: $.owner_id.id
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.owner_id.id
+            isNotEmpty: true
+          value:
+            $var: $.owner_id.id
+      default:
+        $var: $.owner_id
+  org_id:
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.org_id.value
+            isNotEmpty: true
+          value:
+            $var: $.org_id.value
+      default:
+        $var: $.org_id
   owner:
     id:
       $var: $.owner_id.id
@@ -42,8 +94,6 @@ fields:
       $var: $.owner_id.name
     email:
       $var: $.owner_id.email
-  org_id:
-    $var: $.org_id.value
   org:
     name:
       $var: $.org_id.name

@@ -1,0 +1,7 @@
+- type: collection
+  path: /data/leads
+  name: All Leads
+  isDefault: true
+- type: directory
+  path: /data/lead-filters
+  name: Leads by Filter

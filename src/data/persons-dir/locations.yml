@@ -1,0 +1,13 @@
+- type: collection
+  path: '/data/persons'
+  name: 'All Persons'
+  isDefault: true
+- type: directory
+  path: /data/person-filters
+  name: Person Filters
+- type: collection
+  path: '/data/leads'
+  name: 'All Leads'
+- type: directory
+  path: '/data/lead-filters'
+  name: 'Lead Filters'

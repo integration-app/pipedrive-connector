@@ -1,17 +1,26 @@
 import {
   DataCollectionHandler,
   DataCollectionSpecArgs,
+  makeDataBuilder,
   WebhookSubscriptionHandler,
 } from '@integration-app/connector-sdk'
-import { DataCollectionSpec } from '@integration-app/sdk/connector-api'
+import { DataCollectionSpec } from '@integration-app/sdk'
 import { getCustomFields, getCustomFieldSchema } from '../api/custom-fields'
 import { getFilterById } from '../api/filters'
-import { createRecord, findRecordById, updateRecord } from '../api/records'
+import {
+  createRecord,
+  defaultExtractRecord,
+  findRecordById,
+  getRecords,
+  searchRecords,
+  updateRecord,
+} from '../api/records'
 import {
   handleSubscriptionWebhook,
   subscribeToCollection,
   unsubscribeFromCollection,
 } from '../api/subscriptions'
+import * as fs from 'fs'
 
 export function objectCollectionHandler({
   ymlDir,
@@ -39,10 +48,52 @@ export function objectCollectionHandler({
   subscription?: any
   activeOnly?: boolean
 }): DataCollectionHandler {
-  ymlDir
-  activeOnly
-  const extractRecord = (record) => record
+  let extractRecord = defaultExtractRecord
+
+  if (fs.existsSync(`${ymlDir}/extract-record.yml`)) {
+    const extractRecordBuilder = makeDataBuilder(`${ymlDir}/extract-record.yml`)
+    extractRecord = async (data) => {
+      const record = await extractRecordBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
+        },
+      }
+    }
+  }
+  let extractRecordSearch = extractRecord
+  if (fs.existsSync(`${ymlDir}/extract-record-search.yml`)) {
+    const extractRecordSearchBuilder = makeDataBuilder(
+      `${ymlDir}/extract-record-search.yml`,
+    )
+    extractRecordSearch = async (data) => {
+      const record = await extractRecordSearchBuilder(data)
+      return {
+        ...record,
+        fields: {
+          ...data, // To add all the custom fields to the result
+          ...record.fields, // But parsed fields override these
+        },
+      }
+    }
+  }
+
+  const find = (request) => {
+    if (request.query) {
+      return searchRecords({
+        ...request,
+        path,
+        extractRecord: extractRecordSearch,
+      })
+    } else {
+      return getRecords({ ...request, path, extractRecord, activeOnly })
+    }
+  }
+
   const handler = new DataCollectionHandler({
+    find,
     findById: (request) => findRecordById({ ...request, path, extractRecord }),
   })
 

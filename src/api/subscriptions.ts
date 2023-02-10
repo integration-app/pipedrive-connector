@@ -9,7 +9,7 @@ import {
   DataCollectionEventType,
 } from '@integration-app/sdk/data-collections'
 import { defaultExtractRecord } from './records'
-import { getLatestRecordsArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import { PullLatestRecordsArgs } from '@integration-app/connector-sdk'
 
 export interface SubscriptionState {
   webhookId: string
@@ -127,7 +127,7 @@ const DATE_FIELD_MAPPING = {
 }
 
 export async function getLatestRecords(
-  { apiClient, limit, extractRecord, parameters }: getLatestRecordsArgs,
+  { apiClient, limit, recordFromApi, parameters }: PullLatestRecordsArgs,
   path,
   activeOnly,
   event,
@@ -146,7 +146,7 @@ export async function getLatestRecords(
     records = records.filter((record) => record.active_flag)
   }
   records = await Promise.all(
-    records.map(extractRecord ?? defaultExtractRecord),
+    records.map(recordFromApi ?? defaultExtractRecord),
   )
 
   return {

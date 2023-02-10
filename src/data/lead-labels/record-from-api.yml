@@ -1,0 +1,6 @@
+id:
+  $var: $.id
+name:
+  $var: $.name
+fields:
+  $var: $

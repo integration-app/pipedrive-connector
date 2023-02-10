@@ -1,10 +1,10 @@
-import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import { DataCollectionSpecArgs } from '@integration-app/connector-sdk'
 import { DataCollectionSpec } from '@integration-app/sdk'
 import { getCustomFields, getCustomFieldSchema } from '../../api/custom-fields'
 import { getFilterById } from '../../api/filters'
 
 export default async function spec(
-  args: SpecArgs,
+  args: DataCollectionSpecArgs,
 ): Promise<DataCollectionSpec> {
   const { spec, apiClient, parameters } = args
 

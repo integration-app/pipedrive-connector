@@ -3,7 +3,7 @@ import {
   DataCollectionFindByIdResponse,
   DataCollectionFindResponse,
   DataCollectionUpdateResponse,
-} from '@integration-app/sdk/connector-api'
+} from '@integration-app/sdk'
 import { DataRecord } from '@integration-app/sdk/data-collections'
 import { MAX_LIMIT } from '.'
 

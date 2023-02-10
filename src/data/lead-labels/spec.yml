@@ -1,0 +1,29 @@
+extends:
+  path: _reference_object
+  parameters:
+    path: leadLabels
+type: collection
+name: Lead Labels
+fieldsSchema:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    color:
+      type: string
+      default: gray
+    add_time:
+      type: string
+      format: date-time
+    update_time:
+      type: string
+      format: date-time
+create:
+  fields: [name, color]
+  requiredFields: [name]
+find:
+  queryFields: [name]
+update:
+  fields: [name, color]

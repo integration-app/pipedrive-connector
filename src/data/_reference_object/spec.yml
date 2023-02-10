@@ -1,0 +1,10 @@
+name: _reference_object
+type: collection
+parametersSchema:
+  type: object
+  properties:
+    path:
+      type: string
+    activeOnly:
+      type: boolean
+  required: []

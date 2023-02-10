@@ -1,5 +1,5 @@
 import { DataDirectoryHandler } from '@integration-app/connector-sdk'
-import { DataLocationType } from '@integration-app/sdk/connector-api'
+import { DataLocationType } from '@integration-app/sdk'
 
 const handler = new DataDirectoryHandler({
   spec: async () => ({

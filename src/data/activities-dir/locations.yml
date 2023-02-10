@@ -1,0 +1,13 @@
+- type: collection
+  path: /data/activities
+  name: All Activities
+  isDefault: true
+- type: directory
+  path: /data/activity-filters
+  name: Activity Filters
+- type: directory
+  path: /data/activities-by-type
+  name: Activities By Type
+- type: collection
+  path: /data/notes
+  name: Notes

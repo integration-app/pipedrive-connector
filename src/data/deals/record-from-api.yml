@@ -17,7 +17,38 @@ fields:
     email:
       $var: $.creator_user_id.email
   user_id:
-    $var: $.user_id.id
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.user_id.id
+            isNotEmpty: true
+          value:
+            $var: $.user_id.id
+      default:
+        $var: $.user_id
+  person_id:
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.person_id.value
+            isNotEmpty: true
+          value:
+            $var: $.person_id.value
+      default:
+        $var: $.person_id
+  org_id:
+    $case:
+      cases:
+        - filter:
+            $eval:
+              $var: $.org_id.value
+            isNotEmpty: true
+          value:
+            $var: $.org_id.value
+      default:
+        $var: $.org_id
   user:
     id:
       $var: $.user_id.id
@@ -25,8 +56,6 @@ fields:
       $var: $.user_id.name
     email:
       $var: $.user_id.email
-  person_id:
-    $var: $.person_id.value
   person:
     name:
       $var: $.person_id.name
@@ -44,8 +73,6 @@ fields:
       $var: $.person_id.owner_id
     value:
       $var: $.person_id.value
-  org_id:
-    $var: $.org_id.value
   org:
     name:
       $var: $.org_id.name

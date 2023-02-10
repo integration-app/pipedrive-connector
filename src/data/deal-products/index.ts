@@ -4,7 +4,7 @@ import {
   FindArgs,
   UpdateArgs,
 } from '@integration-app/connector-sdk'
-import { SpecArgs } from '@integration-app/connector-sdk/dist/handlers/data-collection'
+import { DataCollectionSpecArgs } from '@integration-app/connector-sdk'
 import {
   DataCollectionCreateResponse,
   DataCollectionFindResponse,
@@ -13,8 +13,8 @@ import {
 import { MAX_LIMIT } from '../../api'
 
 export default new DataCollectionHandler({
-  spec: async (args: SpecArgs) => {
-    return args.defaultSpec
+  spec: async (args: DataCollectionSpecArgs) => {
+    return args.spec
   },
   find: (request) => {
     return findDealProducts(request)

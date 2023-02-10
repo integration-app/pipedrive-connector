@@ -5,4 +5,5 @@ schema:
     api_token:
       type: string
       title: Pipedrive API Token
+  required: []
 helpUri: https://support.pipedrive.com/en/article/how-can-i-find-my-personal-api-key
