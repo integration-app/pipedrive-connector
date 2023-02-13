@@ -1,4 +1,4 @@
-name: Deploy to Prod
+name: Release Images
 
 on:
   push:
