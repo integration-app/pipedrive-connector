@@ -1,0 +1,21 @@
+name: Deploy to Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: kciter/aws-ecr-action@v3
+        with:
+          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: eu-central-1
+          repo: integration-app
+          tags: ${{ github.event.repository.name }}
+          create_repo: true
